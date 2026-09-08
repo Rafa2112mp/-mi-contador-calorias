@@ -1,823 +1,2613 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#111827">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Mi Contador">
-<link rel="manifest" href="/manifest.webmanifest">
-<link rel="apple-touch-icon" href="/icons/icon-192.png">
-<title>Mi Contador de Calorías</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#24160f">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Mi Contador">
+  <link rel="manifest" href="/manifest.webmanifest">
 
-<style>
-*{box-sizing:border-box}
-body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#eef1f5;color:#15171b}
-.app{max-width:560px;margin:auto;min-height:100vh;background:#fff;padding:18px 16px 100px}
-.screen{display:none}.screen.active{display:block}
-.top,.row{display:flex;justify-content:space-between;align-items:center;gap:10px}
-h1,h2,h3{margin-top:0}
-.muted{color:#737780}
-.hero{background:linear-gradient(145deg,#111827,#263449);color:white;border-radius:28px;padding:23px;margin:16px 0}
-.big{font-size:42px;font-weight:850}
-.bar{height:10px;background:#454d5b;border-radius:9px;overflow:hidden;margin-top:12px}
-.bar i{display:block;height:100%;background:white;border-radius:9px;width:0}
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
-.stat,.card{background:#f3f4f6;border-radius:20px;padding:14px}
-.stat b{display:block;font-size:18px;margin-top:5px}
-.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.btn{border:0;border-radius:16px;padding:14px;font-size:15px;font-weight:750;cursor:pointer}
-.primary{background:#111827;color:white}.secondary{background:#eef0f3}
-.input{width:100%;padding:13px;border:1px solid #d8dadd;border-radius:13px;margin:6px 0 12px;font-size:16px;background:white}
-.preview{width:100%;border-radius:22px;background:#111;aspect-ratio:4/3;object-fit:cover}
-.back{border:0;background:none;font-size:16px;padding:4px 0 15px}
-.food{display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid #ddd}
-.food small{color:#777}
-.pill{display:inline-block;padding:5px 8px;border-radius:99px;background:#e5e7eb;font-size:11px}
-.bottom{position:fixed;bottom:0;left:50%;transform:translateX(-50%);max-width:560px;width:100%;background:#fff;border-top:1px solid #ddd;display:flex;justify-content:space-around;padding:10px 8px calc(10px + env(safe-area-inset-bottom));z-index:10}
-.bottom button{border:0;background:none;font-size:12px;color:#555}.bottom button.active{color:#111;font-weight:800}
-.chart{height:160px;display:flex;align-items:end;gap:7px;padding:15px 5px}
-.col{flex:1;text-align:center;font-size:10px}.barcol{background:#111827;border-radius:8px 8px 3px 3px;min-height:5px}
-.success{padding:12px;border-radius:14px;background:#eaf7ed}
-.warn{padding:12px;border-radius:14px;background:#fff5df}
-.waterCircle{text-align:center;padding:18px;border-radius:22px;background:#eaf4ff}
-.waterBig{font-size:32px;font-weight:850}
-.photoGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.photoGrid img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:14px}
-.tip{padding:13px;background:white;border-radius:16px;margin-top:8px;border:1px solid #eee}
-.sectionTitle{margin:22px 0 10px}
-.range{width:100%}
-</style>
+  <title>Mi Contador de Calorías</title>
+
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+
+    body{
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      background:#eee5dc;
+      color:#24160f;
+      min-height:100vh;
+    }
+
+    button,input,select,textarea{font:inherit}
+
+    button{
+      border:0;
+      cursor:pointer;
+    }
+
+    .app{
+      max-width:540px;
+      margin:auto;
+      min-height:100vh;
+      background:#f5eee8;
+    }
+
+    .topbar{
+      background:#24160f;
+      color:#fff;
+      padding:17px 18px 14px;
+      position:sticky;
+      top:0;
+      z-index:50;
+    }
+
+    .brand{
+      font-size:21px;
+      font-weight:900;
+    }
+
+    .subtitle{
+      font-size:12px;
+      opacity:.72;
+      margin-top:3px;
+    }
+
+    /* HERO */
+
+    .hero{
+      min-height:470px;
+      position:relative;
+      overflow:hidden;
+      display:flex;
+      align-items:flex-end;
+      background:
+        linear-gradient(
+          180deg,
+          rgba(25,15,9,.02) 25%,
+          rgba(25,15,9,.18) 48%,
+          rgba(25,15,9,.92) 100%
+        ),
+        url("/images/oso-gym.png") center top / cover no-repeat;
+    }
+
+    .hero-content{
+      width:100%;
+      padding:32px 21px 28px;
+      color:#fff;
+    }
+
+    .hero-badge{
+      display:inline-block;
+      background:#d99b4d;
+      color:#24160f;
+      font-size:11px;
+      font-weight:950;
+      padding:7px 12px;
+      border-radius:999px;
+      margin-bottom:11px;
+    }
+
+    .hero h1{
+      font-size:34px;
+      line-height:1;
+      font-weight:950;
+      margin-bottom:10px;
+    }
+
+    .hero p{
+      font-size:14px;
+      line-height:1.45;
+      opacity:.92;
+    }
+
+    .content{
+      padding:17px;
+    }
+
+    .card{
+      background:#fff;
+      border-radius:25px;
+      padding:18px;
+      margin-bottom:16px;
+      box-shadow:0 8px 28px rgba(55,35,20,.09);
+    }
+
+    .card-title{
+      font-size:19px;
+      font-weight:950;
+      margin-bottom:5px;
+    }
+
+    .card-subtitle{
+      font-size:13px;
+      color:#806f63;
+      line-height:1.4;
+      margin-bottom:15px;
+    }
+
+    .main-button{
+      width:100%;
+      background:#24160f;
+      color:#fff;
+      padding:16px;
+      border-radius:17px;
+      font-weight:900;
+      font-size:16px;
+    }
+
+    .main-button:active,
+    .secondary-button:active,
+    .small-button:active{
+      transform:scale(.98);
+    }
+
+    .secondary-button{
+      width:100%;
+      background:#ead7c3;
+      color:#24160f;
+      padding:14px;
+      border-radius:16px;
+      font-weight:850;
+    }
+
+    .small-button{
+      background:#24160f;
+      color:#fff;
+      padding:11px 14px;
+      border-radius:13px;
+      font-weight:800;
+    }
+
+    .danger-button{
+      background:#f6dddd;
+      color:#8d2929;
+    }
+
+    .stats{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:11px;
+    }
+
+    .stat{
+      background:#f7f1eb;
+      border-radius:18px;
+      padding:15px;
+    }
+
+    .stat-label{
+      font-size:11px;
+      color:#806f63;
+      font-weight:700;
+    }
+
+    .stat-value{
+      font-size:24px;
+      font-weight:950;
+      margin-top:3px;
+    }
+
+    /* FORMS */
+
+    .field{
+      margin-bottom:13px;
+    }
+
+    .field label{
+      display:block;
+      font-size:12px;
+      font-weight:850;
+      margin-bottom:6px;
+    }
+
+    .input{
+      width:100%;
+      border:1px solid #e2d6cc;
+      background:#faf8f6;
+      border-radius:14px;
+      padding:13px;
+      outline:none;
+    }
+
+    .input:focus{
+      border-color:#a9794a;
+    }
+
+    textarea.input{
+      resize:vertical;
+      min-height:85px;
+    }
+
+    /* CAMERA */
+
+    .camera-box{
+      border-radius:22px;
+      overflow:hidden;
+      background:#24160f;
+      margin-bottom:14px;
+      min-height:220px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      position:relative;
+    }
+
+    .camera-preview{
+      width:100%;
+      max-height:390px;
+      object-fit:cover;
+      display:block;
+    }
+
+    .camera-placeholder{
+      color:#fff;
+      text-align:center;
+      padding:30px;
+    }
+
+    .camera-placeholder .big{
+      font-size:55px;
+      margin-bottom:8px;
+    }
+
+    .photo-actions{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+    }
+
+    .photo-actions .wide{
+      grid-column:1/-1;
+    }
+
+    .photo-input{
+      display:none;
+    }
+
+    /* INGREDIENTES */
+
+    .ingredient{
+      border:1px solid #eadfd6;
+      background:#fbf8f5;
+      border-radius:18px;
+      padding:14px;
+      margin-bottom:10px;
+    }
+
+    .ingredient-top{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      align-items:center;
+    }
+
+    .ingredient-name{
+      font-weight:900;
+      font-size:15px;
+    }
+
+    .confidence{
+      font-size:10px;
+      background:#ead7c3;
+      border-radius:999px;
+      padding:5px 8px;
+      font-weight:800;
+    }
+
+    .grams-row{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      margin-top:10px;
+    }
+
+    .grams-row input{
+      flex:1;
+    }
+
+    .grams-label{
+      font-size:12px;
+      color:#806f63;
+      font-weight:700;
+    }
+
+    .optional{
+      font-size:11px;
+      color:#8a786b;
+      margin-top:5px;
+    }
+
+    /* RESULTADOS */
+
+    .result-total{
+      background:#24160f;
+      color:#fff;
+      border-radius:20px;
+      padding:18px;
+      margin-bottom:12px;
+    }
+
+    .result-total .number{
+      font-size:35px;
+      font-weight:950;
+    }
+
+    .macro-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:9px;
+    }
+
+    .macro{
+      background:#f7f1eb;
+      border-radius:15px;
+      padding:12px 8px;
+      text-align:center;
+    }
+
+    .macro strong{
+      display:block;
+      font-size:18px;
+    }
+
+    .macro span{
+      font-size:10px;
+      color:#806f63;
+    }
+
+    .food-row{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      padding:12px 0;
+      border-bottom:1px solid #eee5de;
+    }
+
+    .food-row:last-child{
+      border-bottom:0;
+    }
+
+    .food-name{
+      font-weight:850;
+    }
+
+    .food-detail{
+      color:#806f63;
+      font-size:11px;
+      margin-top:3px;
+    }
+
+    .food-cal{
+      font-weight:950;
+      white-space:nowrap;
+    }
+
+    /* AGUA */
+
+    .water-circle{
+      width:155px;
+      height:155px;
+      margin:5px auto 18px;
+      border-radius:50%;
+      background:#ead7c3;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex-direction:column;
+      border:10px solid #d4b28e;
+    }
+
+    .water-number{
+      font-size:27px;
+      font-weight:950;
+    }
+
+    .water-label{
+      font-size:11px;
+      color:#806f63;
+    }
+
+    .water-buttons{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:8px;
+    }
+
+    /* COACH */
+
+    .coach-box{
+      background:linear-gradient(135deg,#24160f,#493021);
+      color:#fff;
+      border-radius:22px;
+      padding:19px;
+    }
+
+    .coach-title{
+      font-size:21px;
+      font-weight:950;
+      margin-bottom:8px;
+    }
+
+    .coach-text{
+      font-size:13px;
+      line-height:1.55;
+      white-space:pre-line;
+    }
+
+    .tip{
+      background:#f7f1eb;
+      border-radius:15px;
+      padding:12px;
+      margin-top:9px;
+      font-size:13px;
+      line-height:1.4;
+    }
+
+    /* PROGRESO */
+
+    .photo-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:8px;
+    }
+
+    .progress-photo{
+      width:100%;
+      aspect-ratio:1;
+      object-fit:cover;
+      border-radius:14px;
+      background:#eee;
+    }
+
+    .progress-entry{
+      border:1px solid #eadfd6;
+      border-radius:18px;
+      padding:13px;
+      margin-bottom:10px;
+      background:#fbf8f5;
+    }
+
+    .progress-date{
+      font-weight:900;
+      margin-bottom:5px;
+    }
+
+    .progress-meta{
+      font-size:12px;
+      color:#806f63;
+      margin-bottom:10px;
+    }
+
+    /* NAV */
+
+    .bottom-nav{
+      position:sticky;
+      bottom:0;
+      z-index:40;
+      background:rgba(255,255,255,.96);
+      backdrop-filter:blur(16px);
+      border-top:1px solid #e7ddd5;
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      padding:7px 7px calc(7px + env(safe-area-inset-bottom));
+    }
+
+    .nav-btn{
+      background:transparent;
+      color:#806f63;
+      padding:8px 3px;
+      border-radius:13px;
+      font-size:10px;
+      font-weight:850;
+    }
+
+    .nav-btn.active{
+      background:#f0e2d4;
+      color:#24160f;
+    }
+
+    .nav-icon{
+      display:block;
+      font-size:21px;
+      margin-bottom:2px;
+    }
+
+    .loading{
+      text-align:center;
+      padding:25px 10px;
+      color:#806f63;
+    }
+
+    .spinner{
+      width:34px;
+      height:34px;
+      border:4px solid #eadfd6;
+      border-top-color:#24160f;
+      border-radius:50%;
+      animation:spin .8s linear infinite;
+      margin:0 auto 10px;
+    }
+
+    @keyframes spin{
+      to{transform:rotate(360deg)}
+    }
+
+    .notice{
+      padding:12px;
+      border-radius:14px;
+      background:#fff4df;
+      color:#69491e;
+      font-size:12px;
+      line-height:1.4;
+      margin-bottom:12px;
+    }
+
+    .success{
+      background:#e4f2e5;
+      color:#285c31;
+    }
+
+    .empty{
+      text-align:center;
+      padding:25px 10px;
+      color:#806f63;
+      font-size:13px;
+    }
+
+    .hidden{
+      display:none!important;
+    }
+
+    .section-title{
+      font-size:24px;
+      font-weight:950;
+      margin-bottom:4px;
+    }
+
+    .section-subtitle{
+      color:#806f63;
+      font-size:13px;
+      margin-bottom:17px;
+    }
+
+    .row{
+      display:flex;
+      gap:9px;
+      align-items:center;
+    }
+
+    .row>*{
+      flex:1;
+    }
+
+    .back-button{
+      background:transparent;
+      color:#806f63;
+      font-size:13px;
+      font-weight:800;
+      margin-bottom:10px;
+    }
+
+    @media(max-width:380px){
+      .hero h1{font-size:29px}
+      .hero{min-height:430px}
+    }
+  </style>
 </head>
 
 <body>
-<main class="app">
 
-<section id="home" class="screen active">
-<div class="top">
-<div>
-<h1>Mi Contador</h1>
-<span class="muted">IA · nutrición · progreso</span>
+<div class="app">
+
+  <header class="topbar">
+    <div class="brand">🐻 Mi Contador de Calorías</div>
+    <div class="subtitle">Entrena fuerte · Come inteligente · Progresa</div>
+  </header>
+
+  <!-- INICIO -->
+  <main id="screen-home">
+
+    <section class="hero">
+      <div class="hero-content">
+        <div class="hero-badge">💪 MODO BESTIA ACTIVADO</div>
+
+        <h1>Tu objetivo.<br>Tu progreso.</h1>
+
+        <p>
+          Controla tus comidas, agua, entrenamiento y evolución
+          con ayuda de inteligencia artificial.
+        </p>
+      </div>
+    </section>
+
+    <div class="content">
+
+      <section class="card">
+        <div class="card-title">📸 ¿Qué has comido?</div>
+        <div class="card-subtitle">
+          Haz una foto y deja que la IA identifique los ingredientes.
+        </div>
+
+        <button class="main-button" onclick="showScreen('food')">
+          🐻 Analizar mi comida
+        </button>
+      </section>
+
+      <section class="card">
+        <div class="card-title">🔥 Resumen de hoy</div>
+
+        <div class="stats">
+          <div class="stat">
+            <div class="stat-label">Calorías</div>
+            <div class="stat-value" id="homeCalories">0</div>
+          </div>
+
+          <div class="stat">
+            <div class="stat-label">Proteínas</div>
+            <div class="stat-value" id="homeProtein">0 g</div>
+          </div>
+
+          <div class="stat">
+            <div class="stat-label">Agua</div>
+            <div class="stat-value" id="homeWater">0 ml</div>
+          </div>
+
+          <div class="stat">
+            <div class="stat-label">Comidas</div>
+            <div class="stat-value" id="homeMeals">0</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="card-title">🧠 Coach nutricional</div>
+
+        <div class="card-subtitle">
+          Consejos personalizados según tu objetivo y lo que has comido.
+        </div>
+
+        <button class="secondary-button" onclick="getCoach()">
+          🐻 Preguntar al Coach IA
+        </button>
+      </section>
+
+      <div id="homeCoach"></div>
+
+    </div>
+  </main>
+
+
+  <!-- COMIDA -->
+  <main id="screen-food" class="content hidden">
+
+    <button class="back-button" onclick="showScreen('home')">
+      ← Volver al inicio
+    </button>
+
+    <div class="section-title">🍽️ Analizar comida</div>
+
+    <div class="section-subtitle">
+      Primero identificaremos los ingredientes. Después podrás poner
+      el peso aproximado de cada uno.
+    </div>
+
+    <section class="card">
+
+      <div class="camera-box" id="cameraBox">
+
+        <div class="camera-placeholder" id="cameraPlaceholder">
+          <div class="big">📸</div>
+          <div>Haz una foto de tu comida</div>
+        </div>
+
+        <img id="foodPreview" class="camera-preview hidden" alt="Foto de comida">
+
+      </div>
+
+      <input
+        id="photoInput"
+        class="photo-input"
+        type="file"
+        accept="image/*"
+        capture="environment"
+      >
+
+      <div class="photo-actions">
+
+        <button
+          class="main-button"
+          onclick="takePhoto()"
+        >
+          📸 Tomar foto
+        </button>
+
+        <button
+          class="secondary-button"
+          onclick="choosePhoto()"
+        >
+          🖼️ Elegir foto
+        </button>
+
+        <button
+          id="analyzeButton"
+          class="main-button wide hidden"
+          onclick="identifyFood()"
+        >
+          ✨ Identificar ingredientes con IA
+        </button>
+
+      </div>
+
+    </section>
+
+    <section class="card">
+
+      <div class="card-title">📝 Información adicional</div>
+
+      <div class="card-subtitle">
+        Opcional: cuéntale a la IA qué contiene el plato.
+      </div>
+
+      <textarea
+        id="foodNote"
+        class="input"
+        placeholder="Ejemplo: arroz con pollo y verduras..."
+      ></textarea>
+
+    </section>
+
+    <section id="ingredientCard" class="card hidden">
+
+      <div class="card-title">🥘 Ingredientes detectados</div>
+
+      <div class="card-subtitle">
+        Puedes introducir el peso aproximado de cada ingrediente.
+        <strong>No es obligatorio.</strong>
+      </div>
+
+      <div id="ingredientsList"></div>
+
+      <div class="notice">
+        💡 Si no sabes el peso de algún ingrediente, déjalo vacío.
+        La IA hará una estimación utilizando la fotografía.
+      </div>
+
+      <button
+        id="calculateButton"
+        class="main-button"
+        onclick="calculateFood()"
+      >
+        🔥 Calcular calorías y macros
+      </button>
+
+    </section>
+
+    <section id="foodResult" class="card hidden"></section>
+
+  </main>
+
+
+  <!-- AGUA -->
+  <main id="screen-water" class="content hidden">
+
+    <button class="back-button" onclick="showScreen('home')">
+      ← Volver
+    </button>
+
+    <div class="section-title">💧 Agua</div>
+
+    <div class="section-subtitle">
+      Mantente hidratado durante el día.
+    </div>
+
+    <section class="card">
+
+      <div class="water-circle">
+        <div class="water-number" id="waterBig">0</div>
+        <div class="water-label">ml hoy</div>
+      </div>
+
+      <div class="water-buttons">
+        <button class="secondary-button" onclick="addWater(250)">
+          +250 ml
+        </button>
+
+        <button class="secondary-button" onclick="addWater(500)">
+          +500 ml
+        </button>
+
+        <button class="secondary-button" onclick="addWater(750)">
+          +750 ml
+        </button>
+      </div>
+
+      <br>
+
+      <div class="row">
+        <input
+          id="customWater"
+          class="input"
+          type="number"
+          min="1"
+          placeholder="Cantidad en ml"
+        >
+
+        <button class="small-button" onclick="addCustomWater()">
+          Añadir
+        </button>
+      </div>
+
+      <br>
+
+      <button
+        class="secondary-button danger-button"
+        onclick="resetWater()"
+      >
+        Reiniciar agua de hoy
+      </button>
+
+    </section>
+
+  </main>
+
+
+  <!-- PROGRESO -->
+  <main id="screen-progress" class="content hidden">
+
+    <div class="section-title">📈 Mi progreso</div>
+
+    <div class="section-subtitle">
+      Guarda fotos y datos para ver tu evolución.
+    </div>
+
+    <section class="card">
+
+      <div class="card-title">📸 Nueva actualización</div>
+
+      <div class="field">
+        <label>Fecha</label>
+        <input id="progressDate" class="input" type="date">
+      </div>
+
+      <div class="field">
+        <label>Peso (kg)</label>
+        <input id="progressWeight" class="input" type="number" step="0.1" placeholder="Ej. 80">
+      </div>
+
+      <div class="field">
+        <label>Cintura (cm) — opcional</label>
+        <input id="progressWaist" class="input" type="number" step="0.1" placeholder="Ej. 90">
+      </div>
+
+      <div class="field">
+        <label>Fotos de progreso</label>
+
+        <input
+          id="progressPhotos"
+          class="input"
+          type="file"
+          accept="image/*"
+          multiple
+        >
+      </div>
+
+      <div id="progressPreview" class="photo-grid"></div>
+
+      <br>
+
+      <button class="main-button" onclick="saveProgress()">
+        💾 Guardar progreso
+      </button>
+
+    </section>
+
+    <section class="card">
+
+      <div class="card-title">🤖 Evaluación con IA</div>
+
+      <div class="card-subtitle">
+        La IA puede valorar cambios visuales, hábitos y próximos pasos.
+        No calcula un porcentaje exacto de grasa corporal a partir de fotos.
+      </div>
+
+      <button
+        class="secondary-button"
+        onclick="analyzeProgress()"
+      >
+        ✨ Analizar mi progreso
+      </button>
+
+      <div id="progressAI"></div>
+
+    </section>
+
+    <section class="card">
+
+      <div class="card-title">🗓️ Historial</div>
+
+      <div id="progressHistory"></div>
+
+    </section>
+
+  </main>
+
+
+  <!-- PERFIL -->
+  <main id="screen-profile" class="content hidden">
+
+    <div class="section-title">👤 Mi perfil</div>
+
+    <div class="section-subtitle">
+      Estos datos ayudan al Coach IA a personalizar tus recomendaciones.
+    </div>
+
+    <section class="card">
+
+      <div class="field">
+        <label>Nombre</label>
+        <input id="profileName" class="input" placeholder="Tu nombre">
+      </div>
+
+      <div class="field">
+        <label>Edad</label>
+        <input id="profileAge" class="input" type="number" placeholder="Ej. 27">
+      </div>
+
+      <div class="field">
+        <label>Sexo</label>
+        <select id="profileSex" class="input">
+          <option value="">Seleccionar</option>
+          <option value="hombre">Hombre</option>
+          <option value="mujer">Mujer</option>
+          <option value="otro">Otro</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Altura (cm)</label>
+        <input id="profileHeight" class="input" type="number" placeholder="Ej. 170">
+      </div>
+
+      <div class="field">
+        <label>Peso actual (kg)</label>
+        <input id="profileWeight" class="input" type="number" step="0.1" placeholder="Ej. 80">
+      </div>
+
+      <div class="field">
+        <label>Objetivo</label>
+
+        <select id="profileGoal" class="input">
+
+          <option value="perder_grasa">
+            Perder grasa
+          </option>
+
+          <option value="ganar_musculo">
+            Ganar músculo
+          </option>
+
+          <option value="recomposicion">
+            Perder grasa y ganar músculo
+          </option>
+
+          <option value="mantener">
+            Mantener peso
+          </option>
+
+        </select>
+
+      </div>
+
+      <div class="field">
+        <label>Nivel de actividad</label>
+
+        <select id="profileActivity" class="input">
+
+          <option value="bajo">
+            Bajo
+          </option>
+
+          <option value="moderado">
+            Moderado
+          </option>
+
+          <option value="alto">
+            Alto
+          </option>
+
+          <option value="muy_alto">
+            Muy alto
+          </option>
+
+        </select>
+
+      </div>
+
+      <button class="main-button" onclick="saveProfile()">
+        💾 Guardar perfil
+      </button>
+
+    </section>
+
+    <section class="card">
+
+      <div class="card-title">🧠 Tu Coach</div>
+
+      <div class="card-subtitle">
+        Recibe recomendaciones sobre calorías, proteínas,
+        hidratación, alimentación y entrenamiento.
+      </div>
+
+      <button class="secondary-button" onclick="getCoach()">
+        🐻 Quiero mi consejo de hoy
+      </button>
+
+      <div id="profileCoach"></div>
+
+    </section>
+
+  </main>
+
+
+  <!-- NAVEGACIÓN -->
+
+  <nav class="bottom-nav">
+
+    <button class="nav-btn active" onclick="showScreen('home')">
+      <span class="nav-icon">🏠</span>
+      Inicio
+    </button>
+
+    <button class="nav-btn" onclick="showScreen('food')">
+      <span class="nav-icon">🍽️</span>
+      Comida
+    </button>
+
+    <button class="nav-btn" onclick="showScreen('progress')">
+      <span class="nav-icon">📈</span>
+      Progreso
+    </button>
+
+    <button class="nav-btn" onclick="showScreen('profile')">
+      <span class="nav-icon">👤</span>
+      Perfil
+    </button>
+
+  </nav>
+
 </div>
-<button class="btn secondary" onclick="show('profile')">⚙️</button>
-</div>
 
-<div class="hero">
-<div style="color:#c9cdd5">Calorías restantes</div>
-<div class="big" id="remaining">2.200</div>
-<div>de <span id="goal">2.200</span> kcal</div>
-<div class="bar"><i id="progress"></i></div>
-</div>
-
-<div class="grid">
-<div class="stat">🔥 Kcal<b id="cal">0</b></div>
-<div class="stat">🥩 Proteína<b id="p">0 g</b></div>
-<div class="stat">🍚 Carbos<b id="c">0 g</b></div>
-</div>
-
-<div class="sectionTitle"><h3>💧 Hidratación</h3></div>
-<div class="waterCircle">
-<div class="waterBig"><span id="waterNow">0</span> ml</div>
-<div class="muted">Objetivo: <span id="waterGoal">2000</span> ml</div>
-<div class="bar" style="background:#d9e7f5"><i id="waterProgress" style="background:#1683d8"></i></div>
-</div>
-
-<div class="actions" style="margin-top:12px">
-<button class="btn primary" onclick="show('scan')">📷 Analizar comida</button>
-<button class="btn secondary" onclick="show('barcode')">▣ Código</button>
-</div>
-
-<div class="actions" style="margin-top:10px">
-<button class="btn secondary" onclick="show('coach')">🤖 Coach IA</button>
-<button class="btn secondary" onclick="show('progressScreen')">📈 Mi progreso</button>
-</div>
-
-<div class="card" style="margin-top:12px">
-<b>💧 Añadir agua</b>
-<div class="actions" style="margin-top:10px">
-<button class="btn secondary" onclick="addWater(250)">+250 ml</button>
-<button class="btn secondary" onclick="addWater(500)">+500 ml</button>
-</div>
-<div class="actions" style="margin-top:8px">
-<button class="btn secondary" onclick="addWater(750)">+750 ml</button>
-<button class="btn secondary" onclick="customWater()">✏️ Otra cantidad</button>
-</div>
-</div>
-
-<div id="diary"></div>
-</section>
-
-<section id="scan" class="screen">
-<button class="back" onclick="show('home')">← Volver</button>
-<h2>📷 Analizar comida</h2>
-<p class="muted">Haz una foto del plato. La cámara tomará solamente una fotografía.</p>
-
-<input id="photo" type="file" accept="image/*" capture="environment" class="input">
-<input id="gallery" type="file" accept="image/*" class="input" style="display:none">
-
-<img id="photoPreview" class="preview" style="display:none">
-
-<div class="card" style="margin-top:12px">
-<label><b>⚖️ Peso de la comida</b>
-<input id="foodGrams" class="input" type="number" min="1" placeholder="Ej. 450">
-</label>
-
-<label><b>📝 Información adicional (opcional)</b>
-<input id="foodNote" class="input" placeholder="Ej. arroz con pollo y ensalada">
-</label>
-</div>
-
-<div class="actions">
-<button class="btn primary" onclick="takePhoto()">📷 Tomar foto</button>
-<button class="btn secondary" onclick="$('gallery').click()">🖼️ Galería</button>
-</div>
-
-<button class="btn primary" style="width:100%;margin-top:10px" onclick="analyzePhoto()">✨ Analizar con IA</button>
-
-<div id="scanStatus" class="muted" style="margin:12px 0"></div>
-<div id="result"></div>
-</section>
-
-<section id="barcode" class="screen">
-<button class="back" onclick="show('home')">← Volver</button>
-<h2>▣ Código de barras</h2>
-<p class="muted">Introduce el código EAN/UPC.</p>
-<input id="barcodeInput" class="input" inputmode="numeric" placeholder="Ej. 8412345678901">
-<button class="btn primary" style="width:100%" onclick="lookupBarcode()">🔎 Buscar producto</button>
-<div id="barcodeResult" style="margin-top:14px"></div>
-</section>
-
-<section id="coach" class="screen">
-<button class="back" onclick="show('home')">← Volver</button>
-<h2>🤖 Coach nutricional IA</h2>
-<p class="muted">Consejos personalizados según tu objetivo y lo que llevas hoy.</p>
-
-<div class="card">
-<div class="row"><b>Objetivo</b><span class="pill" id="coachGoal">Perder grasa</span></div>
-<div class="row" style="margin-top:10px"><span>Calorías</span><b id="coachCalories">0</b></div>
-<div class="row"><span>Proteína</span><b id="coachProtein">0 g</b></div>
-<div class="row"><span>Agua</span><b id="coachWater">0 ml</b></div>
-</div>
-
-<button class="btn primary" style="width:100%;margin-top:12px" onclick="askCoach()">✨ Pedir consejo a la IA</button>
-<div id="coachResult" style="margin-top:12px"></div>
-</section>
-
-<section id="progressScreen" class="screen">
-<button class="back" onclick="show('home')">← Volver</button>
-<h2>📈 Mi progreso</h2>
-<p class="muted">Guarda fotos y observa tus cambios con el tiempo.</p>
-
-<div class="card">
-<label><b>Fecha</b>
-<input id="progressDate" class="input" type="date">
-</label>
-
-<label><b>Peso actual (kg)</b>
-<input id="progressWeight" class="input" type="number" step="0.1" placeholder="Ej. 79.5">
-</label>
-
-<label><b>Cintura (cm)</b>
-<input id="progressWaist" class="input" type="number" step="0.1" placeholder="Opcional">
-</label>
-</div>
-
-<div class="card" style="margin-top:10px">
-<h3>📸 Fotos</h3>
-<p class="muted">Puedes añadir frontal, lateral y espalda.</p>
-
-<label>Frontal
-<input id="frontPhoto" class="input" type="file" accept="image/*">
-</label>
-
-<label>Lateral
-<input id="sidePhoto" class="input" type="file" accept="image/*">
-</label>
-
-<label>Espalda
-<input id="backPhoto" class="input" type="file" accept="image/*">
-</label>
-
-<div id="progressPreview" class="photoGrid"></div>
-
-<button class="btn primary" style="width:100%;margin-top:10px" onclick="saveProgress()">💾 Guardar progreso</button>
-</div>
-
-<div class="card" style="margin-top:10px">
-<h3>🤖 Analizar progreso con IA</h3>
-<p class="muted">La IA analizará cambios visuales y te dará recomendaciones.</p>
-<button class="btn primary" style="width:100%" onclick="analyzeProgress()">✨ Analizar mi progreso</button>
-<div id="progressAI" style="margin-top:12px"></div>
-</div>
-
-<div id="progressHistory" style="margin-top:12px"></div>
-</section>
-
-<section id="history" class="screen">
-<button class="back" onclick="show('home')">← Volver</button>
-<h2>📊 Historial</h2>
-<div class="card">
-<b>Últimos 7 días</b>
-<div id="chart" class="chart"></div>
-<div class="row"><span>Media kcal</span><b id="avg">0</b></div>
-<div class="row"><span>Objetivo</span><b id="avgGoal">0</b></div>
-</div>
-<div id="historyList" style="margin-top:12px"></div>
-</section>
-
-<section id="profile" class="screen">
-<button class="back" onclick="show('home')">← Volver</button>
-<h2>👤 Tu perfil</h2>
-
-<div class="card">
-<label>Peso (kg)
-<input id="weight" class="input" type="number">
-</label>
-
-<label>Altura (cm)
-<input id="height" class="input" type="number">
-</label>
-
-<label>Edad
-<input id="age" class="input" type="number">
-</label>
-
-<label>Sexo
-<select id="sex" class="input">
-<option value="male">Hombre</option>
-<option value="female">Mujer</option>
-</select>
-</label>
-
-<label>Objetivo
-<select id="goalType" class="input">
-<option value="lose">Perder grasa</option>
-<option value="maintain">Mantener</option>
-<option value="gain">Ganar músculo/peso</option>
-</select>
-</label>
-
-<label>Objetivo de agua (ml)
-<input id="waterTarget" class="input" type="number" value="2000">
-</label>
-
-<button class="btn primary" style="width:100%" onclick="saveProfile()">Guardar y calcular</button>
-</div>
-</section>
-
-</main>
-
-<nav class="bottom">
-<button onclick="show('home')">🏠<br>Inicio</button>
-<button onclick="show('scan')">📷<br>Comida</button>
-<button onclick="show('coach')">🤖<br>Coach</button>
-<button onclick="show('history')">📊<br>Historial</button>
-<button onclick="show('profile')">👤<br>Perfil</button>
-</nav>
 
 <script>
-const $=id=>document.getElementById(id);
 
-const today=()=>new Date().toISOString().slice(0,10);
+  /* =========================
+     ESTADO
+  ========================= */
 
-let state=JSON.parse(localStorage.getItem('v7state')||'null')||{
- goal:2200,
- foods:[],
- days:{},
- water:{},
- profile:{
-  weight:80,
-  height:169,
-  age:27,
-  sex:'male',
-  goalType:'lose',
-  waterTarget:2000
- },
- progress:[]
-};
+  const STORAGE_KEY = "v7state";
 
-let selectedImage=null;
-let last=null;
+  let state = {
+    profile:{
+      name:"",
+      age:"",
+      sex:"",
+      height:"",
+      weight:"",
+      goal:"perder_grasa",
+      activity:"moderado"
+    },
 
-function save(){
- state.days[today()]=state.foods;
- localStorage.setItem('v7state',JSON.stringify(state));
- render();
-}
+    meals:[],
 
-function totals(){
- return state.foods.reduce((a,x)=>{
-  let t=x.totals||x;
-  return {
-   cal:a.cal+(+t.calories||0),
-   p:a.p+(+t.protein_g||0),
-   c:a.c+(+t.carbs_g||0),
-   f:a.f+(+t.fat_g||0)
-  };
- },{cal:0,p:0,c:0,f:0});
-}
-
-function waterToday(){
- return +(state.water[today()]||0);
-}
-
-function render(){
- let t=totals();
- let wg=state.profile.waterTarget||2000;
- let w=waterToday();
-
- $('goal').textContent=Math.round(state.goal).toLocaleString('es-ES');
- $('cal').textContent=Math.round(t.cal);
- $('p').textContent=t.p.toFixed(1)+' g';
- $('c').textContent=t.c.toFixed(1)+' g';
- $('remaining').textContent=Math.max(0,Math.round(state.goal-t.cal)).toLocaleString('es-ES');
- $('progress').style.width=Math.min(100,t.cal/state.goal*100)+'%';
-
- $('waterNow').textContent=w;
- $('waterGoal').textContent=wg;
- $('waterProgress').style.width=Math.min(100,w/wg*100)+'%';
-
- $('diary').innerHTML=state.foods.length
- ?'<h3 class="sectionTitle">🍽️ Comidas de hoy</h3>'+
- state.foods.map((m,i)=>`
- <div class="card" style="margin-top:8px">
- <div class="row">
- <b>${m.meal_name||'Comida'}</b>
- <button class="btn secondary" onclick="removeFood(${i})">Eliminar</button>
- </div>
- ${(m.items||[]).map(x=>`
- <div class="food">
- <span><b>${x.food}</b><br>
- <small>${x.grams} g · P ${x.protein_g}g · C ${x.carbs_g}g · G ${x.fat_g}g</small></span>
- <b>${x.calories} kcal</b>
- </div>`).join('')}
- <b>Total: ${m.totals?.calories||0} kcal</b>
- </div>`).join('')
- :'<div class="card" style="margin-top:18px"><b>Tu diario está vacío</b><p class="muted">Haz una foto de tu comida para empezar.</p></div>';
-
- renderHistory();
- renderProgressHistory();
-}
-
-function show(id){
- document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));
- $(id).classList.add('active');
- window.scrollTo(0,0);
-
- if(id==='home')render();
- if(id==='history')renderHistory();
- if(id==='coach'){
-  let t=totals();
-  $('coachCalories').textContent=Math.round(t.cal)+' kcal';
-  $('coachProtein').textContent=t.p.toFixed(1)+' g';
-  $('coachWater').textContent=waterToday()+' ml';
-  $('coachGoal').textContent=
-   state.profile.goalType==='lose'?'Perder grasa':
-   state.profile.goalType==='gain'?'Ganar músculo':'Mantener';
- }
- if(id==='progressScreen')renderProgressHistory();
-}
-
-function removeFood(i){
- state.foods.splice(i,1);
- save();
-}
-
-function addWater(ml){
- state.water[today()]=waterToday()+ml;
- localStorage.setItem('v7state',JSON.stringify(state));
- render();
-}
-
-function customWater(){
- let ml=prompt('¿Cuántos ml has bebido?');
- ml=Number(ml);
- if(ml>0)addWater(ml);
-}
-
-function takePhoto(){
- $('photo').click();
-}
-
-$('photo').onchange=()=>{
- if($('photo').files[0]){
-  selectedImage=$('photo').files[0];
-  showPreview(selectedImage);
- }
-};
-
-$('gallery').onchange=()=>{
- if($('gallery').files[0]){
-  selectedImage=$('gallery').files[0];
-  showPreview(selectedImage);
- }
-};
-
-function showPreview(file){
- let url=URL.createObjectURL(file);
- $('photoPreview').src=url;
- $('photoPreview').style.display='block';
- $('scanStatus').textContent='✅ Foto lista. Introduce los gramos y pulsa Analizar con IA.';
-}
-
-async function analyzePhoto(){
- if(!selectedImage){
-  $('scanStatus').textContent='📷 Primero toma una foto.';
-  return;
- }
-
- let grams=Number($('foodGrams').value);
-
- if(!grams || grams<=0){
-  $('scanStatus').textContent='⚖️ Introduce el peso de la comida en gramos.';
-  $('foodGrams').focus();
-  return;
- }
-
- $('scanStatus').textContent='⏳ Analizando foto y peso...';
-
- try{
-  let img=await resizeData(selectedImage);
-
-  let r=await fetch('/api/analyze-food',{
-   method:'POST',
-   headers:{'Content-Type':'application/json'},
-   body:JSON.stringify({
-    image:img,
-    grams:grams,
-    note:$('foodNote').value
-   })
-  });
-
-  let d=await r.json();
-
-  if(!r.ok)throw Error(d.error||'Error');
-
-  last=d;
-
-  $('scanStatus').textContent='✅ Análisis terminado. Revisa el resultado.';
-
-  $('result').innerHTML=`
-  <div class="card">
-  <h3>${d.meal_name}</h3>
-  ${d.items.map(x=>`
-  <div class="food">
-  <span><b>${x.food}</b><br>
-  <small>${x.grams} g · P ${x.protein_g}g · C ${x.carbs_g}g · G ${x.fat_g}g</small><br>
-  <span class="pill">Confianza: ${x.confidence}</span></span>
-  <b>${x.calories} kcal</b>
-  </div>`).join('')}
-  <h3>Total: ${d.totals.calories} kcal</h3>
-  <p class="muted">P ${d.totals.protein_g}g · C ${d.totals.carbs_g}g · G ${d.totals.fat_g}g</p>
-  <p class="muted">${d.notes||''}</p>
-  <button class="btn primary" style="width:100%" onclick="addResult()">＋ Añadir al diario</button>
-  </div>`;
- }catch(e){
-  $('scanStatus').textContent='❌ '+e.message;
- }
-}
-
-function resizeData(blob){
- return new Promise(resolve=>{
-  let im=new Image();
-
-  im.onload=()=>{
-   let s=Math.min(1400/Math.max(im.width,im.height),1);
-   let c=document.createElement('canvas');
-
-   c.width=Math.round(im.width*s);
-   c.height=Math.round(im.height*s);
-
-   c.getContext('2d').drawImage(im,0,0,c.width,c.height);
-
-   resolve(c.toDataURL('image/jpeg',.76));
-  };
-
-  im.src=URL.createObjectURL(blob);
- });
-}
-
-function addResult(){
- state.foods.push(last);
- save();
- show('home');
-}
-
-async function lookupBarcode(){
- let code=$('barcodeInput').value.trim();
- if(!code)return;
-
- $('barcodeResult').innerHTML='⏳ Buscando...';
-
- try{
-  let r=await fetch('/api/barcode?code='+encodeURIComponent(code));
-  let d=await r.json();
-
-  if(!r.ok)throw Error(d.error);
-
-  let n=d.per100g;
-
-  $('barcodeResult').innerHTML=`
-  <div class="card">
-  <h3>${d.name}</h3>
-  <p class="muted">${d.brand||''}</p>
-  <div class="grid">
-  <div class="stat">🔥<b>${n.calories}</b></div>
-  <div class="stat">🥩<b>${n.protein_g} g</b></div>
-  <div class="stat">🍚<b>${n.carbs_g} g</b></div>
-  </div>
-  <button class="btn primary" style="width:100%;margin-top:10px"
-  onclick="addBarcode(${JSON.stringify(d.name)},${n.calories},${n.protein_g},${n.carbs_g},${n.fat_g})">
-  ＋ Añadir 100 g
-  </button>
-  </div>`;
- }catch(e){
-  $('barcodeResult').innerHTML='<div class="warn">❌ '+e.message+'</div>';
- }
-}
-
-function addBarcode(name,k,p,c,f){
- state.foods.push({
-  meal_name:'Producto',
-  items:[{
-   food:name,
-   grams:100,
-   calories:k,
-   protein_g:p,
-   carbs_g:c,
-   fat_g:f
-  }],
-  totals:{
-   grams:100,
-   calories:k,
-   protein_g:p,
-   carbs_g:c,
-   fat_g:f
-  }
- });
-
- save();
- show('home');
-}
-
-function saveProfile(){
- let w=+$('weight').value;
- let h=+$('height').value;
- let a=+$('age').value;
- let s=$('sex').value;
- let g=$('goalType').value;
- let wt=+$('waterTarget').value||2000;
-
- if(!w||!h||!a){
-  alert('Completa peso, altura y edad.');
-  return;
- }
-
- let bmr=s==='male'
- ?10*w+6.25*h-5*a+5
- :10*w+6.25*h-5*a-161;
-
- let tdee=bmr*1.55;
-
- state.goal=Math.round(
-  tdee+(g==='lose'?-400:g==='gain'?300:0)
- );
-
- state.profile={
-  weight:w,
-  height:h,
-  age:a,
-  sex:s,
-  goalType:g,
-  waterTarget:wt
- };
-
- save();
- show('home');
-}
-
-async function askCoach(){
- $('coachResult').innerHTML='⏳ La IA está preparando tus recomendaciones...';
-
- try{
-  let r=await fetch('/api/coach',{
-   method:'POST',
-   headers:{'Content-Type':'application/json'},
-   body:JSON.stringify({
-    profile:state.profile,
-    totals:totals(),
     water:{
-     consumed:waterToday(),
-     goal:state.profile.waterTarget||2000
-    }
-   })
-  });
+      date:"",
+      ml:0
+    },
 
-  let d=await r.json();
-
-  if(!r.ok)throw Error(d.error||'Error');
-
-  $('coachResult').innerHTML=`
-  <div class="success">
-  <h3>💡 ${d.summary}</h3>
-  <div class="tip"><b>🔥 Calorías</b><br>${d.calorie_advice}</div>
-  <div class="tip"><b>🥩 Proteína</b><br>${d.protein_advice}</div>
-  <div class="tip"><b>💧 Agua</b><br>${d.water_advice}</div>
-  <div class="tip"><b>🥗 Alimentación</b><br>${d.meal_recommendation}</div>
-  <div class="tip"><b>🏋️ Entrenamiento</b><br>${d.training_advice}</div>
-  <h3>Consejos</h3>
-  ${(d.tips||[]).map(x=>`<div class="tip">✓ ${x}</div>`).join('')}
-  <p class="muted">${d.warning||''}</p>
-  </div>`;
- }catch(e){
-  $('coachResult').innerHTML='<div class="warn">❌ '+e.message+'</div>';
- }
-}
-
-function readFile(file){
- return new Promise(resolve=>{
-  if(!file)return resolve(null);
-
-  let im=new Image();
-
-  im.onload=()=>{
-   let s=Math.min(700/Math.max(im.width,im.height),1);
-   let c=document.createElement('canvas');
-
-   c.width=Math.round(im.width*s);
-   c.height=Math.round(im.height*s);
-
-   c.getContext('2d').drawImage(im,0,0,c.width,c.height);
-
-   resolve(c.toDataURL('image/jpeg',.65));
+    progress:[]
   };
 
-  im.src=URL.createObjectURL(file);
- });
-}
+  let currentPhoto = null;
+  let identifiedIngredients = [];
 
-async function saveProgress(){
- let date=$('progressDate').value||today();
 
- let entry={
-  date,
-  weight:Number($('progressWeight').value)||null,
-  waist:Number($('progressWaist').value)||null,
-  photos:[
-   await readFile($('frontPhoto').files[0]),
-   await readFile($('sidePhoto').files[0]),
-   await readFile($('backPhoto').files[0])
-  ].filter(Boolean)
- };
+  /* =========================
+     UTILIDADES
+  ========================= */
 
- if(!entry.photos.length && !entry.weight && !entry.waist){
-  alert('Añade al menos una foto, peso o medida.');
-  return;
- }
+  function $(id){
+    return document.getElementById(id);
+  }
 
- state.progress.unshift(entry);
- state.progress=state.progress.slice(0,30);
+  function today(){
+    return new Date().toISOString().slice(0,10);
+  }
 
- localStorage.setItem('v7state',JSON.stringify(state));
+  function saveState(){
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  }
 
- $('frontPhoto').value='';
- $('sidePhoto').value='';
- $('backPhoto').value='';
+  function loadState(){
 
- $('progressPreview').innerHTML='';
+    try{
 
- renderProgressHistory();
+      const saved = localStorage.getItem(STORAGE_KEY);
 
- alert('✅ Progreso guardado');
-}
+      if(saved){
+        state = Object.assign(state, JSON.parse(saved));
+      }
 
-function renderProgressHistory(){
- let box=$('progressHistory');
- if(!box)return;
+    }catch(e){
+      console.error(e);
+    }
 
- if(!state.progress.length){
-  box.innerHTML='<div class="card"><b>Aún no tienes registros.</b><p class="muted">Guarda tu primera foto de progreso.</p></div>';
-  return;
- }
+    if(!state.water || state.water.date !== today()){
+      state.water = {
+        date:today(),
+        ml:0
+      };
+    }
 
- box.innerHTML='<h3>📅 Registros</h3>'+
- state.progress.map((x,i)=>`
- <div class="card" style="margin-top:8px">
- <div class="row"><b>${x.date}</b><span>${x.weight?x.weight+' kg':''}</span></div>
- ${x.waist?`<div class="muted">Cintura: ${x.waist} cm</div>`:''}
- <div class="photoGrid" style="margin-top:8px">
- ${(x.photos||[]).map(p=>`<img src="${p}">`).join('')}
- </div>
- </div>`).join('');
-}
+    saveState();
+  }
 
-async function analyzeProgress(){
- let current=state.progress[0];
 
- if(!current||!current.photos.length){
-  $('progressAI').innerHTML='<div class="warn">Primero guarda un registro con al menos una foto.</div>';
-  return;
- }
+  /* =========================
+     NAVEGACIÓN
+  ========================= */
 
- $('progressAI').innerHTML='⏳ Analizando tu progreso...';
+  function showScreen(screen){
 
- try{
-  let previous=state.progress.slice(1,4);
+    document
+      .querySelectorAll("main[id^='screen-']")
+      .forEach(el => el.classList.add("hidden"));
 
-  let r=await fetch('/api/analyze-progress',{
-   method:'POST',
-   headers:{'Content-Type':'application/json'},
-   body:JSON.stringify({
-    photos:current.photos,
-    profile:state.profile,
-    previousProgress:previous.map(x=>({
-     date:x.date,
-     weight:x.weight,
-     waist:x.waist
-    }))
-   })
-  });
+    const target = $("screen-" + screen);
 
-  let d=await r.json();
+    if(target){
+      target.classList.remove("hidden");
+    }
 
-  if(!r.ok)throw Error(d.error||'Error');
+    document
+      .querySelectorAll(".nav-btn")
+      .forEach(btn => btn.classList.remove("active"));
 
-  $('progressAI').innerHTML=`
-  <div class="success">
-  <h3>📊 Valoración</h3>
-  <p>${d.overall}</p>
+    const indexes = {
+      home:0,
+      food:1,
+      progress:2,
+      profile:3
+    };
 
-  <h3>👀 Cambios visibles</h3>
-  ${(d.visual_changes||[]).map(x=>`<div class="tip">✓ ${x}</div>`).join('')}
+    const buttons = document.querySelectorAll(".nav-btn");
 
-  <h3>💪 Puntos positivos</h3>
-  ${(d.strengths||[]).map(x=>`<div class="tip">✓ ${x}</div>`).join('')}
+    if(buttons[indexes[screen]]){
+      buttons[indexes[screen]].classList.add("active");
+    }
 
-  <h3>🎯 Para mejorar</h3>
-  ${(d.improvements||[]).map(x=>`<div class="tip">→ ${x}</div>`).join('')}
+    if(screen === "home"){
+      updateHome();
+    }
 
-  <div class="tip"><b>🥗 Nutrición</b><br>${d.nutrition_advice}</div>
-  <div class="tip"><b>🏋️ Entrenamiento</b><br>${d.training_advice}</div>
+    if(screen === "progress"){
+      renderProgressHistory();
+    }
 
-  <h3>Próximos pasos</h3>
-  ${(d.next_steps||[]).map(x=>`<div class="tip">→ ${x}</div>`).join('')}
+    if(screen === "profile"){
+      loadProfileForm();
+    }
 
-  <p class="muted">${d.note||''}</p>
-  </div>`;
- }catch(e){
-  $('progressAI').innerHTML='<div class="warn">❌ '+e.message+'</div>';
- }
-}
+    if(screen === "water"){
+      updateWater();
+    }
 
-function renderHistory(){
- let vals=[];
+    window.scrollTo({
+      top:0,
+      behavior:"smooth"
+    });
+  }
 
- for(let i=6;i>=0;i--){
-  let d=new Date();
-  d.setDate(d.getDate()-i);
-  let k=d.toISOString().slice(0,10);
-  let f=state.days[k]||[];
 
-  let kcal=f.reduce((a,x)=>a+(+(x.totals?.calories||0)),0);
+  /* =========================
+     INICIO
+  ========================= */
 
-  vals.push({k,kcal});
- }
+  function updateHome(){
 
- let max=Math.max(state.goal,...vals.map(x=>x.kcal),1);
+    const todayMeals = state.meals.filter(
+      m => m.date === today()
+    );
 
- $('chart').innerHTML=vals.map(x=>`
- <div class="col">
- <div style="height:120px;display:flex;align-items:end">
- <div class="barcol" style="height:${Math.max(5,x.kcal/max*110)}px;width:100%"></div>
- </div>
- <div>${x.k.slice(8)}</div>
- </div>`).join('');
+    let calories = 0;
+    let protein = 0;
 
- let avg=vals.reduce((a,x)=>a+x.kcal,0)/7;
+    todayMeals.forEach(meal => {
 
- $('avg').textContent=Math.round(avg)+' kcal';
- $('avgGoal').textContent=Math.round(state.goal)+' kcal';
+      calories += Number(meal.totals?.calories || 0);
+      protein += Number(meal.totals?.protein_g || 0);
 
- $('historyList').innerHTML=vals.reverse().map(x=>`
- <div class="card" style="margin-top:8px">
- <div class="row"><span>${x.k}</span><b>${Math.round(x.kcal)} kcal</b></div>
- </div>`).join('');
-}
+    });
 
-$('progressDate').value=today();
+    $("homeCalories").textContent =
+      Math.round(calories);
 
-$('weight').value=state.profile.weight;
-$('height').value=state.profile.height;
-$('age').value=state.profile.age;
-$('sex').value=state.profile.sex;
-$('goalType').value=state.profile.goalType;
-$('waterTarget').value=state.profile.waterTarget||2000;
+    $("homeProtein").textContent =
+      Math.round(protein) + " g";
 
-render();
+    $("homeWater").textContent =
+      Math.round(state.water.ml) + " ml";
 
-if('serviceWorker' in navigator){
- navigator.serviceWorker.register('/sw.js');
-}
+    $("homeMeals").textContent =
+      todayMeals.length;
+  }
+
+
+  /* =========================
+     CÁMARA / FOTO
+  ========================= */
+
+  function takePhoto(){
+
+    $("photoInput").click();
+
+  }
+
+  function choosePhoto(){
+
+    $("photoInput").click();
+
+  }
+
+
+  $("photoInput").addEventListener(
+    "change",
+    async function(){
+
+      const file = this.files?.[0];
+
+      if(!file) return;
+
+      currentPhoto = file;
+
+      const reader = new FileReader();
+
+      reader.onload = function(e){
+
+        $("foodPreview").src = e.target.result;
+
+        $("foodPreview").classList.remove("hidden");
+
+        $("cameraPlaceholder").classList.add("hidden");
+
+        $("analyzeButton").classList.remove("hidden");
+
+      };
+
+      reader.readAsDataURL(file);
+
+    }
+  );
+
+
+  /* =========================
+     COMPRESIÓN DE IMAGEN
+  ========================= */
+
+  async function fileToDataURL(file){
+
+    return new Promise((resolve,reject)=>{
+
+      const reader = new FileReader();
+
+      reader.onload = () => resolve(reader.result);
+
+      reader.onerror = reject;
+
+      reader.readAsDataURL(file);
+
+    });
+
+  }
+
+
+  async function compressImage(file){
+
+    const dataURL = await fileToDataURL(file);
+
+    const img = new Image();
+
+    await new Promise((resolve,reject)=>{
+
+      img.onload = resolve;
+
+      img.onerror = reject;
+
+      img.src = dataURL;
+
+    });
+
+    const maxSize = 1600;
+
+    let width = img.width;
+    let height = img.height;
+
+    if(width > maxSize || height > maxSize){
+
+      if(width > height){
+
+        height =
+          Math.round(height * maxSize / width);
+
+        width = maxSize;
+
+      }else{
+
+        width =
+          Math.round(width * maxSize / height);
+
+        height = maxSize;
+
+      }
+
+    }
+
+    const canvas = document.createElement("canvas");
+
+    canvas.width = width;
+    canvas.height = height;
+
+    const ctx = canvas.getContext("2d");
+
+    ctx.drawImage(
+      img,
+      0,
+      0,
+      width,
+      height
+    );
+
+    return canvas.toDataURL(
+      "image/jpeg",
+      .78
+    );
+
+  }
+
+
+  /* =========================
+     IDENTIFICAR INGREDIENTES
+  ========================= */
+
+  async function identifyFood(){
+
+    if(!currentPhoto){
+
+      alert("Primero toma o selecciona una foto.");
+
+      return;
+    }
+
+    const button = $("analyzeButton");
+
+    button.disabled = true;
+
+    button.textContent = "🤖 Analizando...";
+
+    $("ingredientCard").classList.remove("hidden");
+
+    $("ingredientsList").innerHTML = `
+      <div class="loading">
+        <div class="spinner"></div>
+        La IA está identificando los ingredientes...
+      </div>
+    `;
+
+    try{
+
+      const image = await compressImage(currentPhoto);
+
+      const response = await fetch(
+        "/api/analyze-food",
+        {
+          method:"POST",
+          headers:{
+            "Content-Type":"application/json"
+          },
+          body:JSON.stringify({
+            step:"identify",
+            image:image,
+            note:$("foodNote").value.trim()
+          })
+        }
+      );
+
+      const data = await response.json();
+
+      if(!response.ok){
+        throw new Error(
+          data.error || "No se pudo analizar la imagen."
+        );
+      }
+
+      identifiedIngredients =
+        Array.isArray(data.ingredients)
+          ? data.ingredients
+          : [];
+
+      renderIngredients();
+
+    }catch(error){
+
+      console.error(error);
+
+      $("ingredientsList").innerHTML = `
+        <div class="notice">
+          ❌ No se pudo analizar la foto.
+          Inténtalo de nuevo.
+        </div>
+      `;
+
+    }finally{
+
+      button.disabled = false;
+
+      button.textContent =
+        "✨ Identificar ingredientes con IA";
+
+    }
+
+  }
+
+
+  /* =========================
+     MOSTRAR INGREDIENTES
+  ========================= */
+
+  function renderIngredients(){
+
+    const list = $("ingredientsList");
+
+    if(!identifiedIngredients.length){
+
+      list.innerHTML = `
+        <div class="empty">
+          No se han detectado ingredientes.
+        </div>
+      `;
+
+      return;
+    }
+
+    list.innerHTML =
+      identifiedIngredients.map((item,index)=>{
+
+        const confidence =
+          Math.round(
+            Number(item.confidence || 0.8) * 100
+          );
+
+        return `
+          <div class="ingredient">
+
+            <div class="ingredient-top">
+
+              <div class="ingredient-name">
+                ${escapeHTML(item.name || "Ingrediente")}
+              </div>
+
+              <div class="confidence">
+                ${confidence}% confianza
+              </div>
+
+            </div>
+
+            <div class="grams-row">
+
+              <span class="grams-label">
+                Peso:
+              </span>
+
+              <input
+                class="input ingredient-grams"
+                data-index="${index}"
+                type="number"
+                min="1"
+                step="1"
+                placeholder="Ej. 150"
+              >
+
+              <span class="grams-label">
+                g
+              </span>
+
+            </div>
+
+            <div class="optional">
+              Opcional · si no sabes el peso, déjalo vacío.
+            </div>
+
+          </div>
+        `;
+
+      }).join("");
+
+  }
+
+
+  /* =========================
+     CALCULAR COMIDA
+  ========================= */
+
+  async function calculateFood(){
+
+    if(!currentPhoto){
+
+      alert("Primero toma una foto.");
+
+      return;
+    }
+
+    if(!identifiedIngredients.length){
+
+      alert("Primero identifica los ingredientes.");
+
+      return;
+    }
+
+    const button = $("calculateButton");
+
+    button.disabled = true;
+
+    button.textContent =
+      "🔥 Calculando...";
+
+    try{
+
+      const image =
+        await compressImage(currentPhoto);
+
+      const inputs =
+        document.querySelectorAll(".ingredient-grams");
+
+      const ingredients =
+        identifiedIngredients.map((item,index)=>{
+
+          const value =
+            Number(inputs[index]?.value || 0);
+
+          return {
+            id:item.id || String(index),
+            name:item.name,
+            estimated_grams:item.estimated_grams || null,
+            grams:value > 0 ? value : null
+          };
+
+        });
+
+      const response =
+        await fetch(
+          "/api/analyze-food",
+          {
+            method:"POST",
+            headers:{
+              "Content-Type":"application/json"
+            },
+            body:JSON.stringify({
+              step:"calculate",
+              image:image,
+              ingredients:ingredients,
+              note:$("foodNote").value.trim()
+            })
+          }
+        );
+
+      const data =
+        await response.json();
+
+      if(!response.ok){
+
+        throw new Error(
+          data.error ||
+          "No se pudieron calcular las calorías."
+        );
+
+      }
+
+      showFoodResult(data);
+
+      state.meals.push({
+        id:Date.now(),
+        date:today(),
+        meal_name:data.meal_name || "Comida",
+        totals:data.totals || {},
+        items:data.items || [],
+        note:$("foodNote").value.trim()
+      });
+
+      saveState();
+
+      updateHome();
+
+    }catch(error){
+
+      console.error(error);
+
+      $("foodResult").classList.remove("hidden");
+
+      $("foodResult").innerHTML = `
+        <div class="notice">
+          ❌ ${escapeHTML(error.message)}
+        </div>
+      `;
+
+    }finally{
+
+      button.disabled = false;
+
+      button.textContent =
+        "🔥 Calcular calorías y macros";
+
+    }
+
+  }
+
+
+  /* =========================
+     RESULTADO COMIDA
+  ========================= */
+
+  function showFoodResult(data){
+
+    const totals = data.totals || {};
+
+    const items = data.items || [];
+
+    $("foodResult").classList.remove("hidden");
+
+    $("foodResult").innerHTML = `
+
+      <div class="card-title">
+        🍽️ ${escapeHTML(data.meal_name || "Tu comida")}
+      </div>
+
+      <br>
+
+      <div class="result-total">
+
+        <div class="number">
+          ${Math.round(Number(totals.calories || 0))} kcal
+        </div>
+
+        <div>
+          ${Math.round(Number(totals.grams || 0))} g estimados
+        </div>
+
+      </div>
+
+      <div class="macro-grid">
+
+        <div class="macro">
+          <strong>
+            ${Math.round(Number(totals.protein_g || 0))} g
+          </strong>
+          <span>Proteínas</span>
+        </div>
+
+        <div class="macro">
+          <strong>
+            ${Math.round(Number(totals.carbs_g || 0))} g
+          </strong>
+          <span>Carbohidratos</span>
+        </div>
+
+        <div class="macro">
+          <strong>
+            ${Math.round(Number(totals.fat_g || 0))} g
+          </strong>
+          <span>Grasas</span>
+        </div>
+
+      </div>
+
+      <br>
+
+      ${
+        items.map(item=>`
+
+          <div class="food-row">
+
+            <div>
+
+              <div class="food-name">
+                ${escapeHTML(item.food || "Alimento")}
+              </div>
+
+              <div class="food-detail">
+                ${Math.round(Number(item.grams || 0))} g
+                · ${item.grams_source === "user"
+                    ? "peso introducido"
+                    : "estimado por IA"}
+              </div>
+
+            </div>
+
+            <div class="food-cal">
+              ${Math.round(Number(item.calories || 0))} kcal
+            </div>
+
+          </div>
+
+        `).join("")
+      }
+
+      ${
+        data.notes
+          ? `
+            <div class="notice" style="margin-top:12px">
+              💡 ${escapeHTML(data.notes)}
+            </div>
+          `
+          : ""
+      }
+
+      <button
+        class="secondary-button"
+        onclick="resetFood()"
+      >
+        📸 Analizar otra comida
+      </button>
+    `;
+
+    $("foodResult").scrollIntoView({
+      behavior:"smooth"
+    });
+
+  }
+
+
+  function resetFood(){
+
+    currentPhoto = null;
+
+    identifiedIngredients = [];
+
+    $("photoInput").value = "";
+
+    $("foodPreview").src = "";
+
+    $("foodPreview").classList.add("hidden");
+
+    $("cameraPlaceholder").classList.remove("hidden");
+
+    $("analyzeButton").classList.add("hidden");
+
+    $("ingredientCard").classList.add("hidden");
+
+    $("foodResult").classList.add("hidden");
+
+    $("ingredientsList").innerHTML = "";
+
+    $("foodNote").value = "";
+
+    window.scrollTo({
+      top:0,
+      behavior:"smooth"
+    });
+
+  }
+
+
+  /* =========================
+     AGUA
+  ========================= */
+
+  function ensureWaterDate(){
+
+    if(state.water.date !== today()){
+
+      state.water = {
+        date:today(),
+        ml:0
+      };
+
+      saveState();
+
+    }
+
+  }
+
+
+  function addWater(amount){
+
+    ensureWaterDate();
+
+    state.water.ml += Number(amount);
+
+    saveState();
+
+    updateWater();
+
+    updateHome();
+
+  }
+
+
+  function addCustomWater(){
+
+    const amount =
+      Number($("customWater").value);
+
+    if(!amount || amount <= 0){
+
+      alert("Introduce una cantidad válida.");
+
+      return;
+    }
+
+    addWater(amount);
+
+    $("customWater").value = "";
+
+  }
+
+
+  function resetWater(){
+
+    if(
+      confirm(
+        "¿Quieres reiniciar el agua de hoy?"
+      )
+    ){
+
+      state.water.ml = 0;
+
+      saveState();
+
+      updateWater();
+
+      updateHome();
+
+    }
+
+  }
+
+
+  function updateWater(){
+
+    ensureWaterDate();
+
+    $("waterBig").textContent =
+      Math.round(state.water.ml);
+
+  }
+
+
+  /* =========================
+     PERFIL
+  ========================= */
+
+  function loadProfileForm(){
+
+    const p = state.profile;
+
+    $("profileName").value =
+      p.name || "";
+
+    $("profileAge").value =
+      p.age || "";
+
+    $("profileSex").value =
+      p.sex || "";
+
+    $("profileHeight").value =
+      p.height || "";
+
+    $("profileWeight").value =
+      p.weight || "";
+
+    $("profileGoal").value =
+      p.goal || "perder_grasa";
+
+    $("profileActivity").value =
+      p.activity || "moderado";
+
+  }
+
+
+  function saveProfile(){
+
+    state.profile = {
+
+      name:$("profileName").value.trim(),
+
+      age:$("profileAge").value,
+
+      sex:$("profileSex").value,
+
+      height:$("profileHeight").value,
+
+      weight:$("profileWeight").value,
+
+      goal:$("profileGoal").value,
+
+      activity:$("profileActivity").value
+
+    };
+
+    saveState();
+
+    alert("Perfil guardado correctamente.");
+
+    updateHome();
+
+  }
+
+
+  /* =========================
+     COACH IA
+  ========================= */
+
+  async function getCoach(){
+
+    const targets = [
+      $("homeCoach"),
+      $("profileCoach")
+    ];
+
+    targets.forEach(el=>{
+
+      if(el){
+
+        el.innerHTML = `
+          <div class="coach-box">
+            <div class="loading">
+              <div class="spinner"></div>
+              <div class="coach-text">
+                El Coach está preparando tus recomendaciones...
+              </div>
+            </div>
+          </div>
+        `;
+
+      }
+
+    });
+
+    try{
+
+      const todayMeals =
+        state.meals.filter(
+          m => m.date === today()
+        );
+
+      const totals = {
+
+        calories:
+          todayMeals.reduce(
+            (sum,m)=>
+              sum + Number(m.totals?.calories || 0),
+            0
+          ),
+
+        protein_g:
+          todayMeals.reduce(
+            (sum,m)=>
+              sum + Number(m.totals?.protein_g || 0),
+            0
+          ),
+
+        carbs_g:
+          todayMeals.reduce(
+            (sum,m)=>
+              sum + Number(m.totals?.carbs_g || 0),
+            0
+          ),
+
+        fat_g:
+          todayMeals.reduce(
+            (sum,m)=>
+              sum + Number(m.totals?.fat_g || 0),
+            0
+          )
+
+      };
+
+      const response =
+        await fetch(
+          "/api/coach",
+          {
+            method:"POST",
+            headers:{
+              "Content-Type":"application/json"
+            },
+            body:JSON.stringify({
+              profile:state.profile,
+              totals:totals,
+              water:state.water
+            })
+          }
+        );
+
+      const data =
+        await response.json();
+
+      if(!response.ok){
+
+        throw new Error(
+          data.error ||
+          "No se pudo contactar con el Coach."
+        );
+
+      }
+
+      renderCoach(data);
+
+    }catch(error){
+
+      console.error(error);
+
+      targets.forEach(el=>{
+
+        if(el){
+
+          el.innerHTML = `
+            <div class="notice">
+              ❌ No se pudo obtener el consejo.
+              Inténtalo de nuevo.
+            </div>
+          `;
+
+        }
+
+      });
+
+    }
+
+  }
+
+
+  function renderCoach(data){
+
+    const html = `
+
+      <div class="coach-box">
+
+        <div class="coach-title">
+          🐻 Tu Coach IA
+        </div>
+
+        <div class="coach-text">
+          ${escapeHTML(data.summary || "")}
+        </div>
+
+      </div>
+
+      ${
+        data.calorie_advice
+          ? `<div class="tip">
+              🔥 <strong>Calorías:</strong><br>
+              ${escapeHTML(data.calorie_advice)}
+            </div>`
+          : ""
+      }
+
+      ${
+        data.protein_advice
+          ? `<div class="tip">
+              🥩 <strong>Proteínas:</strong><br>
+              ${escapeHTML(data.protein_advice)}
+            </div>`
+          : ""
+      }
+
+      ${
+        data.water_advice
+          ? `<div class="tip">
+              💧 <strong>Hidratación:</strong><br>
+              ${escapeHTML(data.water_advice)}
+            </div>`
+          : ""
+      }
+
+      ${
+        data.meal_recommendation
+          ? `<div class="tip">
+              🍽️ <strong>Alimentación:</strong><br>
+              ${escapeHTML(data.meal_recommendation)}
+            </div>`
+          : ""
+      }
+
+      ${
+        data.training_advice
+          ? `<div class="tip">
+              🏋️ <strong>Entrenamiento:</strong><br>
+              ${escapeHTML(data.training_advice)}
+            </div>`
+          : ""
+      }
+
+      ${
+        Array.isArray(data.tips)
+          ? data.tips.map(t=>`
+              <div class="tip">
+                💡 ${escapeHTML(t)}
+              </div>
+            `).join("")
+          : ""
+      }
+
+    `;
+
+    if($("homeCoach")){
+      $("homeCoach").innerHTML = html;
+    }
+
+    if($("profileCoach")){
+      $("profileCoach").innerHTML = html;
+    }
+
+  }
+
+
+  /* =========================
+     PROGRESO
+  ========================= */
+
+  function resizeProgressImage(file){
+
+    return new Promise((resolve,reject)=>{
+
+      const reader = new FileReader();
+
+      reader.onload = ()=>{
+
+        const img = new Image();
+
+        img.onload = ()=>{
+
+          const max = 800;
+
+          let width = img.width;
+          let height = img.height;
+
+          if(width > max || height > max){
+
+            if(width > height){
+
+              height =
+                Math.round(height * max / width);
+
+              width = max;
+
+            }else{
+
+              width =
+                Math.round(width * max / height);
+
+              height = max;
+
+            }
+
+          }
+
+          const canvas =
+            document.createElement("canvas");
+
+          canvas.width = width;
+          canvas.height = height;
+
+          canvas
+            .getContext("2d")
+            .drawImage(
+              img,
+              0,
+              0,
+              width,
+              height
+            );
+
+          resolve(
+            canvas.toDataURL(
+              "image/jpeg",
+              .65
+            )
+          );
+
+        };
+
+        img.onerror = reject;
+
+        img.src = reader.result;
+
+      };
+
+      reader.onerror = reject;
+
+      reader.readAsDataURL(file);
+
+    });
+
+  }
+
+
+  $("progressPhotos").addEventListener(
+    "change",
+    async function(){
+
+      const preview =
+        $("progressPreview");
+
+      preview.innerHTML = "";
+
+      const files =
+        Array.from(this.files || []).slice(0,3);
+
+      for(const file of files){
+
+        try{
+
+          const src =
+            await resizeProgressImage(file);
+
+          const img =
+            document.createElement("img");
+
+          img.src = src;
+
+          img.className =
+            "progress-photo";
+
+          preview.appendChild(img);
+
+        }catch(e){
+
+          console.error(e);
+
+        }
+
+      }
+
+    }
+  );
+
+
+  async function saveProgress(){
+
+    const files =
+      Array.from(
+        $("progressPhotos").files || []
+      ).slice(0,3);
+
+    if(!files.length){
+
+      alert("Añade al menos una foto.");
+
+      return;
+    }
+
+    const photos = [];
+
+    for(const file of files){
+
+      try{
+
+        photos.push(
+          await resizeProgressImage(file)
+        );
+
+      }catch(e){
+
+        console.error(e);
+
+      }
+
+    }
+
+    const entry = {
+
+      id:Date.now(),
+
+      date:
+        $("progressDate").value ||
+        today(),
+
+      weight:
+        Number($("progressWeight").value || 0),
+
+      waist:
+        Number($("progressWaist").value || 0),
+
+      photos:photos
+
+    };
+
+    state.progress.unshift(entry);
+
+    state.progress =
+      state.progress.slice(0,20);
+
+    saveState();
+
+    renderProgressHistory();
+
+    $("progressPhotos").value = "";
+
+    $("progressPreview").innerHTML = "";
+
+    alert("Progreso guardado 💪");
+
+  }
+
+
+  function renderProgressHistory(){
+
+    const container =
+      $("progressHistory");
+
+    if(!state.progress.length){
+
+      container.innerHTML = `
+        <div class="empty">
+          Todavía no tienes registros de progreso.
+        </div>
+      `;
+
+      return;
+    }
+
+    container.innerHTML =
+      state.progress.map(entry=>`
+
+        <div class="progress-entry">
+
+          <div class="progress-date">
+            ${escapeHTML(entry.date)}
+          </div>
+
+          <div class="progress-meta">
+
+            ${
+              entry.weight
+                ? `⚖️ ${entry.weight} kg`
+                : ""
+            }
+
+            ${
+              entry.waist
+                ? ` · 📏 ${entry.waist} cm cintura`
+                : ""
+            }
+
+          </div>
+
+          <div class="photo-grid">
+
+            ${
+              (entry.photos || [])
+                .map(photo=>`
+                  <img
+                    src="${photo}"
+                    class="progress-photo"
+                    alt="Progreso"
+                  >
+                `)
+                .join("")
+            }
+
+          </div>
+
+        </div>
+
+      `).join("");
+
+  }
+
+
+  /* =========================
+     ANALIZAR PROGRESO
+  ========================= */
+
+  async function analyzeProgress(){
+
+    if(!state.progress.length){
+
+      alert(
+        "Primero guarda al menos una actualización de progreso."
+      );
+
+      return;
+    }
+
+    const current =
+      state.progress[0];
+
+    $("progressAI").innerHTML = `
+      <div class="coach-box" style="margin-top:15px">
+        <div class="loading">
+          <div class="spinner"></div>
+          <div class="coach-text">
+            La IA está analizando tu evolución...
+          </div>
+        </div>
+      </div>
+    `;
+
+    try{
+
+      const response =
+        await fetch(
+          "/api/analyze-progress",
+          {
+            method:"POST",
+            headers:{
+              "Content-Type":"application/json"
+            },
+            body:JSON.stringify({
+
+              photos:current.photos,
+
+              profile:state.profile,
+
+              previousProgress:
+                state.progress.slice(1,5)
+
+            })
+          }
+        );
+
+      const data =
+        await response.json();
+
+      if(!response.ok){
+
+        throw new Error(
+          data.error ||
+          "No se pudo analizar el progreso."
+        );
+
+      }
+
+      renderProgressAI(data);
+
+    }catch(error){
+
+      console.error(error);
+
+      $("progressAI").innerHTML = `
+        <div class="notice" style="margin-top:15px">
+          ❌ ${escapeHTML(error.message)}
+        </div>
+      `;
+
+    }
+
+  }
+
+
+  function renderProgressAI(data){
+
+    $("progressAI").innerHTML = `
+
+      <div class="coach-box" style="margin-top:15px">
+
+        <div class="coach-title">
+          🐻 Evaluación
+        </div>
+
+        <div class="coach-text">
+          ${escapeHTML(data.overall || "")}
+        </div>
+
+      </div>
+
+      ${
+        Array.isArray(data.visual_changes)
+          ? data.visual_changes.map(x=>`
+              <div class="tip">
+                👀 ${escapeHTML(x)}
+              </div>
+            `).join("")
+          : ""
+      }
+
+      ${
+        Array.isArray(data.strengths)
+          ? data.strengths.map(x=>`
+              <div class="tip">
+                💪 ${escapeHTML(x)}
+              </div>
+            `).join("")
+          : ""
+      }
+
+      ${
+        Array.isArray(data.improvements)
+          ? data.improvements.map(x=>`
+              <div class="tip">
+                🎯 ${escapeHTML(x)}
+              </div>
+            `).join("")
+          : ""
+      }
+
+      ${
+        data.nutrition_advice
+          ? `<div class="tip">
+              🍽️ <strong>Nutrición:</strong><br>
+              ${escapeHTML(data.nutrition_advice)}
+            </div>`
+          : ""
+      }
+
+      ${
+        data.training_advice
+          ? `<div class="tip">
+              🏋️ <strong>Entrenamiento:</strong><br>
+              ${escapeHTML(data.training_advice)}
+            </div>`
+          : ""
+      }
+
+      ${
+        Array.isArray(data.next_steps)
+          ? data.next_steps.map(x=>`
+              <div class="tip">
+                🚀 ${escapeHTML(x)}
+              </div>
+            `).join("")
+          : ""
+      }
+
+      ${
+        data.note
+          ? `<div class="notice" style="margin-top:12px">
+              ℹ️ ${escapeHTML(data.note)}
+            </div>`
+          : ""
+      }
+
+    `;
+
+  }
+
+
+  /* =========================
+     SEGURIDAD DE TEXTO
+  ========================= */
+
+  function escapeHTML(value){
+
+    return String(value ?? "")
+      .replaceAll("&","&amp;")
+      .replaceAll("<","&lt;")
+      .replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;")
+      .replaceAll("'","&#039;");
+
+  }
+
+
+  /* =========================
+     INICIO
+  ========================= */
+
+  $("progressDate").value = today();
+
+  loadState();
+
+  loadProfileForm();
+
+  updateHome();
+
+  updateWater();
+
+  renderProgressHistory();
+
 </script>
+
 </body>
 </html>
