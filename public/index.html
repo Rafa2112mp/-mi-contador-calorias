@@ -2,8 +2,8 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#24160f">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+  <meta name="theme-color" content="#21150f">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Mi Contador">
@@ -12,16 +12,37 @@
   <title>Mi Contador de Calorías</title>
 
   <style>
-    *{box-sizing:border-box;margin:0;padding:0}
+    *{
+      box-sizing:border-box;
+      -webkit-tap-highlight-color:transparent;
+    }
+
+    :root{
+      --bg:#120d0a;
+      --card:#211711;
+      --card2:#2b1d15;
+      --brown:#8b542f;
+      --brown2:#b8753f;
+      --cream:#fff5e9;
+      --muted:#bdaea2;
+      --green:#69c47a;
+      --red:#e96b5f;
+      --yellow:#e6b85c;
+      --border:rgba(255,255,255,.09);
+    }
 
     body{
-      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-      background:#eee5dc;
-      color:#24160f;
+      margin:0;
+      background:
+        radial-gradient(circle at 50% -10%,#4b2b1c 0,#21140d 30%,#120d0a 65%);
+      color:var(--cream);
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
       min-height:100vh;
     }
 
-    button,input,select,textarea{font:inherit}
+    button,input,textarea,select{
+      font:inherit;
+    }
 
     button{
       border:0;
@@ -29,252 +50,342 @@
     }
 
     .app{
-      max-width:540px;
+      width:100%;
+      max-width:620px;
       margin:auto;
       min-height:100vh;
-      background:#f5eee8;
+      padding-bottom:95px;
     }
 
+    .screen{
+      display:none;
+      padding:18px 16px 30px;
+    }
+
+    .screen.active{
+      display:block;
+    }
+
+    /* HEADER */
+
     .topbar{
-      background:#24160f;
-      color:#fff;
-      padding:17px 18px 14px;
-      position:sticky;
-      top:0;
-      z-index:50;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:10px 2px 14px;
     }
 
     .brand{
-      font-size:21px;
       font-weight:900;
+      font-size:20px;
+      letter-spacing:-.5px;
     }
 
-    .subtitle{
+    .brand span{
+      color:var(--brown2);
+    }
+
+    .date{
+      color:var(--muted);
       font-size:12px;
-      opacity:.72;
-      margin-top:3px;
     }
 
-    /* HERO */
+    /* HOME */
 
     .hero{
-      min-height:470px;
       position:relative;
+      min-height:480px;
+      border-radius:32px;
       overflow:hidden;
-      display:flex;
-      align-items:flex-end;
       background:
         linear-gradient(
-          180deg,
-          rgba(25,15,9,.02) 25%,
-          rgba(25,15,9,.18) 48%,
-          rgba(25,15,9,.92) 100%
+          to bottom,
+          rgba(18,13,10,.08) 0%,
+          rgba(18,13,10,.05) 35%,
+          rgba(18,13,10,.65) 72%,
+          rgba(18,13,10,.98) 100%
         ),
-        url("/images/oso-gym.png") center top / cover no-repeat;
+        url("/images/oso-gym.png") center 18% / cover no-repeat;
+      border:1px solid rgba(255,255,255,.08);
+      box-shadow:0 22px 60px rgba(0,0,0,.45);
+      margin-bottom:16px;
     }
 
     .hero-content{
-      width:100%;
-      padding:32px 21px 28px;
-      color:#fff;
+      position:absolute;
+      left:22px;
+      right:22px;
+      bottom:22px;
     }
 
-    .hero-badge{
+    .hero-kicker{
       display:inline-block;
-      background:#d99b4d;
-      color:#24160f;
-      font-size:11px;
-      font-weight:950;
-      padding:7px 12px;
+      background:rgba(0,0,0,.6);
+      border:1px solid rgba(255,255,255,.12);
+      padding:7px 11px;
       border-radius:999px;
-      margin-bottom:11px;
+      font-size:12px;
+      font-weight:800;
+      margin-bottom:9px;
+      backdrop-filter:blur(8px);
     }
 
     .hero h1{
+      margin:0;
       font-size:34px;
       line-height:1;
-      font-weight:950;
-      margin-bottom:10px;
+      letter-spacing:-1.5px;
+      text-shadow:0 4px 15px #000;
     }
 
     .hero p{
+      margin:9px 0 0;
+      color:#eee0d2;
       font-size:14px;
-      line-height:1.45;
-      opacity:.92;
-    }
-
-    .content{
-      padding:17px;
-    }
-
-    .card{
-      background:#fff;
-      border-radius:25px;
-      padding:18px;
-      margin-bottom:16px;
-      box-shadow:0 8px 28px rgba(55,35,20,.09);
-    }
-
-    .card-title{
-      font-size:19px;
-      font-weight:950;
-      margin-bottom:5px;
-    }
-
-    .card-subtitle{
-      font-size:13px;
-      color:#806f63;
-      line-height:1.4;
-      margin-bottom:15px;
-    }
-
-    .main-button{
-      width:100%;
-      background:#24160f;
-      color:#fff;
-      padding:16px;
-      border-radius:17px;
-      font-weight:900;
-      font-size:16px;
-    }
-
-    .main-button:active,
-    .secondary-button:active,
-    .small-button:active{
-      transform:scale(.98);
-    }
-
-    .secondary-button{
-      width:100%;
-      background:#ead7c3;
-      color:#24160f;
-      padding:14px;
-      border-radius:16px;
-      font-weight:850;
-    }
-
-    .small-button{
-      background:#24160f;
-      color:#fff;
-      padding:11px 14px;
-      border-radius:13px;
-      font-weight:800;
-    }
-
-    .danger-button{
-      background:#f6dddd;
-      color:#8d2929;
+      font-weight:600;
+      text-shadow:0 2px 8px #000;
     }
 
     .stats{
       display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:11px;
+      grid-template-columns:repeat(2,1fr);
+      gap:12px;
+      margin-bottom:14px;
     }
 
     .stat{
-      background:#f7f1eb;
-      border-radius:18px;
-      padding:15px;
+      background:linear-gradient(145deg,#2b1d15,#1c130f);
+      border:1px solid var(--border);
+      border-radius:20px;
+      padding:16px;
+      box-shadow:0 10px 25px rgba(0,0,0,.18);
     }
 
     .stat-label{
-      font-size:11px;
-      color:#806f63;
+      color:var(--muted);
+      font-size:12px;
       font-weight:700;
     }
 
     .stat-value{
-      font-size:24px;
-      font-weight:950;
-      margin-top:3px;
+      font-size:25px;
+      font-weight:900;
+      margin-top:5px;
     }
 
-    /* FORMS */
-
-    .field{
-      margin-bottom:13px;
-    }
-
-    .field label{
-      display:block;
+    .stat-value small{
       font-size:12px;
-      font-weight:850;
-      margin-bottom:6px;
+      color:var(--muted);
+      font-weight:700;
+    }
+
+    .action-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+    }
+
+    .big-action{
+      min-height:110px;
+      border-radius:22px;
+      padding:17px;
+      text-align:left;
+      color:white;
+      background:linear-gradient(145deg,#9d6035,#5f351f);
+      box-shadow:0 12px 25px rgba(0,0,0,.22);
+      font-weight:900;
+    }
+
+    .big-action.secondary{
+      background:linear-gradient(145deg,#33231a,#211711);
+      border:1px solid var(--border);
+    }
+
+    .big-action .icon{
+      font-size:28px;
+      display:block;
+      margin-bottom:12px;
+    }
+
+    .big-action span{
+      display:block;
+      font-size:15px;
+    }
+
+    .big-action small{
+      display:block;
+      margin-top:4px;
+      color:#ddcabe;
+      font-weight:600;
+      font-size:11px;
+    }
+
+    /* GENERAL */
+
+    .title{
+      font-size:27px;
+      font-weight:900;
+      letter-spacing:-1px;
+      margin:5px 0 5px;
+    }
+
+    .subtitle{
+      color:var(--muted);
+      font-size:13px;
+      margin-bottom:18px;
+    }
+
+    .card{
+      background:linear-gradient(145deg,#2a1c14,#1c130f);
+      border:1px solid var(--border);
+      border-radius:24px;
+      padding:18px;
+      margin-bottom:14px;
+      box-shadow:0 12px 30px rgba(0,0,0,.18);
+    }
+
+    .card h3{
+      margin:0 0 6px;
+      font-size:18px;
+    }
+
+    .card p{
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.5;
+    }
+
+    .btn{
+      width:100%;
+      padding:15px 16px;
+      border-radius:17px;
+      background:linear-gradient(145deg,#a76438,#744021);
+      color:white;
+      font-weight:900;
+      margin-top:9px;
+      box-shadow:0 8px 18px rgba(0,0,0,.2);
+    }
+
+    .btn.secondary{
+      background:#302119;
+      border:1px solid var(--border);
+    }
+
+    .btn.green{
+      background:linear-gradient(145deg,#4e9e5d,#347440);
+    }
+
+    .btn:active{
+      transform:scale(.98);
     }
 
     .input{
       width:100%;
-      border:1px solid #e2d6cc;
-      background:#faf8f6;
-      border-radius:14px;
-      padding:13px;
+      padding:14px;
+      border-radius:15px;
+      border:1px solid var(--border);
+      background:#120d0a;
+      color:white;
       outline:none;
+      margin-top:7px;
     }
 
-    .input:focus{
-      border-color:#a9794a;
+    label{
+      display:block;
+      color:#d9c8bb;
+      font-size:12px;
+      font-weight:800;
+      margin-top:12px;
     }
 
-    textarea.input{
-      resize:vertical;
-      min-height:85px;
+    .hint{
+      color:#94867d;
+      font-size:11px;
+      margin-top:6px;
     }
 
-    /* CAMERA */
+    .hidden{
+      display:none!important;
+    }
 
-    .camera-box{
+    /* FOOD */
+
+    .food-choice{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+      margin-bottom:14px;
+    }
+
+    .food-choice button{
+      min-height:130px;
+      border-radius:24px;
+      color:white;
+      background:linear-gradient(145deg,#342219,#211711);
+      border:1px solid var(--border);
+      padding:17px;
+      text-align:left;
+    }
+
+    .food-choice button:first-child{
+      background:linear-gradient(145deg,#9c6037,#63381f);
+    }
+
+    .food-choice .big-icon{
+      display:block;
+      font-size:38px;
+      margin-bottom:12px;
+    }
+
+    .food-choice strong{
+      display:block;
+      font-size:15px;
+    }
+
+    .food-choice small{
+      display:block;
+      color:#d4c2b4;
+      margin-top:4px;
+      font-size:11px;
+    }
+
+    .photo-box{
       border-radius:22px;
       overflow:hidden;
-      background:#24160f;
+      background:#0d0907;
+      border:1px solid var(--border);
       margin-bottom:14px;
-      min-height:220px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      position:relative;
     }
 
-    .camera-preview{
+    .photo-box img{
       width:100%;
-      max-height:390px;
+      max-height:380px;
       object-fit:cover;
       display:block;
     }
 
-    .camera-placeholder{
-      color:#fff;
+    .loading{
+      padding:20px;
       text-align:center;
-      padding:30px;
+      color:#d9c8bb;
     }
 
-    .camera-placeholder .big{
-      font-size:55px;
-      margin-bottom:8px;
+    .loading .spin{
+      display:inline-block;
+      animation:spin 1s linear infinite;
+      margin-right:7px;
     }
 
-    .photo-actions{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:10px;
+    @keyframes spin{
+      to{transform:rotate(360deg)}
     }
-
-    .photo-actions .wide{
-      grid-column:1/-1;
-    }
-
-    .photo-input{
-      display:none;
-    }
-
-    /* INGREDIENTES */
 
     .ingredient{
-      border:1px solid #eadfd6;
-      background:#fbf8f5;
-      border-radius:18px;
-      padding:14px;
-      margin-bottom:10px;
+      background:#160f0c;
+      border:1px solid var(--border);
+      border-radius:17px;
+      padding:13px;
+      margin-top:10px;
     }
 
     .ingredient-top{
@@ -286,314 +397,227 @@
 
     .ingredient-name{
       font-weight:900;
-      font-size:15px;
+      font-size:14px;
     }
 
     .confidence{
       font-size:10px;
-      background:#ead7c3;
-      border-radius:999px;
-      padding:5px 8px;
-      font-weight:800;
+      color:var(--muted);
     }
 
-    .grams-row{
-      display:flex;
-      align-items:center;
-      gap:8px;
-      margin-top:10px;
+    .ingredient input{
+      margin-top:8px;
     }
 
-    .grams-row input{
-      flex:1;
-    }
-
-    .grams-label{
-      font-size:12px;
-      color:#806f63;
-      font-weight:700;
-    }
-
-    .optional{
-      font-size:11px;
-      color:#8a786b;
-      margin-top:5px;
-    }
-
-    /* RESULTADOS */
-
-    .result-total{
-      background:#24160f;
-      color:#fff;
-      border-radius:20px;
-      padding:18px;
-      margin-bottom:12px;
-    }
-
-    .result-total .number{
-      font-size:35px;
-      font-weight:950;
-    }
-
-    .macro-grid{
+    .result-grid{
       display:grid;
-      grid-template-columns:repeat(3,1fr);
-      gap:9px;
+      grid-template-columns:repeat(2,1fr);
+      gap:10px;
+      margin-top:12px;
     }
 
-    .macro{
-      background:#f7f1eb;
-      border-radius:15px;
-      padding:12px 8px;
-      text-align:center;
+    .result{
+      background:#160f0c;
+      border-radius:16px;
+      padding:12px;
     }
 
-    .macro strong{
+    .result b{
+      font-size:20px;
+    }
+
+    .result span{
       display:block;
-      font-size:18px;
-    }
-
-    .macro span{
-      font-size:10px;
-      color:#806f63;
-    }
-
-    .food-row{
-      display:flex;
-      justify-content:space-between;
-      gap:12px;
-      padding:12px 0;
-      border-bottom:1px solid #eee5de;
-    }
-
-    .food-row:last-child{
-      border-bottom:0;
-    }
-
-    .food-name{
-      font-weight:850;
-    }
-
-    .food-detail{
-      color:#806f63;
+      color:var(--muted);
       font-size:11px;
       margin-top:3px;
     }
 
-    .food-cal{
-      font-weight:950;
+    .meal-row{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      padding:13px 0;
+      border-bottom:1px solid var(--border);
+    }
+
+    .meal-row:last-child{
+      border-bottom:0;
+    }
+
+    .meal-name{
+      font-weight:800;
+      font-size:14px;
+    }
+
+    .meal-info{
+      color:var(--muted);
+      font-size:11px;
+      margin-top:4px;
+    }
+
+    .meal-cal{
+      font-weight:900;
       white-space:nowrap;
     }
 
-    /* AGUA */
+    /* WATER */
 
     .water-circle{
-      width:155px;
-      height:155px;
-      margin:5px auto 18px;
+      width:190px;
+      height:190px;
       border-radius:50%;
-      background:#ead7c3;
+      margin:12px auto 22px;
       display:flex;
       align-items:center;
       justify-content:center;
       flex-direction:column;
-      border:10px solid #d4b28e;
+      background:
+        radial-gradient(circle,#2d2119 57%,transparent 58%),
+        conic-gradient(#62a9dc var(--water-percent),#30221a 0);
+      box-shadow:0 15px 40px rgba(0,0,0,.25);
     }
 
-    .water-number{
-      font-size:27px;
-      font-weight:950;
+    .water-circle strong{
+      font-size:30px;
     }
 
-    .water-label{
-      font-size:11px;
-      color:#806f63;
+    .water-circle span{
+      color:var(--muted);
+      font-size:12px;
     }
 
     .water-buttons{
       display:grid;
       grid-template-columns:repeat(3,1fr);
-      gap:8px;
+      gap:9px;
+    }
+
+    .water-buttons button{
+      padding:13px 7px;
+      border-radius:15px;
+      background:#302119;
+      color:white;
+      border:1px solid var(--border);
+      font-weight:900;
     }
 
     /* COACH */
 
     .coach-box{
-      background:linear-gradient(135deg,#24160f,#493021);
-      color:#fff;
       border-radius:22px;
-      padding:19px;
+      padding:18px;
+      background:linear-gradient(145deg,#352319,#21150f);
+      border:1px solid rgba(184,117,63,.25);
     }
 
-    .coach-title{
-      font-size:21px;
-      font-weight:950;
-      margin-bottom:8px;
+    .coach-section{
+      margin-top:14px;
+      padding-top:13px;
+      border-top:1px solid var(--border);
     }
 
-    .coach-text{
+    .coach-section strong{
+      display:block;
+      margin-bottom:5px;
+    }
+
+    .coach-section p{
+      margin:0;
+    }
+
+    .tips{
+      padding-left:19px;
+      color:#d8c7bb;
       font-size:13px;
-      line-height:1.55;
-      white-space:pre-line;
+      line-height:1.6;
     }
 
-    .tip{
-      background:#f7f1eb;
-      border-radius:15px;
-      padding:12px;
-      margin-top:9px;
-      font-size:13px;
-      line-height:1.4;
-    }
+    /* PROGRESS */
 
-    /* PROGRESO */
-
-    .photo-grid{
+    .progress-grid{
       display:grid;
       grid-template-columns:repeat(3,1fr);
       gap:8px;
+      margin-top:10px;
     }
 
     .progress-photo{
-      width:100%;
-      aspect-ratio:1;
+      aspect-ratio:3/4;
       object-fit:cover;
+      width:100%;
       border-radius:14px;
-      background:#eee;
+      background:#120d0a;
     }
 
-    .progress-entry{
-      border:1px solid #eadfd6;
-      border-radius:18px;
-      padding:13px;
-      margin-bottom:10px;
-      background:#fbf8f5;
+    .progress-item{
+      background:#160f0c;
+      border:1px solid var(--border);
+      border-radius:19px;
+      padding:12px;
+      margin-top:12px;
     }
 
     .progress-date{
       font-weight:900;
-      margin-bottom:5px;
-    }
-
-    .progress-meta{
-      font-size:12px;
-      color:#806f63;
-      margin-bottom:10px;
+      font-size:14px;
     }
 
     /* NAV */
 
     .bottom-nav{
-      position:sticky;
+      position:fixed;
+      z-index:50;
       bottom:0;
-      z-index:40;
-      background:rgba(255,255,255,.96);
-      backdrop-filter:blur(16px);
-      border-top:1px solid #e7ddd5;
+      left:0;
+      right:0;
+      max-width:620px;
+      margin:auto;
+      padding:10px 10px calc(10px + env(safe-area-inset-bottom));
+      background:rgba(18,13,10,.94);
+      backdrop-filter:blur(18px);
+      border-top:1px solid var(--border);
       display:grid;
       grid-template-columns:repeat(4,1fr);
-      padding:7px 7px calc(7px + env(safe-area-inset-bottom));
     }
 
     .nav-btn{
       background:transparent;
-      color:#806f63;
-      padding:8px 3px;
-      border-radius:13px;
+      color:#897a70;
+      padding:7px 3px;
+      border-radius:14px;
       font-size:10px;
-      font-weight:850;
+      font-weight:800;
+    }
+
+    .nav-btn .nav-icon{
+      display:block;
+      font-size:22px;
+      margin-bottom:3px;
     }
 
     .nav-btn.active{
-      background:#f0e2d4;
-      color:#24160f;
-    }
-
-    .nav-icon{
-      display:block;
-      font-size:21px;
-      margin-bottom:2px;
-    }
-
-    .loading{
-      text-align:center;
-      padding:25px 10px;
-      color:#806f63;
-    }
-
-    .spinner{
-      width:34px;
-      height:34px;
-      border:4px solid #eadfd6;
-      border-top-color:#24160f;
-      border-radius:50%;
-      animation:spin .8s linear infinite;
-      margin:0 auto 10px;
-    }
-
-    @keyframes spin{
-      to{transform:rotate(360deg)}
-    }
-
-    .notice{
-      padding:12px;
-      border-radius:14px;
-      background:#fff4df;
-      color:#69491e;
-      font-size:12px;
-      line-height:1.4;
-      margin-bottom:12px;
-    }
-
-    .success{
-      background:#e4f2e5;
-      color:#285c31;
+      color:#f0c19b;
+      background:#2a1b13;
     }
 
     .empty{
       text-align:center;
-      padding:25px 10px;
-      color:#806f63;
+      color:var(--muted);
+      padding:22px 8px;
       font-size:13px;
     }
 
-    .hidden{
-      display:none!important;
+    .danger{
+      color:#ff9b91;
     }
 
-    .section-title{
-      font-size:24px;
-      font-weight:950;
-      margin-bottom:4px;
-    }
-
-    .section-subtitle{
-      color:#806f63;
-      font-size:13px;
-      margin-bottom:17px;
-    }
-
-    .row{
-      display:flex;
-      gap:9px;
-      align-items:center;
-    }
-
-    .row>*{
-      flex:1;
-    }
-
-    .back-button{
-      background:transparent;
-      color:#806f63;
-      font-size:13px;
-      font-weight:800;
-      margin-bottom:10px;
-    }
-
-    @media(max-width:380px){
-      .hero h1{font-size:29px}
-      .hero{min-height:430px}
+    @media(min-width:600px){
+      .app{
+        padding-left:8px;
+        padding-right:8px;
+      }
     }
   </style>
 </head>
@@ -602,476 +626,373 @@
 
 <div class="app">
 
-  <header class="topbar">
-    <div class="brand">🐻 Mi Contador de Calorías</div>
-    <div class="subtitle">Entrena fuerte · Come inteligente · Progresa</div>
-  </header>
+  <!-- ================= HOME ================= -->
 
-  <!-- INICIO -->
-  <main id="screen-home">
+  <section id="home" class="screen active">
 
-    <section class="hero">
+    <div class="topbar">
+      <div class="brand">MI CONTADOR <span>🔥</span></div>
+      <div class="date" id="homeDate"></div>
+    </div>
+
+    <div class="hero">
       <div class="hero-content">
-        <div class="hero-badge">💪 MODO BESTIA ACTIVADO</div>
-
-        <h1>Tu objetivo.<br>Tu progreso.</h1>
-
-        <p>
-          Controla tus comidas, agua, entrenamiento y evolución
-          con ayuda de inteligencia artificial.
-        </p>
+        <div class="hero-kicker">💪 TU MODO BESTIA ESTÁ ACTIVADO</div>
+        <h1>Hoy también<br>se entrena.</h1>
+        <p>Come mejor. Entrena fuerte. Avanza cada día.</p>
       </div>
-    </section>
-
-    <div class="content">
-
-      <section class="card">
-        <div class="card-title">📸 ¿Qué has comido?</div>
-        <div class="card-subtitle">
-          Haz una foto y deja que la IA identifique los ingredientes.
-        </div>
-
-        <button class="main-button" onclick="showScreen('food')">
-          🐻 Analizar mi comida
-        </button>
-      </section>
-
-      <section class="card">
-        <div class="card-title">🔥 Resumen de hoy</div>
-
-        <div class="stats">
-          <div class="stat">
-            <div class="stat-label">Calorías</div>
-            <div class="stat-value" id="homeCalories">0</div>
-          </div>
-
-          <div class="stat">
-            <div class="stat-label">Proteínas</div>
-            <div class="stat-value" id="homeProtein">0 g</div>
-          </div>
-
-          <div class="stat">
-            <div class="stat-label">Agua</div>
-            <div class="stat-value" id="homeWater">0 ml</div>
-          </div>
-
-          <div class="stat">
-            <div class="stat-label">Comidas</div>
-            <div class="stat-value" id="homeMeals">0</div>
-          </div>
-        </div>
-      </section>
-
-      <section class="card">
-        <div class="card-title">🧠 Coach nutricional</div>
-
-        <div class="card-subtitle">
-          Consejos personalizados según tu objetivo y lo que has comido.
-        </div>
-
-        <button class="secondary-button" onclick="getCoach()">
-          🐻 Preguntar al Coach IA
-        </button>
-      </section>
-
-      <div id="homeCoach"></div>
-
-    </div>
-  </main>
-
-
-  <!-- COMIDA -->
-  <main id="screen-food" class="content hidden">
-
-    <button class="back-button" onclick="showScreen('home')">
-      ← Volver al inicio
-    </button>
-
-    <div class="section-title">🍽️ Analizar comida</div>
-
-    <div class="section-subtitle">
-      Primero identificaremos los ingredientes. Después podrás poner
-      el peso aproximado de cada uno.
     </div>
 
-    <section class="card">
-
-      <div class="camera-box" id="cameraBox">
-
-        <div class="camera-placeholder" id="cameraPlaceholder">
-          <div class="big">📸</div>
-          <div>Haz una foto de tu comida</div>
-        </div>
-
-        <img id="foodPreview" class="camera-preview hidden" alt="Foto de comida">
-
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-label">🔥 CALORÍAS HOY</div>
+        <div class="stat-value"><span id="homeCalories">0</span> <small>kcal</small></div>
       </div>
 
-      <input
-        id="photoInput"
-        class="photo-input"
-        type="file"
-        accept="image/*"
-        capture="environment"
-      >
-
-      <div class="photo-actions">
-
-        <button
-          class="main-button"
-          onclick="takePhoto()"
-        >
-          📸 Tomar foto
-        </button>
-
-        <button
-          class="secondary-button"
-          onclick="choosePhoto()"
-        >
-          🖼️ Elegir foto
-        </button>
-
-        <button
-          id="analyzeButton"
-          class="main-button wide hidden"
-          onclick="identifyFood()"
-        >
-          ✨ Identificar ingredientes con IA
-        </button>
-
+      <div class="stat">
+        <div class="stat-label">🥩 PROTEÍNA</div>
+        <div class="stat-value"><span id="homeProtein">0</span> <small>g</small></div>
       </div>
 
-    </section>
-
-    <section class="card">
-
-      <div class="card-title">📝 Información adicional</div>
-
-      <div class="card-subtitle">
-        Opcional: cuéntale a la IA qué contiene el plato.
+      <div class="stat">
+        <div class="stat-label">💧 AGUA</div>
+        <div class="stat-value"><span id="homeWater">0</span> <small>ml</small></div>
       </div>
 
-      <textarea
-        id="foodNote"
-        class="input"
-        placeholder="Ejemplo: arroz con pollo y verduras..."
-      ></textarea>
-
-    </section>
-
-    <section id="ingredientCard" class="card hidden">
-
-      <div class="card-title">🥘 Ingredientes detectados</div>
-
-      <div class="card-subtitle">
-        Puedes introducir el peso aproximado de cada ingrediente.
-        <strong>No es obligatorio.</strong>
+      <div class="stat">
+        <div class="stat-label">🎯 OBJETIVO</div>
+        <div class="stat-value" style="font-size:18px" id="homeGoal">Configura</div>
       </div>
+    </div>
 
-      <div id="ingredientsList"></div>
+    <div class="action-grid">
 
-      <div class="notice">
-        💡 Si no sabes el peso de algún ingrediente, déjalo vacío.
-        La IA hará una estimación utilizando la fotografía.
-      </div>
-
-      <button
-        id="calculateButton"
-        class="main-button"
-        onclick="calculateFood()"
-      >
-        🔥 Calcular calorías y macros
+      <button class="big-action" onclick="showScreen('food')">
+        <span class="icon">📸</span>
+        <span>Registrar comida</span>
+        <small>Foto + IA + gramos</small>
       </button>
 
-    </section>
+      <button class="big-action secondary" onclick="showScreen('water')">
+        <span class="icon">💧</span>
+        <span>Registrar agua</span>
+        <small>Controla tu hidratación</small>
+      </button>
 
-    <section id="foodResult" class="card hidden"></section>
+      <button class="big-action secondary" onclick="showScreen('progress')">
+        <span class="icon">📈</span>
+        <span>Mi progreso</span>
+        <small>Fotos y evolución</small>
+      </button>
 
-  </main>
+      <button class="big-action secondary" onclick="getCoach()">
+        <span class="icon">🐻</span>
+        <span>Consejo del oso</span>
+        <small>Tu coach nutricional IA</small>
+      </button>
 
-
-  <!-- AGUA -->
-  <main id="screen-water" class="content hidden">
-
-    <button class="back-button" onclick="showScreen('home')">
-      ← Volver
-    </button>
-
-    <div class="section-title">💧 Agua</div>
-
-    <div class="section-subtitle">
-      Mantente hidratado durante el día.
     </div>
 
-    <section class="card">
+  </section>
 
-      <div class="water-circle">
-        <div class="water-number" id="waterBig">0</div>
-        <div class="water-label">ml hoy</div>
+
+  <!-- ================= FOOD ================= -->
+
+  <section id="food" class="screen">
+
+    <div class="topbar">
+      <div>
+        <div class="title">Registrar comida</div>
+        <div class="subtitle">Haz una foto o elige una de tu galería.</div>
+      </div>
+    </div>
+
+    <!-- DOS BOTONES INDEPENDIENTES -->
+    <div class="food-choice">
+
+      <button onclick="openCamera()">
+        <span class="big-icon">📷</span>
+        <strong>Tomar foto</strong>
+        <small>Usar cámara del iPhone</small>
+      </button>
+
+      <button onclick="openGallery()">
+        <span class="big-icon">🖼️</span>
+        <strong>Elegir de galería</strong>
+        <small>Seleccionar una foto</small>
+      </button>
+
+    </div>
+
+    <!-- INPUT CÁMARA -->
+    <input
+      id="cameraInput"
+      class="hidden"
+      type="file"
+      accept="image/*"
+      capture="environment"
+      onchange="handlePhoto(this)"
+    >
+
+    <!-- INPUT GALERÍA -->
+    <input
+      id="galleryInput"
+      class="hidden"
+      type="file"
+      accept="image/*"
+      onchange="handlePhoto(this)"
+    >
+
+    <div id="photoArea"></div>
+
+    <div class="card">
+      <label>Nota opcional</label>
+      <input
+        id="foodNote"
+        class="input"
+        placeholder="Ej.: arroz con pollo, comida casera..."
+      >
+
+      <div class="hint">
+        La IA usará la foto y tus datos para estimar las cantidades.
+      </div>
+    </div>
+
+    <div id="ingredientsArea"></div>
+
+    <div id="foodResult"></div>
+
+    <div class="card" id="todayMealsCard">
+      <h3>🍽️ Comidas de hoy</h3>
+      <div id="todayMeals"></div>
+    </div>
+
+  </section>
+
+
+  <!-- ================= WATER ================= -->
+
+  <section id="water" class="screen">
+
+    <div class="title">💧 Agua</div>
+    <div class="subtitle">Mantén tu hidratación durante el día.</div>
+
+    <div class="card">
+
+      <div
+        class="water-circle"
+        id="waterCircle"
+        style="--water-percent:0deg"
+      >
+        <strong id="waterBig">0</strong>
+        <span>ml hoy</span>
       </div>
 
       <div class="water-buttons">
-        <button class="secondary-button" onclick="addWater(250)">
-          +250 ml
-        </button>
-
-        <button class="secondary-button" onclick="addWater(500)">
-          +500 ml
-        </button>
-
-        <button class="secondary-button" onclick="addWater(750)">
-          +750 ml
-        </button>
+        <button onclick="addWater(250)">+250</button>
+        <button onclick="addWater(500)">+500</button>
+        <button onclick="addWater(750)">+750</button>
       </div>
 
-      <br>
-
-      <div class="row">
-        <input
-          id="customWater"
-          class="input"
-          type="number"
-          min="1"
-          placeholder="Cantidad en ml"
-        >
-
-        <button class="small-button" onclick="addCustomWater()">
-          Añadir
-        </button>
-      </div>
-
-      <br>
-
-      <button
-        class="secondary-button danger-button"
-        onclick="resetWater()"
+      <label>Otra cantidad</label>
+      <input
+        id="customWater"
+        class="input"
+        type="number"
+        min="1"
+        placeholder="Ej.: 350 ml"
       >
+
+      <button class="btn" onclick="addCustomWater()">
+        💧 Añadir agua
+      </button>
+
+      <button class="btn secondary" onclick="resetWater()">
         Reiniciar agua de hoy
       </button>
 
-    </section>
-
-  </main>
-
-
-  <!-- PROGRESO -->
-  <main id="screen-progress" class="content hidden">
-
-    <div class="section-title">📈 Mi progreso</div>
-
-    <div class="section-subtitle">
-      Guarda fotos y datos para ver tu evolución.
     </div>
 
-    <section class="card">
+  </section>
 
-      <div class="card-title">📸 Nueva actualización</div>
 
-      <div class="field">
-        <label>Fecha</label>
-        <input id="progressDate" class="input" type="date">
+  <!-- ================= PROGRESS ================= -->
+
+  <section id="progress" class="screen">
+
+    <div class="title">📈 Mi progreso</div>
+    <div class="subtitle">
+      Guarda fotos y deja que la IA te ayude a valorar tu evolución.
+    </div>
+
+    <div class="card">
+
+      <h3>📸 Nueva actualización</h3>
+
+      <label>Fecha</label>
+      <input id="progressDate" class="input" type="date">
+
+      <label>Peso (kg)</label>
+      <input
+        id="progressWeight"
+        class="input"
+        type="number"
+        step="0.1"
+        placeholder="Ej.: 79.5"
+      >
+
+      <label>Cintura (cm) — opcional</label>
+      <input
+        id="progressWaist"
+        class="input"
+        type="number"
+        step="0.1"
+        placeholder="Ej.: 88"
+      >
+
+      <label>Fotos de progreso</label>
+
+      <input
+        id="progressPhotos"
+        class="input"
+        type="file"
+        accept="image/*"
+        multiple
+      >
+
+      <div class="hint">
+        Puedes subir hasta 3 fotos: frontal, lateral y espalda.
       </div>
 
-      <div class="field">
-        <label>Peso (kg)</label>
-        <input id="progressWeight" class="input" type="number" step="0.1" placeholder="Ej. 80">
-      </div>
+      <div id="progressPreview" class="progress-grid"></div>
 
-      <div class="field">
-        <label>Cintura (cm) — opcional</label>
-        <input id="progressWaist" class="input" type="number" step="0.1" placeholder="Ej. 90">
-      </div>
-
-      <div class="field">
-        <label>Fotos de progreso</label>
-
-        <input
-          id="progressPhotos"
-          class="input"
-          type="file"
-          accept="image/*"
-          multiple
-        >
-      </div>
-
-      <div id="progressPreview" class="photo-grid"></div>
-
-      <br>
-
-      <button class="main-button" onclick="saveProgress()">
-        💾 Guardar progreso
+      <button class="btn" onclick="saveProgress()">
+        📌 Guardar progreso
       </button>
 
-    </section>
+    </div>
 
-    <section class="card">
+    <div class="card">
+      <h3>🤖 Analizar mi progreso</h3>
+      <p>
+        La IA puede ayudarte a valorar cambios visuales, hábitos,
+        alimentación y entrenamiento. No calcula un porcentaje exacto
+        de grasa corporal a partir de una foto.
+      </p>
 
-      <div class="card-title">🤖 Evaluación con IA</div>
-
-      <div class="card-subtitle">
-        La IA puede valorar cambios visuales, hábitos y próximos pasos.
-        No calcula un porcentaje exacto de grasa corporal a partir de fotos.
-      </div>
-
-      <button
-        class="secondary-button"
-        onclick="analyzeProgress()"
-      >
-        ✨ Analizar mi progreso
+      <button class="btn green" onclick="analyzeProgress()">
+        🐻 Analizar con IA
       </button>
 
       <div id="progressAI"></div>
-
-    </section>
-
-    <section class="card">
-
-      <div class="card-title">🗓️ Historial</div>
-
-      <div id="progressHistory"></div>
-
-    </section>
-
-  </main>
-
-
-  <!-- PERFIL -->
-  <main id="screen-profile" class="content hidden">
-
-    <div class="section-title">👤 Mi perfil</div>
-
-    <div class="section-subtitle">
-      Estos datos ayudan al Coach IA a personalizar tus recomendaciones.
     </div>
 
-    <section class="card">
+    <div class="card">
+      <h3>🗓️ Historial</h3>
+      <div id="progressHistory"></div>
+    </div>
 
-      <div class="field">
-        <label>Nombre</label>
-        <input id="profileName" class="input" placeholder="Tu nombre">
-      </div>
+  </section>
 
-      <div class="field">
-        <label>Edad</label>
-        <input id="profileAge" class="input" type="number" placeholder="Ej. 27">
-      </div>
 
-      <div class="field">
-        <label>Sexo</label>
-        <select id="profileSex" class="input">
-          <option value="">Seleccionar</option>
-          <option value="hombre">Hombre</option>
-          <option value="mujer">Mujer</option>
-          <option value="otro">Otro</option>
-        </select>
-      </div>
+  <!-- ================= PROFILE ================= -->
 
-      <div class="field">
-        <label>Altura (cm)</label>
-        <input id="profileHeight" class="input" type="number" placeholder="Ej. 170">
-      </div>
+  <section id="profile" class="screen">
 
-      <div class="field">
-        <label>Peso actual (kg)</label>
-        <input id="profileWeight" class="input" type="number" step="0.1" placeholder="Ej. 80">
-      </div>
+    <div class="title">👤 Mi perfil</div>
+    <div class="subtitle">Configura tus datos para personalizar el consejo.</div>
 
-      <div class="field">
-        <label>Objetivo</label>
+    <div class="card">
 
-        <select id="profileGoal" class="input">
+      <label>Nombre</label>
+      <input id="profileName" class="input" placeholder="Tu nombre">
 
-          <option value="perder_grasa">
-            Perder grasa
-          </option>
+      <label>Edad</label>
+      <input id="profileAge" class="input" type="number" placeholder="Ej.: 27">
 
-          <option value="ganar_musculo">
-            Ganar músculo
-          </option>
+      <label>Sexo</label>
+      <select id="profileSex" class="input">
+        <option value="">Seleccionar</option>
+        <option value="hombre">Hombre</option>
+        <option value="mujer">Mujer</option>
+        <option value="otro">Otro</option>
+      </select>
 
-          <option value="recomposicion">
-            Perder grasa y ganar músculo
-          </option>
+      <label>Altura (cm)</label>
+      <input id="profileHeight" class="input" type="number" placeholder="Ej.: 170">
 
-          <option value="mantener">
-            Mantener peso
-          </option>
+      <label>Peso (kg)</label>
+      <input id="profileWeight" class="input" type="number" step="0.1" placeholder="Ej.: 80">
 
-        </select>
+      <label>Objetivo</label>
+      <select id="profileGoal" class="input">
+        <option value="">Seleccionar objetivo</option>
+        <option value="perder grasa">Perder grasa</option>
+        <option value="ganar músculo">Ganar músculo</option>
+        <option value="mantener peso">Mantener peso</option>
+        <option value="mejorar rendimiento">Mejorar rendimiento</option>
+      </select>
 
-      </div>
+      <label>Actividad</label>
+      <select id="profileActivity" class="input">
+        <option value="">Seleccionar</option>
+        <option value="baja">Baja</option>
+        <option value="moderada">Moderada</option>
+        <option value="alta">Alta</option>
+        <option value="muy alta">Muy alta</option>
+      </select>
 
-      <div class="field">
-        <label>Nivel de actividad</label>
+      <label>Entrenamiento / deporte</label>
+      <input
+        id="profileTraining"
+        class="input"
+        placeholder="Ej.: baloncesto 5 días/semana"
+      >
 
-        <select id="profileActivity" class="input">
-
-          <option value="bajo">
-            Bajo
-          </option>
-
-          <option value="moderado">
-            Moderado
-          </option>
-
-          <option value="alto">
-            Alto
-          </option>
-
-          <option value="muy_alto">
-            Muy alto
-          </option>
-
-        </select>
-
-      </div>
-
-      <button class="main-button" onclick="saveProfile()">
+      <button class="btn" onclick="saveProfile()">
         💾 Guardar perfil
       </button>
 
-    </section>
+    </div>
 
-    <section class="card">
+    <div class="card">
+      <h3>🐻 Tu coach</h3>
+      <p>
+        Con tu perfil y lo que hayas comido, el coach puede darte
+        recomendaciones generales sobre calorías, proteína,
+        alimentación, hidratación y entrenamiento.
+      </p>
 
-      <div class="card-title">🧠 Tu Coach</div>
-
-      <div class="card-subtitle">
-        Recibe recomendaciones sobre calorías, proteínas,
-        hidratación, alimentación y entrenamiento.
-      </div>
-
-      <button class="secondary-button" onclick="getCoach()">
-        🐻 Quiero mi consejo de hoy
+      <button class="btn green" onclick="getCoach()">
+        🐻 Dame mi consejo de hoy
       </button>
 
-      <div id="profileCoach"></div>
+      <div id="coachResult"></div>
+    </div>
 
-    </section>
-
-  </main>
+  </section>
 
 
-  <!-- NAVEGACIÓN -->
+  <!-- ================= BOTTOM NAV ================= -->
 
   <nav class="bottom-nav">
 
-    <button class="nav-btn active" onclick="showScreen('home')">
+    <button id="navHome" class="nav-btn active" onclick="showScreen('home')">
       <span class="nav-icon">🏠</span>
       Inicio
     </button>
 
-    <button class="nav-btn" onclick="showScreen('food')">
+    <button id="navFood" class="nav-btn" onclick="showScreen('food')">
       <span class="nav-icon">🍽️</span>
       Comida
     </button>
 
-    <button class="nav-btn" onclick="showScreen('progress')">
+    <button id="navProgress" class="nav-btn" onclick="showScreen('progress')">
       <span class="nav-icon">📈</span>
       Progreso
     </button>
 
-    <button class="nav-btn" onclick="showScreen('profile')">
+    <button id="navProfile" class="nav-btn" onclick="showScreen('profile')">
       <span class="nav-icon">👤</span>
       Perfil
     </button>
@@ -1083,9 +1004,9 @@
 
 <script>
 
-  /* =========================
+  /* =========================================================
      ESTADO
-  ========================= */
+  ========================================================= */
 
   const STORAGE_KEY = "v7state";
 
@@ -1096,207 +1017,266 @@
       sex:"",
       height:"",
       weight:"",
-      goal:"perder_grasa",
-      activity:"moderado"
+      goal:"",
+      activity:"",
+      training:""
     },
-
     meals:[],
-
-    water:{
-      date:"",
-      ml:0
-    },
-
+    water:{},
     progress:[]
   };
 
-  let currentPhoto = null;
-  let identifiedIngredients = [];
+  let currentImage = null;
+  let currentIngredients = [];
 
 
-  /* =========================
+  /* =========================================================
      UTILIDADES
-  ========================= */
+  ========================================================= */
 
-  function $(id){
-    return document.getElementById(id);
-  }
+  const $ = id => document.getElementById(id);
 
   function today(){
     return new Date().toISOString().slice(0,10);
   }
 
-  function saveState(){
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  function escapeHTML(value){
+    return String(value ?? "")
+      .replace(/&/g,"&amp;")
+      .replace(/</g,"&lt;")
+      .replace(/>/g,"&gt;")
+      .replace(/"/g,"&quot;")
+      .replace(/'/g,"&#039;");
   }
 
   function loadState(){
 
     try{
-
       const saved = localStorage.getItem(STORAGE_KEY);
 
       if(saved){
-        state = Object.assign(state, JSON.parse(saved));
+        const parsed = JSON.parse(saved);
+
+        state = {
+          ...state,
+          ...parsed,
+          profile:{
+            ...state.profile,
+            ...(parsed.profile || {})
+          },
+          meals:Array.isArray(parsed.meals) ? parsed.meals : [],
+          progress:Array.isArray(parsed.progress) ? parsed.progress : [],
+          water:parsed.water || {}
+        };
       }
 
     }catch(e){
       console.error(e);
     }
 
-    if(!state.water || state.water.date !== today()){
-      state.water = {
-        date:today(),
-        ml:0
-      };
-    }
+  }
 
-    saveState();
+  function saveState(){
+    try{
+      localStorage.setItem(STORAGE_KEY,JSON.stringify(state));
+    }catch(e){
+      console.error("No se pudo guardar:",e);
+    }
   }
 
 
-  /* =========================
+  /* =========================================================
      NAVEGACIÓN
-  ========================= */
+  ========================================================= */
 
   function showScreen(screen){
 
-    document
-      .querySelectorAll("main[id^='screen-']")
-      .forEach(el => el.classList.add("hidden"));
+    document.querySelectorAll(".screen")
+      .forEach(el => el.classList.remove("active"));
 
-    const target = $("screen-" + screen);
+    const target = $(screen);
 
     if(target){
-      target.classList.remove("hidden");
+      target.classList.add("active");
     }
 
-    document
-      .querySelectorAll(".nav-btn")
-      .forEach(btn => btn.classList.remove("active"));
+    document.querySelectorAll(".nav-btn")
+      .forEach(el => el.classList.remove("active"));
 
-    const indexes = {
-      home:0,
-      food:1,
-      progress:2,
-      profile:3
+    const navMap = {
+      home:"navHome",
+      food:"navFood",
+      progress:"navProgress",
+      profile:"navProfile"
     };
 
-    const buttons = document.querySelectorAll(".nav-btn");
-
-    if(buttons[indexes[screen]]){
-      buttons[indexes[screen]].classList.add("active");
-    }
-
-    if(screen === "home"){
-      updateHome();
-    }
-
-    if(screen === "progress"){
-      renderProgressHistory();
-    }
-
-    if(screen === "profile"){
-      loadProfileForm();
-    }
-
-    if(screen === "water"){
-      updateWater();
+    if(navMap[screen]){
+      $(navMap[screen]).classList.add("active");
     }
 
     window.scrollTo({
       top:0,
       behavior:"smooth"
     });
+
+    if(screen === "food"){
+      renderTodayMeals();
+    }
+
+    if(screen === "progress"){
+      renderProgress();
+    }
+
+    updateHome();
   }
 
 
-  /* =========================
-     INICIO
-  ========================= */
+  /* =========================================================
+     HOME
+  ========================================================= */
+
+  function getTodayMeals(){
+
+    const d = today();
+
+    return state.meals.filter(
+      meal => meal.date === d
+    );
+  }
+
+  function getTodayTotals(){
+
+    const meals = getTodayMeals();
+
+    return meals.reduce((acc,meal)=>{
+
+      acc.calories += Number(meal.totals?.calories || 0);
+      acc.protein += Number(meal.totals?.protein_g || 0);
+      acc.carbs += Number(meal.totals?.carbs_g || 0);
+      acc.fat += Number(meal.totals?.fat_g || 0);
+
+      return acc;
+
+    },{
+      calories:0,
+      protein:0,
+      carbs:0,
+      fat:0
+    });
+
+  }
 
   function updateHome(){
 
-    const todayMeals = state.meals.filter(
-      m => m.date === today()
-    );
+    const totals = getTodayTotals();
 
-    let calories = 0;
-    let protein = 0;
+    $( "homeCalories" ).textContent =
+      Math.round(totals.calories);
 
-    todayMeals.forEach(meal => {
+    $( "homeProtein" ).textContent =
+      Math.round(totals.protein);
 
-      calories += Number(meal.totals?.calories || 0);
-      protein += Number(meal.totals?.protein_g || 0);
+    const water = Number(state.water[today()] || 0);
 
-    });
+    $( "homeWater" ).textContent = water;
 
-    $("homeCalories").textContent =
-      Math.round(calories);
+    $("homeGoal").textContent =
+      state.profile.goal || "Configura";
 
-    $("homeProtein").textContent =
-      Math.round(protein) + " g";
+    $("homeDate").textContent =
+      new Date().toLocaleDateString("es-ES",{
+        weekday:"short",
+        day:"numeric",
+        month:"short"
+      });
 
-    $("homeWater").textContent =
-      Math.round(state.water.ml) + " ml";
-
-    $("homeMeals").textContent =
-      todayMeals.length;
+    updateWaterUI();
   }
 
 
-  /* =========================
-     CÁMARA / FOTO
-  ========================= */
+  /* =========================================================
+     CÁMARA / GALERÍA
+  ========================================================= */
 
-  function takePhoto(){
+  function openCamera(){
 
-    $("photoInput").click();
+    /*
+      capture="environment" hace que el iPhone abra
+      directamente la cámara.
 
+      No usamos getUserMedia ni un vídeo continuo.
+      Por tanto la aplicación NO mantiene la cámara grabando.
+    */
+
+    $("cameraInput").value = "";
+    $("cameraInput").click();
   }
 
-  function choosePhoto(){
+  function openGallery(){
 
-    $("photoInput").click();
+    /*
+      Input separado para que iPhone abra Fotos.
+    */
 
+    $("galleryInput").value = "";
+    $("galleryInput").click();
   }
 
 
-  $("photoInput").addEventListener(
-    "change",
-    async function(){
+  async function handlePhoto(input){
 
-      const file = this.files?.[0];
+    const file = input.files?.[0];
 
-      if(!file) return;
-
-      currentPhoto = file;
-
-      const reader = new FileReader();
-
-      reader.onload = function(e){
-
-        $("foodPreview").src = e.target.result;
-
-        $("foodPreview").classList.remove("hidden");
-
-        $("cameraPlaceholder").classList.add("hidden");
-
-        $("analyzeButton").classList.remove("hidden");
-
-      };
-
-      reader.readAsDataURL(file);
-
+    if(!file){
+      return;
     }
-  );
+
+    try{
+
+      currentImage = await fileToDataURL(file);
+
+      $("photoArea").innerHTML = `
+        <div class="photo-box">
+          <img src="${currentImage}" alt="Foto de comida">
+        </div>
+
+        <button class="btn" onclick="identifyFood()">
+          ✨ Analizar comida con IA
+        </button>
+
+        <button class="btn secondary" onclick="clearPhoto()">
+          ↩️ Cambiar foto
+        </button>
+      `;
+
+      $("ingredientsArea").innerHTML = "";
+      $("foodResult").innerHTML = "";
+
+    }catch(error){
+
+      alert("No se pudo cargar la imagen.");
+
+      console.error(error);
+    }
+
+  }
 
 
-  /* =========================
-     COMPRESIÓN DE IMAGEN
-  ========================= */
+  function clearPhoto(){
 
-  async function fileToDataURL(file){
+    currentImage = null;
+    currentIngredients = [];
+
+    $("cameraInput").value = "";
+    $("galleryInput").value = "";
+
+    $("photoArea").innerHTML = "";
+    $("ingredientsArea").innerHTML = "";
+    $("foodResult").innerHTML = "";
+  }
+
+
+  function fileToDataURL(file){
 
     return new Promise((resolve,reject)=>{
 
@@ -1313,522 +1293,422 @@
   }
 
 
-  async function compressImage(file){
-
-    const dataURL = await fileToDataURL(file);
-
-    const img = new Image();
-
-    await new Promise((resolve,reject)=>{
-
-      img.onload = resolve;
-
-      img.onerror = reject;
-
-      img.src = dataURL;
-
-    });
-
-    const maxSize = 1600;
-
-    let width = img.width;
-    let height = img.height;
-
-    if(width > maxSize || height > maxSize){
-
-      if(width > height){
-
-        height =
-          Math.round(height * maxSize / width);
-
-        width = maxSize;
-
-      }else{
-
-        width =
-          Math.round(width * maxSize / height);
-
-        height = maxSize;
-
-      }
-
-    }
-
-    const canvas = document.createElement("canvas");
-
-    canvas.width = width;
-    canvas.height = height;
-
-    const ctx = canvas.getContext("2d");
-
-    ctx.drawImage(
-      img,
-      0,
-      0,
-      width,
-      height
-    );
-
-    return canvas.toDataURL(
-      "image/jpeg",
-      .78
-    );
-
-  }
-
-
-  /* =========================
-     IDENTIFICAR INGREDIENTES
-  ========================= */
+  /* =========================================================
+     IA — PASO 1: IDENTIFICAR INGREDIENTES
+  ========================================================= */
 
   async function identifyFood(){
 
-    if(!currentPhoto){
-
-      alert("Primero toma o selecciona una foto.");
-
+    if(!currentImage){
+      alert("Primero toma o elige una foto.");
       return;
     }
 
-    const button = $("analyzeButton");
-
-    button.disabled = true;
-
-    button.textContent = "🤖 Analizando...";
-
-    $("ingredientCard").classList.remove("hidden");
-
-    $("ingredientsList").innerHTML = `
-      <div class="loading">
-        <div class="spinner"></div>
-        La IA está identificando los ingredientes...
+    $("ingredientsArea").innerHTML = `
+      <div class="card">
+        <div class="loading">
+          <span class="spin">⏳</span>
+          La IA está identificando los ingredientes...
+        </div>
       </div>
     `;
 
     try{
 
-      const image = await compressImage(currentPhoto);
+      const response = await fetch("/api/analyze-food",{
 
-      const response = await fetch(
-        "/api/analyze-food",
-        {
-          method:"POST",
-          headers:{
-            "Content-Type":"application/json"
-          },
-          body:JSON.stringify({
-            step:"identify",
-            image:image,
-            note:$("foodNote").value.trim()
-          })
-        }
-      );
+        method:"POST",
+
+        headers:{
+          "Content-Type":"application/json"
+        },
+
+        body:JSON.stringify({
+
+          step:"identify",
+
+          image:currentImage,
+
+          note:$("foodNote").value || ""
+
+        })
+
+      });
 
       const data = await response.json();
 
       if(!response.ok){
-        throw new Error(
-          data.error || "No se pudo analizar la imagen."
-        );
+        throw new Error(data.error || "Error de IA");
       }
 
-      identifiedIngredients =
+      currentIngredients =
         Array.isArray(data.ingredients)
           ? data.ingredients
           : [];
 
-      renderIngredients();
+      renderIngredients(data);
 
     }catch(error){
 
       console.error(error);
 
-      $("ingredientsList").innerHTML = `
-        <div class="notice">
-          ❌ No se pudo analizar la foto.
-          Inténtalo de nuevo.
+      $("ingredientsArea").innerHTML = `
+        <div class="card">
+          <p class="danger">
+            No se pudo analizar la comida.
+          </p>
+          <p>${escapeHTML(error.message)}</p>
+          <button class="btn secondary" onclick="identifyFood()">
+            🔄 Intentar de nuevo
+          </button>
         </div>
       `;
-
-    }finally{
-
-      button.disabled = false;
-
-      button.textContent =
-        "✨ Identificar ingredientes con IA";
-
     }
 
   }
 
 
-  /* =========================
-     MOSTRAR INGREDIENTES
-  ========================= */
+  function renderIngredients(data){
 
-  function renderIngredients(){
+    if(!currentIngredients.length){
 
-    const list = $("ingredientsList");
-
-    if(!identifiedIngredients.length){
-
-      list.innerHTML = `
-        <div class="empty">
-          No se han detectado ingredientes.
+      $("ingredientsArea").innerHTML = `
+        <div class="card">
+          <h3>🤔 No pude identificar los ingredientes</h3>
+          <p>Prueba con una foto más clara o añade una nota describiendo la comida.</p>
+          <button class="btn" onclick="identifyFood()">
+            🔄 Intentar otra vez
+          </button>
         </div>
       `;
 
       return;
     }
 
-    list.innerHTML =
-      identifiedIngredients.map((item,index)=>{
+    let html = `
+      <div class="card">
+        <h3>🥗 He encontrado estos ingredientes</h3>
 
-        const confidence =
-          Math.round(
-            Number(item.confidence || 0.8) * 100
-          );
+        <p>
+          Puedes indicar los gramos de cada ingrediente.
+          <strong>Es opcional.</strong>
+          Si lo dejas vacío, la IA hará una estimación.
+        </p>
+    `;
 
-        return `
-          <div class="ingredient">
+    currentIngredients.forEach((item,index)=>{
 
-            <div class="ingredient-top">
+      html += `
+        <div class="ingredient">
 
-              <div class="ingredient-name">
-                ${escapeHTML(item.name || "Ingrediente")}
-              </div>
-
-              <div class="confidence">
-                ${confidence}% confianza
-              </div>
-
+          <div class="ingredient-top">
+            <div class="ingredient-name">
+              ${escapeHTML(item.name || "Ingrediente")}
             </div>
 
-            <div class="grams-row">
+            <div class="confidence">
+              ${escapeHTML(item.confidence || "")}
+            </div>
+          </div>
 
-              <span class="grams-label">
-                Peso:
-              </span>
+          <input
+            id="grams_${index}"
+            class="input"
+            type="number"
+            min="1"
+            step="1"
+            placeholder="Gramos aproximados (opcional)"
+          >
 
-              <input
-                class="input ingredient-grams"
-                data-index="${index}"
-                type="number"
-                min="1"
-                step="1"
-                placeholder="Ej. 150"
-              >
+        </div>
+      `;
 
-              <span class="grams-label">
-                g
-              </span>
+    });
 
+    html += `
+
+        <button class="btn green" onclick="calculateFood()">
+          🧮 Calcular calorías
+        </button>
+
+      </div>
+    `;
+
+    $("ingredientsArea").innerHTML = html;
+  }
+
+
+  /* =========================================================
+     IA — PASO 2: CALCULAR
+  ========================================================= */
+
+  async function calculateFood(){
+
+    if(!currentImage || !currentIngredients.length){
+      return;
+    }
+
+    const ingredients =
+      currentIngredients.map((item,index)=>{
+
+        const input = $(`grams_${index}`);
+
+        const value =
+          input?.value
+            ? Number(input.value)
+            : null;
+
+        return {
+          ...item,
+          grams:value && value > 0 ? value : null
+        };
+
+      });
+
+    $("foodResult").innerHTML = `
+      <div class="card">
+        <div class="loading">
+          <span class="spin">🧮</span>
+          Calculando calorías y macronutrientes...
+        </div>
+      </div>
+    `;
+
+    try{
+
+      const response = await fetch("/api/analyze-food",{
+
+        method:"POST",
+
+        headers:{
+          "Content-Type":"application/json"
+        },
+
+        body:JSON.stringify({
+
+          step:"calculate",
+
+          image:currentImage,
+
+          ingredients,
+
+          note:$("foodNote").value || ""
+
+        })
+
+      });
+
+      const data = await response.json();
+
+      if(!response.ok){
+        throw new Error(data.error || "Error de cálculo");
+      }
+
+      renderFoodResult(data);
+
+    }catch(error){
+
+      console.error(error);
+
+      $("foodResult").innerHTML = `
+        <div class="card">
+          <p class="danger">No se pudo calcular la comida.</p>
+          <p>${escapeHTML(error.message)}</p>
+
+          <button class="btn secondary" onclick="calculateFood()">
+            🔄 Intentar de nuevo
+          </button>
+        </div>
+      `;
+    }
+
+  }
+
+
+  function renderFoodResult(data){
+
+    const t = data.totals || {};
+
+    let itemsHTML = "";
+
+    if(Array.isArray(data.items)){
+
+      data.items.forEach(item=>{
+
+        itemsHTML += `
+          <div class="meal-row">
+
+            <div>
+              <div class="meal-name">
+                ${escapeHTML(item.food || "Alimento")}
+              </div>
+
+              <div class="meal-info">
+                ${Math.round(Number(item.grams || 0))} g
+                · P ${Math.round(Number(item.protein_g || 0))} g
+                · C ${Math.round(Number(item.carbs_g || 0))} g
+                · G ${Math.round(Number(item.fat_g || 0))} g
+              </div>
             </div>
 
-            <div class="optional">
-              Opcional · si no sabes el peso, déjalo vacío.
+            <div class="meal-cal">
+              ${Math.round(Number(item.calories || 0))} kcal
             </div>
 
           </div>
         `;
 
-      }).join("");
-
-  }
-
-
-  /* =========================
-     CALCULAR COMIDA
-  ========================= */
-
-  async function calculateFood(){
-
-    if(!currentPhoto){
-
-      alert("Primero toma una foto.");
-
-      return;
-    }
-
-    if(!identifiedIngredients.length){
-
-      alert("Primero identifica los ingredientes.");
-
-      return;
-    }
-
-    const button = $("calculateButton");
-
-    button.disabled = true;
-
-    button.textContent =
-      "🔥 Calculando...";
-
-    try{
-
-      const image =
-        await compressImage(currentPhoto);
-
-      const inputs =
-        document.querySelectorAll(".ingredient-grams");
-
-      const ingredients =
-        identifiedIngredients.map((item,index)=>{
-
-          const value =
-            Number(inputs[index]?.value || 0);
-
-          return {
-            id:item.id || String(index),
-            name:item.name,
-            estimated_grams:item.estimated_grams || null,
-            grams:value > 0 ? value : null
-          };
-
-        });
-
-      const response =
-        await fetch(
-          "/api/analyze-food",
-          {
-            method:"POST",
-            headers:{
-              "Content-Type":"application/json"
-            },
-            body:JSON.stringify({
-              step:"calculate",
-              image:image,
-              ingredients:ingredients,
-              note:$("foodNote").value.trim()
-            })
-          }
-        );
-
-      const data =
-        await response.json();
-
-      if(!response.ok){
-
-        throw new Error(
-          data.error ||
-          "No se pudieron calcular las calorías."
-        );
-
-      }
-
-      showFoodResult(data);
-
-      state.meals.push({
-        id:Date.now(),
-        date:today(),
-        meal_name:data.meal_name || "Comida",
-        totals:data.totals || {},
-        items:data.items || [],
-        note:$("foodNote").value.trim()
       });
 
-      saveState();
-
-      updateHome();
-
-    }catch(error){
-
-      console.error(error);
-
-      $("foodResult").classList.remove("hidden");
-
-      $("foodResult").innerHTML = `
-        <div class="notice">
-          ❌ ${escapeHTML(error.message)}
-        </div>
-      `;
-
-    }finally{
-
-      button.disabled = false;
-
-      button.textContent =
-        "🔥 Calcular calorías y macros";
-
     }
-
-  }
-
-
-  /* =========================
-     RESULTADO COMIDA
-  ========================= */
-
-  function showFoodResult(data){
-
-    const totals = data.totals || {};
-
-    const items = data.items || [];
-
-    $("foodResult").classList.remove("hidden");
 
     $("foodResult").innerHTML = `
 
-      <div class="card-title">
-        🍽️ ${escapeHTML(data.meal_name || "Tu comida")}
-      </div>
+      <div class="card">
 
-      <br>
+        <h3>
+          🔥 ${escapeHTML(data.meal_name || "Comida")}
+        </h3>
 
-      <div class="result-total">
+        ${itemsHTML}
 
-        <div class="number">
-          ${Math.round(Number(totals.calories || 0))} kcal
-        </div>
+        <div class="result-grid">
 
-        <div>
-          ${Math.round(Number(totals.grams || 0))} g estimados
-        </div>
-
-      </div>
-
-      <div class="macro-grid">
-
-        <div class="macro">
-          <strong>
-            ${Math.round(Number(totals.protein_g || 0))} g
-          </strong>
-          <span>Proteínas</span>
-        </div>
-
-        <div class="macro">
-          <strong>
-            ${Math.round(Number(totals.carbs_g || 0))} g
-          </strong>
-          <span>Carbohidratos</span>
-        </div>
-
-        <div class="macro">
-          <strong>
-            ${Math.round(Number(totals.fat_g || 0))} g
-          </strong>
-          <span>Grasas</span>
-        </div>
-
-      </div>
-
-      <br>
-
-      ${
-        items.map(item=>`
-
-          <div class="food-row">
-
-            <div>
-
-              <div class="food-name">
-                ${escapeHTML(item.food || "Alimento")}
-              </div>
-
-              <div class="food-detail">
-                ${Math.round(Number(item.grams || 0))} g
-                · ${item.grams_source === "user"
-                    ? "peso introducido"
-                    : "estimado por IA"}
-              </div>
-
-            </div>
-
-            <div class="food-cal">
-              ${Math.round(Number(item.calories || 0))} kcal
-            </div>
-
+          <div class="result">
+            <b>${Math.round(Number(t.calories || 0))}</b>
+            <span>kcal</span>
           </div>
 
-        `).join("")
-      }
+          <div class="result">
+            <b>${Math.round(Number(t.protein_g || 0))} g</b>
+            <span>proteína</span>
+          </div>
 
-      ${
-        data.notes
-          ? `
-            <div class="notice" style="margin-top:12px">
-              💡 ${escapeHTML(data.notes)}
-            </div>
-          `
-          : ""
-      }
+          <div class="result">
+            <b>${Math.round(Number(t.carbs_g || 0))} g</b>
+            <span>carbohidratos</span>
+          </div>
 
-      <button
-        class="secondary-button"
-        onclick="resetFood()"
-      >
-        📸 Analizar otra comida
-      </button>
+          <div class="result">
+            <b>${Math.round(Number(t.fat_g || 0))} g</b>
+            <span>grasas</span>
+          </div>
+
+        </div>
+
+        <button class="btn green" onclick='saveMeal(${JSON.stringify(data).replace(/</g,"\\u003c")})'>
+          ✅ Añadir a mi día
+        </button>
+
+        <button class="btn secondary" onclick="clearPhoto()">
+          🗑️ Nueva comida
+        </button>
+
+      </div>
     `;
 
-    $("foodResult").scrollIntoView({
-      behavior:"smooth"
-    });
-
   }
 
 
-  function resetFood(){
+  function saveMeal(data){
 
-    currentPhoto = null;
+    const meal = {
 
-    identifiedIngredients = [];
+      id:Date.now(),
 
-    $("photoInput").value = "";
+      date:today(),
 
-    $("foodPreview").src = "";
+      meal_name:data.meal_name || "Comida",
 
-    $("foodPreview").classList.add("hidden");
+      items:Array.isArray(data.items)
+        ? data.items
+        : [],
 
-    $("cameraPlaceholder").classList.remove("hidden");
+      totals:{
+        grams:Number(data.totals?.grams || 0),
+        calories:Number(data.totals?.calories || 0),
+        protein_g:Number(data.totals?.protein_g || 0),
+        carbs_g:Number(data.totals?.carbs_g || 0),
+        fat_g:Number(data.totals?.fat_g || 0)
+      },
 
-    $("analyzeButton").classList.add("hidden");
+      notes:data.notes || ""
 
-    $("ingredientCard").classList.add("hidden");
+    };
 
-    $("foodResult").classList.add("hidden");
-
-    $("ingredientsList").innerHTML = "";
-
-    $("foodNote").value = "";
-
-    window.scrollTo({
-      top:0,
-      behavior:"smooth"
-    });
-
-  }
-
-
-  /* =========================
-     AGUA
-  ========================= */
-
-  function ensureWaterDate(){
-
-    if(state.water.date !== today()){
-
-      state.water = {
-        date:today(),
-        ml:0
-      };
-
-      saveState();
-
-    }
-
-  }
-
-
-  function addWater(amount){
-
-    ensureWaterDate();
-
-    state.water.ml += Number(amount);
+    state.meals.unshift(meal);
 
     saveState();
 
-    updateWater();
+    updateHome();
+
+    renderTodayMeals();
+
+    alert("✅ Comida añadida a tu día.");
+
+  }
+
+
+  function renderTodayMeals(){
+
+    const meals = getTodayMeals();
+
+    if(!meals.length){
+
+      $("todayMeals").innerHTML = `
+        <div class="empty">
+          Todavía no has registrado ninguna comida hoy.
+        </div>
+      `;
+
+      return;
+    }
+
+    let html = "";
+
+    meals.forEach(meal=>{
+
+      html += `
+        <div class="meal-row">
+
+          <div>
+            <div class="meal-name">
+              ${escapeHTML(meal.meal_name)}
+            </div>
+
+            <div class="meal-info">
+              P ${Math.round(meal.totals?.protein_g || 0)} g
+              · C ${Math.round(meal.totals?.carbs_g || 0)} g
+              · G ${Math.round(meal.totals?.fat_g || 0)} g
+            </div>
+          </div>
+
+          <div class="meal-cal">
+            ${Math.round(meal.totals?.calories || 0)} kcal
+          </div>
+
+        </div>
+      `;
+
+    });
+
+    $("todayMeals").innerHTML = html;
+  }
+
+
+  /* =========================================================
+     AGUA
+  ========================================================= */
+
+  function addWater(amount){
+
+    const d = today();
+
+    state.water[d] =
+      Number(state.water[d] || 0) +
+      Number(amount || 0);
+
+    saveState();
 
     updateHome();
 
@@ -1841,78 +1721,67 @@
       Number($("customWater").value);
 
     if(!amount || amount <= 0){
-
       alert("Introduce una cantidad válida.");
-
       return;
     }
 
     addWater(amount);
 
     $("customWater").value = "";
-
   }
 
 
   function resetWater(){
 
-    if(
-      confirm(
-        "¿Quieres reiniciar el agua de hoy?"
-      )
-    ){
-
-      state.water.ml = 0;
-
-      saveState();
-
-      updateWater();
-
-      updateHome();
-
+    if(!confirm("¿Quieres reiniciar el agua de hoy?")){
+      return;
     }
 
+    state.water[today()] = 0;
+
+    saveState();
+
+    updateHome();
   }
 
 
-  function updateWater(){
+  function updateWaterUI(){
 
-    ensureWaterDate();
+    const amount =
+      Number(state.water[today()] || 0);
 
-    $("waterBig").textContent =
-      Math.round(state.water.ml);
+    $("waterBig").textContent = amount;
+
+    const target = 2500;
+
+    const percent =
+      Math.min(amount / target,1) * 360;
+
+    $("waterCircle")
+      .style.setProperty(
+        "--water-percent",
+        percent + "deg"
+      );
 
   }
 
 
-  /* =========================
+  /* =========================================================
      PERFIL
-  ========================= */
+  ========================================================= */
 
   function loadProfileForm(){
 
     const p = state.profile;
 
-    $("profileName").value =
-      p.name || "";
-
-    $("profileAge").value =
-      p.age || "";
-
-    $("profileSex").value =
-      p.sex || "";
-
-    $("profileHeight").value =
-      p.height || "";
-
-    $("profileWeight").value =
-      p.weight || "";
-
-    $("profileGoal").value =
-      p.goal || "perder_grasa";
-
-    $("profileActivity").value =
-      p.activity || "moderado";
+    $("profileName").value = p.name || "";
+    $("profileAge").value = p.age || "";
+    $("profileSex").value = p.sex || "";
+    $("profileHeight").value = p.height || "";
+    $("profileWeight").value = p.weight || "";
+    $("profileGoal").value = p.goal || "";
+    $("profileActivity").value = p.activity || "";
+    $("profileTraining").value = p.training || "";
 
   }
 
@@ -1933,136 +1802,81 @@
 
       goal:$("profileGoal").value,
 
-      activity:$("profileActivity").value
+      activity:$("profileActivity").value,
+
+      training:$("profileTraining").value.trim()
 
     };
 
     saveState();
 
-    alert("Perfil guardado correctamente.");
-
     updateHome();
+
+    alert("✅ Perfil guardado.");
 
   }
 
 
-  /* =========================
+  /* =========================================================
      COACH IA
-  ========================= */
+  ========================================================= */
 
   async function getCoach(){
 
-    const targets = [
-      $("homeCoach"),
-      $("profileCoach")
-    ];
+    showScreen("profile");
 
-    targets.forEach(el=>{
+    $("coachResult").innerHTML = `
+      <div class="loading">
+        <span class="spin">🐻</span>
+        El oso está preparando tu consejo...
+      </div>
+    `;
 
-      if(el){
+    const totals = getTodayTotals();
 
-        el.innerHTML = `
-          <div class="coach-box">
-            <div class="loading">
-              <div class="spinner"></div>
-              <div class="coach-text">
-                El Coach está preparando tus recomendaciones...
-              </div>
-            </div>
-          </div>
-        `;
-
-      }
-
-    });
+    const water =
+      Number(state.water[today()] || 0);
 
     try{
 
-      const todayMeals =
-        state.meals.filter(
-          m => m.date === today()
-        );
+      const response = await fetch("/api/coach",{
 
-      const totals = {
+        method:"POST",
 
-        calories:
-          todayMeals.reduce(
-            (sum,m)=>
-              sum + Number(m.totals?.calories || 0),
-            0
-          ),
+        headers:{
+          "Content-Type":"application/json"
+        },
 
-        protein_g:
-          todayMeals.reduce(
-            (sum,m)=>
-              sum + Number(m.totals?.protein_g || 0),
-            0
-          ),
+        body:JSON.stringify({
 
-        carbs_g:
-          todayMeals.reduce(
-            (sum,m)=>
-              sum + Number(m.totals?.carbs_g || 0),
-            0
-          ),
+          profile:state.profile,
 
-        fat_g:
-          todayMeals.reduce(
-            (sum,m)=>
-              sum + Number(m.totals?.fat_g || 0),
-            0
-          )
+          totals,
 
-      };
+          water
 
-      const response =
-        await fetch(
-          "/api/coach",
-          {
-            method:"POST",
-            headers:{
-              "Content-Type":"application/json"
-            },
-            body:JSON.stringify({
-              profile:state.profile,
-              totals:totals,
-              water:state.water
-            })
-          }
-        );
+        })
 
-      const data =
-        await response.json();
+      });
+
+      const data = await response.json();
 
       if(!response.ok){
-
-        throw new Error(
-          data.error ||
-          "No se pudo contactar con el Coach."
-        );
-
+        throw new Error(data.error || "No se pudo obtener el consejo.");
       }
 
       renderCoach(data);
 
     }catch(error){
 
-      console.error(error);
-
-      targets.forEach(el=>{
-
-        if(el){
-
-          el.innerHTML = `
-            <div class="notice">
-              ❌ No se pudo obtener el consejo.
-              Inténtalo de nuevo.
-            </div>
-          `;
-
-        }
-
-      });
+      $("coachResult").innerHTML = `
+        <div class="card">
+          <p class="danger">${escapeHTML(error.message)}</p>
+          <button class="btn secondary" onclick="getCoach()">
+            🔄 Intentar de nuevo
+          </button>
+        </div>
+      `;
 
     }
 
@@ -2071,93 +1885,122 @@
 
   function renderCoach(data){
 
-    const html = `
+    let tips = "";
+
+    if(Array.isArray(data.tips)){
+
+      tips = `
+        <ul class="tips">
+          ${data.tips.map(t =>
+            `<li>${escapeHTML(t)}</li>`
+          ).join("")}
+        </ul>
+      `;
+
+    }
+
+    $("coachResult").innerHTML = `
 
       <div class="coach-box">
 
-        <div class="coach-title">
-          🐻 Tu Coach IA
+        <h3>🐻 Tu consejo</h3>
+
+        <p>
+          ${escapeHTML(data.summary || "")}
+        </p>
+
+        <div class="coach-section">
+          <strong>🔥 Calorías</strong>
+          <p>${escapeHTML(data.calorie_advice || "")}</p>
         </div>
 
-        <div class="coach-text">
-          ${escapeHTML(data.summary || "")}
+        <div class="coach-section">
+          <strong>🥩 Proteína</strong>
+          <p>${escapeHTML(data.protein_advice || "")}</p>
         </div>
+
+        <div class="coach-section">
+          <strong>💧 Hidratación</strong>
+          <p>${escapeHTML(data.water_advice || "")}</p>
+        </div>
+
+        <div class="coach-section">
+          <strong>🍽️ Alimentación</strong>
+          <p>${escapeHTML(data.meal_recommendation || "")}</p>
+        </div>
+
+        <div class="coach-section">
+          <strong>🏋️ Entrenamiento</strong>
+          <p>${escapeHTML(data.training_advice || "")}</p>
+        </div>
+
+        ${tips}
+
+        ${
+          data.warning
+          ? `
+            <div class="coach-section">
+              <strong>⚠️ Importante</strong>
+              <p>${escapeHTML(data.warning)}</p>
+            </div>
+          `
+          : ""
+        }
 
       </div>
 
-      ${
-        data.calorie_advice
-          ? `<div class="tip">
-              🔥 <strong>Calorías:</strong><br>
-              ${escapeHTML(data.calorie_advice)}
-            </div>`
-          : ""
-      }
-
-      ${
-        data.protein_advice
-          ? `<div class="tip">
-              🥩 <strong>Proteínas:</strong><br>
-              ${escapeHTML(data.protein_advice)}
-            </div>`
-          : ""
-      }
-
-      ${
-        data.water_advice
-          ? `<div class="tip">
-              💧 <strong>Hidratación:</strong><br>
-              ${escapeHTML(data.water_advice)}
-            </div>`
-          : ""
-      }
-
-      ${
-        data.meal_recommendation
-          ? `<div class="tip">
-              🍽️ <strong>Alimentación:</strong><br>
-              ${escapeHTML(data.meal_recommendation)}
-            </div>`
-          : ""
-      }
-
-      ${
-        data.training_advice
-          ? `<div class="tip">
-              🏋️ <strong>Entrenamiento:</strong><br>
-              ${escapeHTML(data.training_advice)}
-            </div>`
-          : ""
-      }
-
-      ${
-        Array.isArray(data.tips)
-          ? data.tips.map(t=>`
-              <div class="tip">
-                💡 ${escapeHTML(t)}
-              </div>
-            `).join("")
-          : ""
-      }
-
     `;
 
-    if($("homeCoach")){
-      $("homeCoach").innerHTML = html;
-    }
+  }
 
-    if($("profileCoach")){
-      $("profileCoach").innerHTML = html;
+
+  /* =========================================================
+     PROGRESO
+  ========================================================= */
+
+  $("progressDate").value = today();
+
+  $("progressPhotos").addEventListener(
+    "change",
+    previewProgressPhotos
+  );
+
+
+  async function previewProgressPhotos(event){
+
+    const files =
+      Array.from(event.target.files || []).slice(0,3);
+
+    const preview = $("progressPreview");
+
+    preview.innerHTML = "";
+
+    for(const file of files){
+
+      try{
+
+        const url =
+          await fileToDataURL(file);
+
+        const img =
+          document.createElement("img");
+
+        img.src = url;
+
+        img.className = "progress-photo";
+
+        preview.appendChild(img);
+
+      }catch(e){
+        console.error(e);
+      }
+
     }
 
   }
 
 
-  /* =========================
-     PROGRESO
-  ========================= */
-
-  function resizeProgressImage(file){
+  async function compressImage(file,maxSize=900){
 
     return new Promise((resolve,reject)=>{
 
@@ -2169,27 +2012,25 @@
 
         img.onload = ()=>{
 
-          const max = 800;
-
           let width = img.width;
           let height = img.height;
 
-          if(width > max || height > max){
+          if(width > height){
 
-            if(width > height){
-
+            if(width > maxSize){
               height =
-                Math.round(height * max / width);
+                Math.round(height * maxSize / width);
 
-              width = max;
+              width = maxSize;
+            }
 
-            }else{
+          }else{
 
+            if(height > maxSize){
               width =
-                Math.round(width * max / height);
+                Math.round(width * maxSize / height);
 
-              height = max;
-
+              height = maxSize;
             }
 
           }
@@ -2200,20 +2041,21 @@
           canvas.width = width;
           canvas.height = height;
 
-          canvas
-            .getContext("2d")
-            .drawImage(
-              img,
-              0,
-              0,
-              width,
-              height
-            );
+          const ctx =
+            canvas.getContext("2d");
+
+          ctx.drawImage(
+            img,
+            0,
+            0,
+            width,
+            height
+          );
 
           resolve(
             canvas.toDataURL(
               "image/jpeg",
-              .65
+              .68
             )
           );
 
@@ -2232,47 +2074,6 @@
     });
 
   }
-
-
-  $("progressPhotos").addEventListener(
-    "change",
-    async function(){
-
-      const preview =
-        $("progressPreview");
-
-      preview.innerHTML = "";
-
-      const files =
-        Array.from(this.files || []).slice(0,3);
-
-      for(const file of files){
-
-        try{
-
-          const src =
-            await resizeProgressImage(file);
-
-          const img =
-            document.createElement("img");
-
-          img.src = src;
-
-          img.className =
-            "progress-photo";
-
-          preview.appendChild(img);
-
-        }catch(e){
-
-          console.error(e);
-
-        }
-
-      }
-
-    }
-  );
 
 
   async function saveProgress(){
@@ -2296,13 +2097,11 @@
       try{
 
         photos.push(
-          await resizeProgressImage(file)
+          await compressImage(file)
         );
 
       }catch(e){
-
         console.error(e);
-
       }
 
     }
@@ -2311,17 +2110,13 @@
 
       id:Date.now(),
 
-      date:
-        $("progressDate").value ||
-        today(),
+      date:$("progressDate").value || today(),
 
-      weight:
-        Number($("progressWeight").value || 0),
+      weight:$("progressWeight").value,
 
-      waist:
-        Number($("progressWaist").value || 0),
+      waist:$("progressWaist").value,
 
-      photos:photos
+      photos
 
     };
 
@@ -2332,25 +2127,21 @@
 
     saveState();
 
-    renderProgressHistory();
+    renderProgress();
 
-    $("progressPhotos").value = "";
-
-    $("progressPreview").innerHTML = "";
-
-    alert("Progreso guardado 💪");
+    alert("📈 Progreso guardado.");
 
   }
 
 
-  function renderProgressHistory(){
+  function renderProgress(){
 
-    const container =
+    const history =
       $("progressHistory");
 
     if(!state.progress.length){
 
-      container.innerHTML = `
+      history.innerHTML = `
         <div class="empty">
           Todavía no tienes registros de progreso.
         </div>
@@ -2359,127 +2150,125 @@
       return;
     }
 
-    container.innerHTML =
-      state.progress.map(entry=>`
+    history.innerHTML =
+      state.progress.map(entry=>{
 
-        <div class="progress-entry">
+        const photos =
+          (entry.photos || [])
+            .map(photo =>
+              `<img class="progress-photo" src="${photo}" alt="Progreso">`
+            )
+            .join("");
 
-          <div class="progress-date">
-            ${escapeHTML(entry.date)}
-          </div>
+        return `
+          <div class="progress-item">
 
-          <div class="progress-meta">
+            <div class="progress-date">
+              ${escapeHTML(
+                new Date(entry.date + "T12:00:00")
+                .toLocaleDateString("es-ES",{
+                  day:"numeric",
+                  month:"long",
+                  year:"numeric"
+                })
+              )}
+            </div>
 
-            ${
-              entry.weight
-                ? `⚖️ ${entry.weight} kg`
+            <div class="meal-info">
+              ${
+                entry.weight
+                ? `Peso: ${escapeHTML(entry.weight)} kg`
                 : ""
-            }
+              }
 
-            ${
-              entry.waist
-                ? ` · 📏 ${entry.waist} cm cintura`
+              ${
+                entry.waist
+                ? ` · Cintura: ${escapeHTML(entry.waist)} cm`
                 : ""
-            }
+              }
+            </div>
+
+            <div class="progress-grid">
+              ${photos}
+            </div>
 
           </div>
+        `;
 
-          <div class="photo-grid">
-
-            ${
-              (entry.photos || [])
-                .map(photo=>`
-                  <img
-                    src="${photo}"
-                    class="progress-photo"
-                    alt="Progreso"
-                  >
-                `)
-                .join("")
-            }
-
-          </div>
-
-        </div>
-
-      `).join("");
+      }).join("");
 
   }
 
-
-  /* =========================
-     ANALIZAR PROGRESO
-  ========================= */
 
   async function analyzeProgress(){
 
     if(!state.progress.length){
 
-      alert(
-        "Primero guarda al menos una actualización de progreso."
-      );
+      alert("Primero guarda al menos una actualización de progreso.");
 
       return;
     }
 
-    const current =
+    const latest =
       state.progress[0];
 
+    if(!latest.photos?.length){
+
+      alert("El último registro no tiene fotos.");
+
+      return;
+    }
+
     $("progressAI").innerHTML = `
-      <div class="coach-box" style="margin-top:15px">
-        <div class="loading">
-          <div class="spinner"></div>
-          <div class="coach-text">
-            La IA está analizando tu evolución...
-          </div>
-        </div>
+      <div class="loading">
+        <span class="spin">🐻</span>
+        Analizando tu evolución...
       </div>
     `;
 
     try{
 
       const response =
-        await fetch(
-          "/api/analyze-progress",
-          {
-            method:"POST",
-            headers:{
-              "Content-Type":"application/json"
-            },
-            body:JSON.stringify({
+        await fetch("/api/analyze-progress",{
 
-              photos:current.photos,
+          method:"POST",
 
-              profile:state.profile,
+          headers:{
+            "Content-Type":"application/json"
+          },
 
-              previousProgress:
-                state.progress.slice(1,5)
+          body:JSON.stringify({
 
-            })
-          }
-        );
+            photos:latest.photos,
+
+            profile:state.profile,
+
+            previousProgress:state.progress.slice(1,6)
+
+          })
+
+        });
 
       const data =
         await response.json();
 
       if(!response.ok){
-
         throw new Error(
           data.error ||
           "No se pudo analizar el progreso."
         );
-
       }
 
       renderProgressAI(data);
 
     }catch(error){
 
-      console.error(error);
-
       $("progressAI").innerHTML = `
-        <div class="notice" style="margin-top:15px">
-          ❌ ${escapeHTML(error.message)}
+        <div class="card">
+          <p class="danger">${escapeHTML(error.message)}</p>
+          <button class="btn secondary" onclick="analyzeProgress()">
+            🔄 Intentar de nuevo
+          </button>
         </div>
       `;
 
@@ -2490,122 +2279,90 @@
 
   function renderProgressAI(data){
 
+    const list = value =>
+      Array.isArray(value) && value.length
+      ? `
+        <ul class="tips">
+          ${value.map(x =>
+            `<li>${escapeHTML(x)}</li>`
+          ).join("")}
+        </ul>
+      `
+      : `<p>${escapeHTML(value || "Sin datos.")}</p>`;
+
     $("progressAI").innerHTML = `
 
-      <div class="coach-box" style="margin-top:15px">
+      <div class="coach-box">
 
-        <div class="coach-title">
-          🐻 Evaluación
-        </div>
+        <h3>🐻 Análisis de tu progreso</h3>
 
-        <div class="coach-text">
+        <p>
           ${escapeHTML(data.overall || "")}
+        </p>
+
+        <div class="coach-section">
+          <strong>👀 Cambios visuales</strong>
+          ${list(data.visual_changes)}
         </div>
+
+        <div class="coach-section">
+          <strong>💪 Puntos fuertes</strong>
+          ${list(data.strengths)}
+        </div>
+
+        <div class="coach-section">
+          <strong>🔧 Qué mejorar</strong>
+          ${list(data.improvements)}
+        </div>
+
+        <div class="coach-section">
+          <strong>🍽️ Nutrición</strong>
+          <p>${escapeHTML(data.nutrition_advice || "")}</p>
+        </div>
+
+        <div class="coach-section">
+          <strong>🏋️ Entrenamiento</strong>
+          <p>${escapeHTML(data.training_advice || "")}</p>
+        </div>
+
+        <div class="coach-section">
+          <strong>🎯 Próximos pasos</strong>
+          ${list(data.next_steps)}
+        </div>
+
+        ${
+          data.note
+          ? `
+            <div class="coach-section">
+              <strong>ℹ️ Nota</strong>
+              <p>${escapeHTML(data.note)}</p>
+            </div>
+          `
+          : ""
+        }
 
       </div>
-
-      ${
-        Array.isArray(data.visual_changes)
-          ? data.visual_changes.map(x=>`
-              <div class="tip">
-                👀 ${escapeHTML(x)}
-              </div>
-            `).join("")
-          : ""
-      }
-
-      ${
-        Array.isArray(data.strengths)
-          ? data.strengths.map(x=>`
-              <div class="tip">
-                💪 ${escapeHTML(x)}
-              </div>
-            `).join("")
-          : ""
-      }
-
-      ${
-        Array.isArray(data.improvements)
-          ? data.improvements.map(x=>`
-              <div class="tip">
-                🎯 ${escapeHTML(x)}
-              </div>
-            `).join("")
-          : ""
-      }
-
-      ${
-        data.nutrition_advice
-          ? `<div class="tip">
-              🍽️ <strong>Nutrición:</strong><br>
-              ${escapeHTML(data.nutrition_advice)}
-            </div>`
-          : ""
-      }
-
-      ${
-        data.training_advice
-          ? `<div class="tip">
-              🏋️ <strong>Entrenamiento:</strong><br>
-              ${escapeHTML(data.training_advice)}
-            </div>`
-          : ""
-      }
-
-      ${
-        Array.isArray(data.next_steps)
-          ? data.next_steps.map(x=>`
-              <div class="tip">
-                🚀 ${escapeHTML(x)}
-              </div>
-            `).join("")
-          : ""
-      }
-
-      ${
-        data.note
-          ? `<div class="notice" style="margin-top:12px">
-              ℹ️ ${escapeHTML(data.note)}
-            </div>`
-          : ""
-      }
 
     `;
 
   }
 
 
-  /* =========================
-     SEGURIDAD DE TEXTO
-  ========================= */
-
-  function escapeHTML(value){
-
-    return String(value ?? "")
-      .replaceAll("&","&amp;")
-      .replaceAll("<","&lt;")
-      .replaceAll(">","&gt;")
-      .replaceAll('"',"&quot;")
-      .replaceAll("'","&#039;");
-
-  }
-
-
-  /* =========================
+  /* =========================================================
      INICIO
-  ========================= */
-
-  $("progressDate").value = today();
+  ========================================================= */
 
   loadState();
 
   loadProfileForm();
 
+  $("progressDate").value = today();
+
   updateHome();
 
-  updateWater();
+  renderTodayMeals();
 
-  renderProgressHistory();
+  renderProgress();
 
 </script>
 
