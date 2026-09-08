@@ -1,127 +1,211 @@
-const OpenAI = require('openai');
+const OpenAI = require("openai");
 
-module.exports = async function handler(req, res) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Método no permitido' });
+const client = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
+
+function cleanJson(text) {
+  return text
+    .replace(/^```json\s*/i, "")
+    .replace(/^```\s*/i, "")
+    .replace(/\s*```$/i, "")
+    .trim();
+}
+
+export default async function handler(req, res) {
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Método no permitido" });
   }
 
   try {
-    if (!process.env.OPENAI_API_KEY) {
-      return res.status(500).json({
-        error: 'Falta configurar OPENAI_API_KEY en Vercel.'
-      });
-    }
+    const {
+      step = "identify",
+      image,
+      ingredients = [],
+      note = "",
+    } = req.body || {};
 
-    const { image, grams, note } = req.body || {};
-
-    if (!image || typeof image !== 'string') {
+    if (!image) {
       return res.status(400).json({
-        error: 'No se recibió la imagen.'
+        error: "No se recibió ninguna imagen.",
       });
     }
 
-    if (image.length > 7_000_000) {
-      return res.status(413).json({
-        error: 'La foto es demasiado grande. Intenta otra vez.'
+    if (typeof image !== "string" || image.length > 10000000) {
+      return res.status(400).json({
+        error: "La imagen es demasiado grande.",
       });
     }
 
-    const userGrams = Number(grams);
+    /* =========================================================
+       PASO 1 — IDENTIFICAR INGREDIENTES
+       ========================================================= */
 
-    const gramInstruction =
-      Number.isFinite(userGrams) && userGrams > 0
-        ? `El usuario ha indicado que el peso total de la comida es de ${userGrams} gramos. USA ESTE PESO como referencia principal para calcular las cantidades y los valores nutricionales. No sustituyas este dato por una estimación visual. Si aparecen varios alimentos, reparte los gramos entre ellos de forma razonable según lo que se vea en la fotografía.`
-        : 'El usuario no ha indicado el peso. En ese caso estima las cantidades basándote en la fotografía.';
+    if (step === "identify") {
+      const response = await client.responses.create({
+        model: process.env.OPENAI_MODEL || "gpt-5.6-luna",
 
-    const noteInstruction = note
-      ? `Información adicional proporcionada por el usuario: "${String(note).slice(0, 500)}"`
-      : '';
+        input: [
+          {
+            role: "user",
+            content: [
+              {
+                type: "input_text",
+                text: `
+Analiza esta fotografía de comida.
 
-    const client = new OpenAI({
-      apiKey: process.env.OPENAI_API_KEY
-    });
+Tu primera tarea NO es calcular las calorías finales.
 
-    const prompt = `
-Eres el analizador nutricional visual de una aplicación de alimentación.
-
-Analiza la fotografía y reconoce únicamente los alimentos y bebidas que sean razonablemente visibles.
-
-${gramInstruction}
-
-${noteInstruction}
+Identifica los ingredientes o alimentos que puedas distinguir visualmente.
 
 IMPORTANTE:
-- El peso indicado por el usuario tiene prioridad sobre una estimación visual.
-- Calcula las calorías y macronutrientes correspondientes a la cantidad indicada.
-- No inventes ingredientes que no puedan identificarse razonablemente.
-- Si aceite, salsas, aderezos u otros ingredientes son claramente visibles, inclúyelos con una estimación prudente.
-- Si algo no puede identificarse con suficiente seguridad, indícalo en "notes".
-- No afirmes una precisión superior a la que permite la fotografía.
-- Los valores deben ser estimaciones nutricionales razonables.
+- No inventes ingredientes que no sean razonablemente visibles.
+- Separa los ingredientes principales.
+- Si algo parece ser una salsa, aceite, queso, arroz, carne, verduras, etc., indícalo por separado cuando sea posible.
+- Puedes proporcionar una estimación orientativa de gramos basada en la apariencia de la porción, pero esa estimación será solamente una sugerencia que el usuario podrá modificar.
+- El usuario NO está obligado a introducir los gramos.
+- No necesitas conocer el peso total del plato.
 
-Devuelve SOLO JSON válido con este formato exacto:
+Devuelve ÚNICAMENTE JSON válido con esta estructura:
 
 {
-  "meal_name": "string",
+  "meal_name": "nombre aproximado del plato",
+  "ingredients": [
+    {
+      "id": "1",
+      "name": "nombre del alimento",
+      "estimated_grams": 100,
+      "confidence": 0.85
+    }
+  ],
+  "notes": "observaciones breves"
+}
+
+confidence debe estar entre 0 y 1.
+estimated_grams debe ser un número aproximado.
+                `,
+              },
+              {
+                type: "input_image",
+                image_url: image,
+              },
+            ],
+          },
+        ],
+      });
+
+      const text = response.output_text || "";
+      const data = JSON.parse(cleanJson(text));
+
+      return res.status(200).json(data);
+    }
+
+    /* =========================================================
+       PASO 2 — CALCULAR CALORÍAS Y MACROS
+       ========================================================= */
+
+    if (step === "calculate") {
+      if (!Array.isArray(ingredients) || ingredients.length === 0) {
+        return res.status(400).json({
+          error: "No se recibieron ingredientes.",
+        });
+      }
+
+      const response = await client.responses.create({
+        model: process.env.OPENAI_MODEL || "gpt-5.6-luna",
+
+        input: [
+          {
+            role: "user",
+            content: [
+              {
+                type: "input_text",
+                text: `
+Analiza nuevamente la fotografía y calcula las calorías y macronutrientes del plato.
+
+Estos son los ingredientes identificados previamente por la IA:
+
+${JSON.stringify(ingredients, null, 2)}
+
+REGLAS IMPORTANTES:
+
+1. Si el usuario ha introducido gramos para un ingrediente, UTILIZA ESOS GRAMOS como prioridad.
+
+2. Si el usuario dejó los gramos vacíos, NO lo consideres un error.
+   En ese caso estima una cantidad razonable observando la fotografía y utilizando el ingrediente identificado.
+
+3. NO pidas nunca el peso total de la comida.
+
+4. El peso de cada ingrediente es OPCIONAL.
+
+5. No inventes ingredientes que no aparezcan razonablemente en la fotografía.
+
+6. Si hay aceite, salsa, queso u otros ingredientes visibles, intenta incluirlos de forma prudente.
+
+7. Las calorías deben corresponder a la cantidad estimada de cada ingrediente.
+
+8. Diferencia entre peso proporcionado por el usuario y peso estimado por la IA.
+
+9. Da una estimación razonable, no una falsa precisión.
+
+Devuelve ÚNICAMENTE JSON válido:
+
+{
+  "meal_name": "nombre del plato",
   "items": [
     {
-      "food": "string",
-      "grams": number,
-      "calories": number,
-      "protein_g": number,
-      "carbs_g": number,
-      "fat_g": number,
-      "confidence": "low|medium|high"
+      "food": "alimento",
+      "grams": 100,
+      "grams_source": "usuario",
+      "calories": 150,
+      "protein_g": 10,
+      "carbs_g": 15,
+      "fat_g": 5,
+      "confidence": 0.85
     }
   ],
   "totals": {
-    "grams": number,
-    "calories": number,
-    "protein_g": number,
-    "carbs_g": number,
-    "fat_g": number
+    "grams": 300,
+    "calories": 500,
+    "protein_g": 30,
+    "carbs_g": 50,
+    "fat_g": 15
   },
-  "notes": "string"
+  "notes": "explicación breve de las estimaciones"
 }
 
-Usa gramos y macronutrientes con 1 decimal y calorías enteras.
-`;
+Para grams_source utiliza:
+- "usuario" si el usuario indicó los gramos.
+- "estimado" si la IA tuvo que estimarlos.
 
-    const response = await client.responses.create({
-      model: process.env.OPENAI_MODEL || 'gpt-5.6-luna',
-      input: [
-        {
-          role: 'user',
-          content: [
-            {
-              type: 'input_text',
-              text: prompt
-            },
-            {
-              type: 'input_image',
-              image_url: image,
-              detail: 'high'
-            }
-          ]
-        }
-      ],
-      text: {
-        format: {
-          type: 'json_object'
-        }
-      }
+${note ? `Información adicional del usuario: ${note}` : ""}
+                `,
+              },
+              {
+                type: "input_image",
+                image_url: image,
+              },
+            ],
+          },
+        ],
+      });
+
+      const text = response.output_text || "";
+      const data = JSON.parse(cleanJson(text));
+
+      return res.status(200).json(data);
+    }
+
+    return res.status(400).json({
+      error: "Paso de análisis no válido.",
     });
 
-    const result = JSON.parse(response.output_text);
-
-    return res.status(200).json(result);
-
-  } catch (e) {
-    console.error(e);
+  } catch (error) {
+    console.error("Error analizando comida:", error);
 
     return res.status(500).json({
-      error: 'No se pudo analizar la foto.',
-      detail: e.message
+      error: "No se pudo analizar la comida.",
+      detail: error?.message || "Error desconocido",
     });
   }
-};
+}
