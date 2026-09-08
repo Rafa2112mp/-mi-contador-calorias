@@ -19,9 +19,9 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif
 .screen.active{display:block}
 .top{display:flex;justify-content:space-between;align-items:center;gap:10px}
 .muted{color:#806f63}
-.hero{position:relative;overflow:hidden;background:linear-gradient(145deg,#4b2818,#7b492d);color:#fff;border-radius:28px;margin:12px 0;padding:20px 18px 16px;box-shadow:0 10px 28px #4b281833}
-.hero-copy{position:relative;z-index:2;width:56%}
-.hero-bear{display:block;width:58%;max-height:310px;object-fit:contain;object-position:center bottom;margin:-2px -2px -4px auto;position:relative;z-index:1;filter:drop-shadow(0 10px 12px #0005)}
+.hero{position:relative;overflow:hidden;background:linear-gradient(145deg,#4b2818,#7b492d);color:#fff;border-radius:28px;margin:12px 0;padding:20px 18px 16px;box-shadow:0 10px 28px #4b321d33;min-height:330px}
+.hero-copy{position:absolute;left:18px;top:25px;z-index:2;width:48%}
+.hero-bear{display:block;width:68%;max-width:390px;max-height:330px;object-fit:contain;object-position:center bottom;margin:0 0 0 auto;position:absolute;right:0;bottom:0;z-index:1;filter:drop-shadow(0 10px 12px #0005)}
 .hero h1{font-size:28px;margin:0 0 5px}
 .big{font-size:38px;font-weight:900;line-height:1}
 .bar{height:10px;background:#ffffff35;border-radius:9px;overflow:hidden;margin-top:10px}
@@ -38,7 +38,7 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif
 .primary{background:#5b321d;color:#fff}
 .secondary{background:#eee5dd;color:#432719}
 .danger{background:#f7dddd;color:#8a2727}
-.back{border:0;background:none;font-size:16px;padding:4px 0;color:#5b321d;font-weight:700}
+.smallbtn{padding:9px 11px;font-size:13px}
 .input,select{width:100%;padding:12px;border:1px solid #dacdc2;border-radius:12px;margin:6px 0 10px;background:#fff;font-size:16px}
 .row{display:flex;justify-content:space-between;align-items:center;gap:10px}
 .food{display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid #eadfd6}
@@ -66,10 +66,8 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif
 .col{flex:1;text-align:center;font-size:10px}
 .barcol{background:#6b3e24;border-radius:8px 8px 3px 3px;min-height:4px}
 .notice{font-size:12px;color:#806f63;line-height:1.4}
-.section-title{margin:18px 0 8px}
-.center{text-align:center}
-.smallbtn{padding:9px 11px;font-size:13px}
 .line{height:1px;background:#eadfd6;margin:12px 0}
+.center{text-align:center}
 </style>
 </head>
 
@@ -84,16 +82,24 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif
 <h2 style="margin:0">Mi Contador de Calorías</h2>
 <div class="muted">Tu nutrición, tus macros, tu progreso.</div>
 </div>
+
 <button class="btn secondary smallbtn" onclick="show('profile')">⚙️</button>
 </div>
 
 <div class="hero">
 
 <div class="hero-copy">
+
 <div style="opacity:.82">Calorías restantes hoy</div>
+
 <div class="big" id="remaining">2.200</div>
+
 <div>de <span id="goal">2.200</span> kcal</div>
-<div class="bar"><i id="progress"></i></div>
+
+<div class="bar">
+<i id="progress"></i>
+</div>
+
 </div>
 
 <img
@@ -148,20 +154,44 @@ onerror="this.style.display='none'"
 </div>
 
 <div class="actions" style="margin-top:12px">
-<button class="btn primary" onclick="show('scan')">📸 Añadir comida</button>
-<button class="btn secondary" onclick="show('water')">💧 Agua</button>
+
+<button class="btn primary" onclick="show('scan')">
+📸 Añadir comida
+</button>
+
+<button class="btn secondary" onclick="show('water')">
+💧 Agua
+</button>
+
 </div>
 
 <div class="actions" style="margin-top:10px">
-<button class="btn secondary" onclick="show('coach')">🐻 Coach IA</button>
-<button class="btn secondary" onclick="show('progressScreen')">📈 Mi progreso</button>
+
+<button class="btn secondary" onclick="show('coach')">
+🐻 Coach IA
+</button>
+
+<button class="btn secondary" onclick="show('progressScreen')">
+📈 Mi progreso
+</button>
+
 </div>
 
 <div class="card" style="margin-top:12px">
 
 <div class="row">
-<h3 style="margin:0">🍽️ Comidas de hoy</h3>
-<button class="btn secondary smallbtn" onclick="show('history')">Ver estadísticas</button>
+
+<h3 style="margin:0">
+🍽️ Comidas de hoy
+</h3>
+
+<button
+class="btn secondary smallbtn"
+onclick="show('history')"
+>
+Ver estadísticas
+</button>
+
 </div>
 
 <div id="diary"></div>
@@ -173,7 +203,9 @@ onerror="this.style.display='none'"
 
 <section id="scan" class="screen">
 
-<button class="back" onclick="resetScan();show('home')">← Volver</button>
+<button class="back" onclick="resetScan();show('home')">
+← Volver
+</button>
 
 <h2>📸 Añadir comida</h2>
 
@@ -184,23 +216,55 @@ Todo es opcional.
 
 <div class="scanbox">
 
-<video id="video" class="preview" autoplay playsinline muted></video>
+<video
+id="video"
+class="preview"
+autoplay
+playsinline
+muted
+></video>
 
-<img id="shot" class="preview hidden" alt="Foto de comida">
+<img
+id="shot"
+class="preview hidden"
+alt="Foto de comida"
+>
 
 <canvas id="canvas" hidden></canvas>
 
 </div>
 
-<input id="photo" type="file" accept="image/*" capture="environment" hidden>
+<!-- Cámara -->
+<input
+id="cameraInput"
+type="file"
+accept="image/*"
+capture="environment"
+hidden
+>
+
+<!-- Galería -->
+<input
+id="galleryInput"
+type="file"
+accept="image/*"
+multiple="false"
+hidden
+>
 
 <div class="actions" style="margin-top:10px">
 
-<button class="btn primary" onclick="openCamera()">
+<button
+class="btn primary"
+onclick="openCamera()"
+>
 📷 Tomar foto
 </button>
 
-<button class="btn secondary" onclick="openGallery()">
+<button
+class="btn secondary"
+onclick="openGallery()"
+>
 🖼️ Galería
 </button>
 
@@ -221,21 +285,36 @@ class="actions"
 style="margin-top:10px;display:none"
 >
 
-<button class="btn secondary" onclick="retakePhoto()">
+<button
+class="btn secondary"
+onclick="retakePhoto()"
+>
 ↩️ Repetir
 </button>
 
-<button class="btn primary" onclick="showIngredients()">
+<button
+class="btn primary"
+onclick="showIngredients()"
+>
 ➡️ Continuar
 </button>
 
 </div>
 
-<div id="scanStatus" class="muted" style="margin:12px 0"></div>
+<div
+id="scanStatus"
+class="muted"
+style="margin:12px 0"
+></div>
 
-<div id="ingredientsBox" class="card hidden">
+<div
+id="ingredientsBox"
+class="card hidden"
+>
 
-<h3 style="margin-top:0">🥘 ¿Qué alimentos hay?</h3>
+<h3 style="margin-top:0">
+🥘 ¿Qué alimentos hay?
+</h3>
 
 <p class="notice">
 Escribe los alimentos que quieras.
@@ -282,15 +361,21 @@ onclick="calculateFood()"
 
 <section id="water" class="screen">
 
-<button class="back" onclick="show('home')">← Volver</button>
+<button class="back" onclick="show('home')">
+← Volver
+</button>
 
 <h2>💧 Agua</h2>
 
 <div class="card center">
 
-<div class="muted">Consumida hoy</div>
+<div class="muted">
+Consumida hoy
+</div>
 
-<div class="waterbig" id="waterBig">0 ml</div>
+<div class="waterbig" id="waterBig">
+0 ml
+</div>
 
 <div class="muted">
 Objetivo: <span id="waterGoal">2000</span> ml
@@ -312,6 +397,7 @@ Objetivo: <span id="waterGoal">2000</span> ml
 <div class="line"></div>
 
 <label>
+
 O escribe la cantidad
 
 <input
@@ -347,7 +433,9 @@ Reiniciar agua de hoy
 
 <section id="coach" class="screen">
 
-<button class="back" onclick="show('home')">← Volver</button>
+<button class="back" onclick="show('home')">
+← Volver
+</button>
 
 <h2>🐻 Coach nutricional IA</h2>
 
@@ -359,7 +447,9 @@ Consejos personalizados según tu perfil, tus calorías, macros y agua.
 
 <div id="coachResult">
 
-<p>Pulsa el botón para pedir al oso un consejo.</p>
+<p>
+Pulsa el botón para pedir al oso un consejo.
+</p>
 
 <button
 class="btn primary"
@@ -378,17 +468,20 @@ onclick="askCoach()"
 
 <section id="progressScreen" class="screen">
 
-<button class="back" onclick="show('home')">← Volver</button>
+<button class="back" onclick="show('home')">
+← Volver
+</button>
 
 <h2>📈 Mi progreso</h2>
 
 <p class="muted">
-Sube hasta 3 fotos (frente, lado y espalda) para recibir una valoración visual responsable.
+Sube hasta 3 fotos para recibir una valoración visual responsable.
 </p>
 
 <div class="card">
 
 <label>
+
 Fotos de progreso
 
 <input
@@ -398,9 +491,11 @@ type="file"
 accept="image/*"
 multiple
 >
+
 </label>
 
 <label>
+
 Peso actual
 
 <input
@@ -410,6 +505,7 @@ type="number"
 inputmode="decimal"
 placeholder="kg"
 >
+
 </label>
 
 <p class="notice">
@@ -434,27 +530,45 @@ onclick="analyzeProgress()"
 
 <section id="history" class="screen">
 
-<button class="back" onclick="show('home')">← Volver</button>
+<button class="back" onclick="show('home')">
+← Volver
+</button>
 
 <h2>📊 Estadísticas</h2>
 
 <div class="grid">
 
 <div class="stat">
-<span class="muted">Media 7 días</span>
-<b id="avg">0 kcal</b>
+
+<span class="muted">
+Media 7 días
+</span>
+
+<b id="avg">
+0 kcal
+</b>
+
 </div>
 
 <div class="stat">
-<span class="muted">Objetivo</span>
-<b id="avgGoal">0 kcal</b>
+
+<span class="muted">
+Objetivo
+</span>
+
+<b id="avgGoal">
+0 kcal
+</b>
+
 </div>
 
 </div>
 
 <div class="card" style="margin-top:12px">
 
-<h3 style="margin-top:0">Últimos 7 días</h3>
+<h3 style="margin-top:0">
+Últimos 7 días
+</h3>
 
 <div id="chart" class="chart"></div>
 
@@ -467,13 +581,16 @@ onclick="analyzeProgress()"
 
 <section id="profile" class="screen">
 
-<button class="back" onclick="show('home')">← Volver</button>
+<button class="back" onclick="show('home')">
+← Volver
+</button>
 
 <h2>⚙️ Mi perfil</h2>
 
 <div class="card">
 
 <label>
+
 Peso (kg)
 
 <input
@@ -482,9 +599,11 @@ class="input"
 type="number"
 inputmode="decimal"
 >
+
 </label>
 
 <label>
+
 Altura (cm)
 
 <input
@@ -493,9 +612,11 @@ class="input"
 type="number"
 inputmode="numeric"
 >
+
 </label>
 
 <label>
+
 Edad
 
 <input
@@ -504,34 +625,51 @@ class="input"
 type="number"
 inputmode="numeric"
 >
+
 </label>
 
 <label>
+
 Sexo
 
 <select id="sex">
 
-<option value="male">Hombre</option>
-<option value="female">Mujer</option>
+<option value="male">
+Hombre
+</option>
+
+<option value="female">
+Mujer
+</option>
 
 </select>
 
 </label>
 
 <label>
+
 Objetivo
 
 <select id="goalType">
 
-<option value="lose">Perder grasa</option>
-<option value="maintain">Mantener peso</option>
-<option value="gain">Ganar músculo</option>
+<option value="lose">
+Perder grasa
+</option>
+
+<option value="maintain">
+Mantener peso
+</option>
+
+<option value="gain">
+Ganar músculo
+</option>
 
 </select>
 
 </label>
 
 <label>
+
 Objetivo de agua (ml)
 
 <input
@@ -558,24 +696,29 @@ onclick="saveProfile()"
 
 <nav class="nav">
 
-<button onclick="show('home')" id="navHome">
-<span style="font-size:20px">🏠</span><br>Inicio
+<button onclick="show('home')">
+<span style="font-size:20px">🏠</span><br>
+Inicio
 </button>
 
-<button onclick="show('scan')" id="navScan">
-<span style="font-size:20px">📸</span><br>Comida
+<button onclick="show('scan')">
+<span style="font-size:20px">📸</span><br>
+Comida
 </button>
 
-<button onclick="show('water')" id="navWater">
-<span style="font-size:20px">💧</span><br>Agua
+<button onclick="show('water')">
+<span style="font-size:20px">💧</span><br>
+Agua
 </button>
 
-<button onclick="show('coach')" id="navCoach">
-<span style="font-size:20px">🐻</span><br>Coach
+<button onclick="show('coach')">
+<span style="font-size:20px">🐻</span><br>
+Coach
 </button>
 
-<button onclick="show('progressScreen')" id="navProgress">
-<span style="font-size:20px">📈</span><br>Progreso
+<button onclick="show('progressScreen')">
+<span style="font-size:20px">📈</span><br>
+Progreso
 </button>
 
 </nav>
@@ -592,8 +735,7 @@ let lastPhotoBlob=null;
 let lastResult=null;
 
 let state=JSON.parse(
-localStorage.getItem('v7state')||
-'null'
+localStorage.getItem('v7state')||'null'
 )||{
 
 profile:{
@@ -683,18 +825,27 @@ function render(){
 let t=totals();
 
 $('cal').textContent=Math.round(t.calories);
-$('p').textContent=t.protein_g.toFixed(1)+' g';
-$('c').textContent=t.carbs_g.toFixed(1)+' g';
-$('f').textContent=t.fat_g.toFixed(1)+' g';
 
-$('goal').textContent=Math.round(state.goal).toLocaleString('es-ES');
+$('p').textContent=
+t.protein_g.toFixed(1)+' g';
 
-let remaining=Math.max(0,state.goal-t.calories);
+$('c').textContent=
+t.carbs_g.toFixed(1)+' g';
+
+$('f').textContent=
+t.fat_g.toFixed(1)+' g';
+
+$('goal').textContent=
+Math.round(state.goal).toLocaleString('es-ES');
+
+let remaining=
+Math.max(0,state.goal-t.calories);
 
 $('remaining').textContent=
 Math.round(remaining).toLocaleString('es-ES');
 
-let pct=Math.min(100,t.calories/state.goal*100);
+let pct=
+Math.min(100,t.calories/state.goal*100);
 
 $('progress').style.width=pct+'%';
 
@@ -714,7 +865,10 @@ $('waterGoal').textContent=
 Math.round(state.waterGoal);
 
 $('waterProgress').style.width=
-Math.min(100,(state.water||0)/state.waterGoal*100)+'%';
+Math.min(
+100,
+(state.water||0)/state.waterGoal*100
+)+'%';
 
 renderDiary();
 
@@ -734,7 +888,9 @@ return;
 
 }
 
-d.innerHTML=state.foods.map((x,i)=>`
+d.innerHTML=
+
+state.foods.map((x,i)=>`
 
 <div class="food">
 
@@ -745,10 +901,15 @@ d.innerHTML=state.foods.map((x,i)=>`
 <br>
 
 <small>
+
 ${Math.round(x.totals?.calories||0)} kcal ·
+
 P ${(+x.totals?.protein_g||0).toFixed(1)} g ·
+
 C ${(+x.totals?.carbs_g||0).toFixed(1)} g ·
+
 G ${(+x.totals?.fat_g||0).toFixed(1)} g
+
 </small>
 
 </div>
@@ -776,11 +937,14 @@ $(id).classList.add('active');
 
 window.scrollTo(0,0);
 
-if(id==='home')render();
+if(id==='home')
+render();
 
-if(id==='history')renderHistory();
+if(id==='history')
+renderHistory();
 
-if(id==='water')render();
+if(id==='water')
+render();
 
 if(id==='profile'){
 
@@ -830,8 +994,10 @@ $('video').srcObject=stream;
 
 $('captureBtn').style.display='block';
 
+$('photoActions').style.display='none';
+
 $('scanStatus').textContent=
-'Cámara abierta. Pulsa Capturar foto. La app no guardará vídeo.';
+'Cámara abierta. Pulsa Capturar foto.';
 
 }catch(e){
 
@@ -845,24 +1011,45 @@ $('scanStatus').textContent=
 
 function openGallery(){
 
-$('photo').value='';
+stopCamera();
 
-$('photo').click();
+$('galleryInput').value='';
+
+$('galleryInput').click();
 
 }
 
 
-$('photo').onchange=()=>{
+$('galleryInput').onchange=()=>{
 
-let f=$('photo').files[0];
+let f=$('galleryInput').files[0];
 
 if(!f)return;
 
+setPhoto(f);
+
+};
+
+
+$('cameraInput').onchange=()=>{
+
+let f=$('cameraInput').files[0];
+
+if(!f)return;
+
+setPhoto(f);
+
+};
+
+
+function setPhoto(file){
+
 stopCamera();
 
-lastPhotoBlob=f;
+lastPhotoBlob=file;
 
-$('shot').src=URL.createObjectURL(f);
+$('shot').src=
+URL.createObjectURL(file);
 
 $('shot').classList.remove('hidden');
 
@@ -872,18 +1059,25 @@ $('captureBtn').style.display='none';
 
 $('photoActions').style.display='grid';
 
+$('ingredientsBox').classList.add('hidden');
+
+$('result').innerHTML='';
+
 $('scanStatus').textContent=
 '📸 Foto lista. Pulsa Continuar.';
 
-};
+}
 
 
 function takePhoto(){
 
 if(!stream)return;
 
-$('canvas').width=$('video').videoWidth;
-$('canvas').height=$('video').videoHeight;
+$('canvas').width=
+$('video').videoWidth;
+
+$('canvas').height=
+$('video').videoHeight;
 
 $('canvas')
 .getContext('2d')
@@ -968,7 +1162,9 @@ lastPhotoBlob=null;
 
 if(hard){
 
-$('photo').value='';
+$('cameraInput').value='';
+
+$('galleryInput').value='';
 
 $('shot').classList.add('hidden');
 
@@ -1042,18 +1238,27 @@ $('ingredients').appendChild(d);
 }
 
 
+/* =========================================================
+   FUNCIÓN CORREGIDA: CALCULATE FOOD
+   ========================================================= */
+
 async function calculateFood(){
 
-if(!lastPhotoBlob)return;
+if(!lastPhotoBlob){
+
+$('scanStatus').textContent=
+'Primero toma o selecciona una foto.';
+
+return;
+
+}
 
 $('scanStatus').textContent=
 '⏳ Calculando calorías y macros…';
 
-let rows=[...]
-
-document
-.querySelectorAll('.ingredient')
-].map(r=>({
+let rows=
+[...document.querySelectorAll('.ingredient')]
+.map(r=>({
 
 name:
 r.querySelector('.ing-name').value.trim(),
@@ -1064,9 +1269,23 @@ r.querySelector('.ing-grams').value
 +r.querySelector('.ing-grams').value
 :null
 
-})).filter(x=>x.name);
+}))
+.filter(x=>x.name);
 
-let img=await resizeData(lastPhotoBlob);
+let img;
+
+try{
+
+img=await resizeData(lastPhotoBlob);
+
+}catch(e){
+
+$('scanStatus').textContent=
+'❌ No se pudo preparar la imagen.';
+
+return;
+
+}
 
 try{
 
@@ -1100,10 +1319,13 @@ note:$('foodNote').value.trim()
 
 let d=await r.json();
 
-if(!r.ok)
+if(!r.ok){
+
 throw Error(
-d.error||'Error al analizar'
+d.error||'Error al analizar la comida'
 );
+
+}
 
 lastResult=d;
 
@@ -1124,24 +1346,34 @@ ${(d.items||[]).map(x=>`
 
 <span>
 
-<b>${esc(x.food)}</b>
+<b>
+${esc(x.food)}
+</b>
 
 <br>
 
 <small>
+
 ${Math.round(x.grams||0)} g ·
+
 P ${(+x.protein_g||0).toFixed(1)} g ·
+
 C ${(+x.carbs_g||0).toFixed(1)} g ·
+
 G ${(+x.fat_g||0).toFixed(1)} g
+
 </small>
 
 <br>
 
 <span class="pill">
+
 ${x.grams_source==='user'
 ?'Peso introducido por ti'
 :'Peso estimado por IA'}
+
 · ${esc(x.confidence||'media')}
+
 </span>
 
 </span>
@@ -1159,22 +1391,30 @@ ${Math.round(x.calories||0)} kcal
 <div class="macrogrid">
 
 <div class="macro">
-<b>${Math.round(d.totals.calories)}</b>
+<b>
+${Math.round(d.totals?.calories||0)}
+</b>
 <span>🔥 kcal</span>
 </div>
 
 <div class="macro">
-<b>${(+d.totals.protein_g||0).toFixed(1)} g</b>
+<b>
+${(+d.totals?.protein_g||0).toFixed(1)} g
+</b>
 <span>🥩 proteína</span>
 </div>
 
 <div class="macro">
-<b>${(+d.totals.carbs_g||0).toFixed(1)} g</b>
+<b>
+${(+d.totals?.carbs_g||0).toFixed(1)} g
+</b>
 <span>🍚 carbos</span>
 </div>
 
 <div class="macro">
-<b>${(+d.totals.fat_g||0).toFixed(1)} g</b>
+<b>
+${(+d.totals?.fat_g||0).toFixed(1)} g
+</b>
 <span>🥑 grasas</span>
 </div>
 
@@ -1241,8 +1481,11 @@ let s=Math.min(
 
 let c=document.createElement('canvas');
 
-c.width=Math.round(im.width*s);
-c.height=Math.round(im.height*s);
+c.width=
+Math.round(im.width*s);
+
+c.height=
+Math.round(im.height*s);
 
 c.getContext('2d')
 .drawImage(
@@ -1264,7 +1507,8 @@ c.toDataURL(
 
 im.onerror=reject;
 
-im.src=URL.createObjectURL(blob);
+im.src=
+URL.createObjectURL(blob);
 
 });
 
@@ -1283,7 +1527,8 @@ save();
 
 function addTypedWater(){
 
-let n=+$('waterInput').value||0;
+let n=
++$('waterInput').value||0;
 
 if(n>0){
 
@@ -1493,7 +1738,9 @@ $('progressResult').innerHTML=`
 🐻 ${esc(d.overall||'Valoración')}
 </h3>
 
-<h4>Cambios visuales</h4>
+<h4>
+Cambios visuales
+</h4>
 
 <ul>
 ${(d.visual_changes||[]).map(x=>
@@ -1501,7 +1748,9 @@ ${(d.visual_changes||[]).map(x=>
 ).join('')}
 </ul>
 
-<h4>Puntos fuertes</h4>
+<h4>
+Puntos fuertes
+</h4>
 
 <ul>
 ${(d.strengths||[]).map(x=>
@@ -1509,7 +1758,9 @@ ${(d.strengths||[]).map(x=>
 ).join('')}
 </ul>
 
-<h4>Qué mejorar</h4>
+<h4>
+Qué mejorar
+</h4>
 
 <ul>
 ${(d.improvements||[]).map(x=>
@@ -1527,7 +1778,9 @@ ${esc(d.nutrition_advice||'')}
 ${esc(d.training_advice||'')}
 </p>
 
-<h4>Próximos pasos</h4>
+<h4>
+Próximos pasos
+</h4>
 
 <ul>
 ${(d.next_steps||[]).map(x=>
@@ -1557,8 +1810,6 @@ esc(e.message)+
 
 function renderHistory(){
 
-if(!$('chart'))return;
-
 let vals=[];
 
 for(let i=6;i>=0;i--){
@@ -1569,11 +1820,14 @@ d.setDate(
 d.getDate()-i
 );
 
-let k=d.toISOString().slice(0,10);
+let k=
+d.toISOString().slice(0,10);
 
-let f=state.days[k]||[];
+let f=
+state.days[k]||[];
 
-let kcal=f.reduce(
+let kcal=
+f.reduce(
 (a,x)=>
 a+(+(x.totals?.calories||0)),
 0
@@ -1586,7 +1840,8 @@ kcal
 
 }
 
-let max=Math.max(
+let max=
+Math.max(
 state.goal,
 ...vals.map(x=>x.kcal),
 1
@@ -1613,7 +1868,9 @@ width:100%
 
 </div>
 
-<div>${x.k.slice(8)}</div>
+<div>
+${x.k.slice(8)}
+</div>
 
 </div>
 
@@ -1641,7 +1898,9 @@ vals
 
 <div class="row">
 
-<span>${x.k}</span>
+<span>
+${x.k}
+</span>
 
 <b>
 ${Math.round(x.kcal)} kcal
@@ -1658,15 +1917,20 @@ ${Math.round(x.kcal)} kcal
 
 function saveProfile(){
 
-let w=+$('weight').value||80;
+let w=
++$('weight').value||80;
 
-let h=+$('height').value||169;
+let h=
++$('height').value||169;
 
-let a=+$('age').value||27;
+let a=
++$('age').value||27;
 
-let s=$('sex').value;
+let s=
+$('sex').value;
 
-let g=$('goalType').value;
+let g=
+$('goalType').value;
 
 let bmr=
 
@@ -1686,14 +1950,18 @@ s==='male'
 5*a-
 161;
 
-let tdee=bmr*1.55;
+let tdee=
+bmr*1.55;
 
-state.goal=Math.max(
+state.goal=
+Math.max(
 
 1500,
 
 Math.round(
+
 tdee+
+
 (
 g==='lose'
 ?
@@ -1705,6 +1973,7 @@ g==='gain'
 :
 0
 )
+
 )
 
 );
@@ -1758,8 +2027,13 @@ state.waterGoal;
 render();
 
 
-if('serviceWorker' in navigator)
+if(
+'serviceWorker' in navigator
+){
+
 navigator.serviceWorker.register('/sw.js');
+
+}
 
 </script>
 
