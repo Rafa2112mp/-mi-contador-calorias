@@ -1,211 +1,220 @@
-const OpenAI = require("openai");
-
-const client = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-
-function cleanJson(text) {
-  return text
-    .replace(/^```json\s*/i, "")
-    .replace(/^```\s*/i, "")
-    .replace(/\s*```$/i, "")
-    .trim();
-}
-
 export default async function handler(req, res) {
   if (req.method !== "POST") {
-    return res.status(405).json({ error: "Método no permitido" });
+    return res.status(405).json({
+      error: "Método no permitido"
+    });
   }
 
   try {
     const {
-      step = "identify",
+      step = "calculate",
       image,
-      ingredients = [],
       note = "",
+      ingredients = []
     } = req.body || {};
 
-    if (!image) {
+    if (!image || typeof image !== "string") {
       return res.status(400).json({
-        error: "No se recibió ninguna imagen.",
+        error: "No se recibió ninguna imagen."
       });
     }
 
-    if (typeof image !== "string" || image.length > 10000000) {
-      return res.status(400).json({
-        error: "La imagen es demasiado grande.",
+    // Evita enviar imágenes gigantes que hacen lenta la petición
+    if (image.length > 10000000) {
+      return res.status(413).json({
+        error: "La imagen es demasiado grande. Intenta hacer otra foto."
       });
     }
 
-    /* =========================================================
-       PASO 1 — IDENTIFICAR INGREDIENTES
-       ========================================================= */
+    const apiKey = process.env.OPENAI_API_KEY;
 
-    if (step === "identify") {
-      const response = await client.responses.create({
-        model: process.env.OPENAI_MODEL || "gpt-5.6-luna",
+    if (!apiKey) {
+      return res.status(500).json({
+        error: "La API de JuliFit no está configurada."
+      });
+    }
 
-        input: [
-          {
-            role: "user",
-            content: [
-              {
-                type: "input_text",
-                text: `
-Analiza esta fotografía de comida.
+    const model = process.env.OPENAI_MODEL || "gpt-5.6-luna";
 
-Tu primera tarea NO es calcular las calorías finales.
+    const isIdentify = step === "identify";
 
-Identifica los ingredientes o alimentos que puedas distinguir visualmente.
+    const prompt = isIdentify
+      ? `
+Analiza esta foto de comida.
 
-IMPORTANTE:
-- No inventes ingredientes que no sean razonablemente visibles.
-- Separa los ingredientes principales.
-- Si algo parece ser una salsa, aceite, queso, arroz, carne, verduras, etc., indícalo por separado cuando sea posible.
-- Puedes proporcionar una estimación orientativa de gramos basada en la apariencia de la porción, pero esa estimación será solamente una sugerencia que el usuario podrá modificar.
-- El usuario NO está obligado a introducir los gramos.
-- No necesitas conocer el peso total del plato.
+Identifica:
+1. El nombre general del plato.
+2. Los ingredientes visibles.
+3. Una estimación razonable de gramos de cada ingrediente.
 
-Devuelve ÚNICAMENTE JSON válido con esta estructura:
+Devuelve SOLO JSON con esta estructura:
 
 {
-  "meal_name": "nombre aproximado del plato",
+  "meal_name": "string",
   "ingredients": [
     {
       "id": "1",
-      "name": "nombre del alimento",
-      "estimated_grams": 100,
-      "confidence": 0.85
+      "name": "string",
+      "estimated_grams": 0,
+      "confidence": 0
     }
   ],
-  "notes": "observaciones breves"
+  "notes": "string"
 }
 
-confidence debe estar entre 0 y 1.
-estimated_grams debe ser un número aproximado.
-                `,
-              },
-              {
-                type: "input_image",
-                image_url: image,
-              },
-            ],
-          },
-        ],
-      });
+No inventes ingredientes que no sean razonablemente visibles.
+`
+      : `
+Analiza esta comida para JuliFit.
 
-      const text = response.output_text || "";
-      const data = JSON.parse(cleanJson(text));
+Calcula una estimación nutricional razonable para cada ingrediente.
 
-      return res.status(200).json(data);
-    }
+IMPORTANTE:
+- Si el usuario proporciona gramos, usa esos gramos.
+- Si no proporciona gramos, estima una cantidad razonable según la fotografía.
+- No exageres las cantidades.
+- Devuelve calorías y macronutrientes aproximados.
+- La estimación debe corresponder a la comida completa de la fotografía.
 
-    /* =========================================================
-       PASO 2 — CALCULAR CALORÍAS Y MACROS
-       ========================================================= */
+${ingredients.length
+  ? `Ingredientes proporcionados por el usuario:
+${JSON.stringify(ingredients)}`
+  : "No se proporcionaron ingredientes; identifícalos mediante la fotografía."
+}
 
-    if (step === "calculate") {
-      if (!Array.isArray(ingredients) || ingredients.length === 0) {
-        return res.status(400).json({
-          error: "No se recibieron ingredientes.",
-        });
-      }
+Nota del usuario:
+${note || "Ninguna"}
 
-      const response = await client.responses.create({
-        model: process.env.OPENAI_MODEL || "gpt-5.6-luna",
-
-        input: [
-          {
-            role: "user",
-            content: [
-              {
-                type: "input_text",
-                text: `
-Analiza nuevamente la fotografía y calcula las calorías y macronutrientes del plato.
-
-Estos son los ingredientes identificados previamente por la IA:
-
-${JSON.stringify(ingredients, null, 2)}
-
-REGLAS IMPORTANTES:
-
-1. Si el usuario ha introducido gramos para un ingrediente, UTILIZA ESOS GRAMOS como prioridad.
-
-2. Si el usuario dejó los gramos vacíos, NO lo consideres un error.
-   En ese caso estima una cantidad razonable observando la fotografía y utilizando el ingrediente identificado.
-
-3. NO pidas nunca el peso total de la comida.
-
-4. El peso de cada ingrediente es OPCIONAL.
-
-5. No inventes ingredientes que no aparezcan razonablemente en la fotografía.
-
-6. Si hay aceite, salsa, queso u otros ingredientes visibles, intenta incluirlos de forma prudente.
-
-7. Las calorías deben corresponder a la cantidad estimada de cada ingrediente.
-
-8. Diferencia entre peso proporcionado por el usuario y peso estimado por la IA.
-
-9. Da una estimación razonable, no una falsa precisión.
-
-Devuelve ÚNICAMENTE JSON válido:
+Devuelve SOLO JSON con esta estructura:
 
 {
-  "meal_name": "nombre del plato",
+  "meal_name": "string",
   "items": [
     {
-      "food": "alimento",
-      "grams": 100,
-      "grams_source": "usuario",
-      "calories": 150,
-      "protein_g": 10,
-      "carbs_g": 15,
-      "fat_g": 5,
-      "confidence": 0.85
+      "food": "string",
+      "grams": 0,
+      "grams_source": "user" | "estimated",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "confidence": 0
     }
   ],
   "totals": {
-    "grams": 300,
-    "calories": 500,
-    "protein_g": 30,
-    "carbs_g": 50,
-    "fat_g": 15
+    "grams": 0,
+    "calories": 0,
+    "protein_g": 0,
+    "carbs_g": 0,
+    "fat_g": 0
   },
-  "notes": "explicación breve de las estimaciones"
+  "notes": "string"
 }
+`;
 
-Para grams_source utiliza:
-- "usuario" si el usuario indicó los gramos.
-- "estimado" si la IA tuvo que estimarlos.
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 45000);
 
-${note ? `Información adicional del usuario: ${note}` : ""}
-                `,
-              },
-              {
-                type: "input_image",
-                image_url: image,
-              },
-            ],
-          },
-        ],
+    let response;
+
+    try {
+      response = await fetch("https://api.openai.com/v1/responses", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${apiKey}`
+        },
+        body: JSON.stringify({
+          model,
+          input: [
+            {
+              role: "user",
+              content: [
+                {
+                  type: "input_text",
+                  text: prompt
+                },
+                {
+                  type: "input_image",
+                  image_url: image,
+                  detail: "low"
+                }
+              ]
+            }
+          ]
+        }),
+        signal: controller.signal
       });
-
-      const text = response.output_text || "";
-      const data = JSON.parse(cleanJson(text));
-
-      return res.status(200).json(data);
+    } finally {
+      clearTimeout(timeout);
     }
 
-    return res.status(400).json({
-      error: "Paso de análisis no válido.",
-    });
+    if (!response.ok) {
+      const errorText = await response.text();
+
+      console.error("OpenAI error:", errorText);
+
+      return res.status(502).json({
+        error: "No se pudo analizar la comida en este momento."
+      });
+    }
+
+    const data = await response.json();
+
+    let text = "";
+
+    if (typeof data.output_text === "string") {
+      text = data.output_text;
+    } else if (Array.isArray(data.output)) {
+      for (const item of data.output) {
+        if (!Array.isArray(item.content)) continue;
+
+        for (const content of item.content) {
+          if (typeof content.text === "string") {
+            text += content.text;
+          }
+        }
+      }
+    }
+
+    if (!text) {
+      return res.status(502).json({
+        error: "La IA no devolvió información."
+      });
+    }
+
+    // Limpieza por si el modelo devuelve ```json ... ```
+    text = text
+      .replace(/^```json\s*/i, "")
+      .replace(/^```\s*/i, "")
+      .replace(/\s*```$/i, "")
+      .trim();
+
+    let result;
+
+    try {
+      result = JSON.parse(text);
+    } catch (error) {
+      console.error("JSON inválido:", text);
+
+      return res.status(502).json({
+        error: "No se pudo interpretar el resultado del análisis."
+      });
+    }
+
+    return res.status(200).json(result);
 
   } catch (error) {
-    console.error("Error analizando comida:", error);
+    console.error("analyze-food error:", error);
+
+    if (error.name === "AbortError") {
+      return res.status(504).json({
+        error: "El análisis está tardando demasiado. Inténtalo de nuevo."
+      });
+    }
 
     return res.status(500).json({
-      error: "No se pudo analizar la comida.",
-      detail: error?.message || "Error desconocido",
+      error: "No se pudo conectar con el analizador de JuliFit."
     });
   }
 }
