@@ -1,1 +1,22 @@
-{"name":"Mi Contador de Calorías","short_name":"Mi Contador","start_url":"/","display":"standalone","background_color":"#f5f6f8","theme_color":"#111827","description":"Contador de calorías con IA, cámara y códigos de barras.","icons":[{"src":"/icons/icon-192.png","sizes":"192x192","type":"image/png"},{"src":"/icons/icon-512.png","sizes":"512x512","type":"image/png"}]}
+{
+  "name": "JuliFit",
+  "short_name": "JuliFit",
+  "description": "Tu contador inteligente de calorías y nutrición",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f5f1ed",
+  "theme_color": "#17110d",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
