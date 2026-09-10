@@ -1,0 +1,31 @@
+name: Instalar JuliFit
+
+on:
+  push:
+    paths:
+      - "JuliFit_COMPLETO_DEPLOYABLE.zip"
+      - ".github/workflows/descomprimir-julifit.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  instalar:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v4
+
+      - name: Descomprimir JuliFit
+        run: |
+          unzip -o JuliFit_COMPLETO_DEPLOYABLE.zip -d /tmp/julifit
+          cp -R /tmp/julifit/JuliFit_DEPLOYABLE/. .
+
+      - name: Guardar archivos de JuliFit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add api public package.json vercel.json .env.example README.md
+          git diff --cached --quiet || git commit -m "Instalar proyecto completo JuliFit"
+          git push
