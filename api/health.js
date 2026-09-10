@@ -1,7 +1,1 @@
-module.exports = (req, res) => {
-  res.status(200).json({
-    ok: true,
-    app: "JuliFit",
-    time: new Date().toISOString()
-  });
-};
+module.exports=async function handler(req,res){res.status(200).json({ok:true,app:'JuliFit',time:new Date().toISOString()})};

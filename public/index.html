@@ -12,2236 +12,265 @@
 <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32.png">
 <link rel="icon" type="image/png" sizes="48x48" href="/icons/favicon-48.png">
 <title>JuliFit</title>
-
 <style>
-*{box-sizing:border-box}
-body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#efe8e1;color:#25180f}
-.app{max-width:560px;margin:auto;min-height:100vh;background:#fbf8f5;padding:14px 15px 100px}
-.screen{display:none}
-.screen.active{display:block}
-.top{display:flex;justify-content:space-between;align-items:center;gap:10px}
-.muted{color:#806f63}
-
-.hero{
-position:relative;
-overflow:hidden;
-background:linear-gradient(145deg,#4b2818,#7b492d);
-color:#fff;
-border-radius:28px;
-margin:12px 0;
-padding:20px 18px 16px;
-box-shadow:0 10px 28px #4b281833
-}
-
-.hero-copy{
-position:relative;
-z-index:2;
-width:56%
-}
-
-.hero-bear{
-display:block;
-width:58%;
-max-height:310px;
-object-fit:contain;
-object-position:center bottom;
-margin:-2px -2px -4px auto;
-position:relative;
-z-index:1;
-filter:drop-shadow(0 10px 12px #0005)
-}
-
-.hero h1{font-size:28px;margin:0 0 5px}
-.big{font-size:38px;font-weight:900;line-height:1}
-.bar{height:10px;background:#ffffff35;border-radius:9px;overflow:hidden;margin-top:10px}
-.bar i{display:block;height:100%;background:#fff;border-radius:9px;width:0}
-
-.grid{
-display:grid;
-grid-template-columns:repeat(2,1fr);
-gap:10px
-}
-
-.stat,.card{
-background:#fff;
-border:1px solid #eadfd6;
-border-radius:20px;
-padding:14px;
-box-shadow:0 5px 18px #5b321d0b
-}
-
-.stat b{
-display:block;
-font-size:20px;
-margin-top:4px
-}
-
-.macrogrid{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:8px
-}
-
-.macro{
-border-radius:16px;
-padding:12px;
-text-align:center;
-background:#f4eee9
-}
-
-.macro b{
-display:block;
-font-size:18px
-}
-
-.macro span{
-font-size:12px;
-color:#806f63
-}
-
-.actions{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:10px
-}
-
-.btn{
-border:0;
-border-radius:16px;
-padding:14px;
-font-size:15px;
-font-weight:800;
-cursor:pointer
-}
-
-.primary{
-background:#5b321d;
-color:#fff
-}
-
-.secondary{
-background:#eee5dd;
-color:#432719
-}
-
-.danger{
-background:#f7dddd;
-color:#8a2727
-}
-
-.back{
-border:0;
-background:none;
-font-size:16px;
-padding:4px 0;
-color:#5b321d;
-font-weight:700
-}
-
-.input,select{
-width:100%;
-padding:12px;
-border:1px solid #dacdc2;
-border-radius:12px;
-margin:6px 0 10px;
-background:#fff;
-font-size:16px
-}
-
-.row{
-display:flex;
-justify-content:space-between;
-align-items:center;
-gap:10px
-}
-
-.food{
-display:flex;
-justify-content:space-between;
-gap:12px;
-padding:12px 0;
-border-bottom:1px solid #eadfd6
-}
-
-.food:last-child{border:0}
-.food small{color:#806f63}
-
-.pill{
-display:inline-block;
-padding:5px 8px;
-border-radius:99px;
-background:#eee5dd;
-font-size:11px
-}
-
-.ingredient{
-display:grid;
-grid-template-columns:1fr 105px;
-gap:8px;
-align-items:center
-}
-
-.scanbox{
-border:2px dashed #c9b9ab;
-border-radius:20px;
-padding:12px;
-text-align:center
-}
-
-.preview{
-width:100%;
-border-radius:22px;
-background:#21150f;
-aspect-ratio:4/3;
-object-fit:cover
-}
-
-.hidden{display:none!important}
-
-.success{
-padding:12px;
-border-radius:14px;
-background:#e8f5e8
-}
-
-.warn{
-padding:12px;
-border-radius:14px;
-background:#fff2dc
-}
-
-.waterbig{
-font-size:34px;
-font-weight:900
-}
-
-.waterbar{
-height:14px;
-background:#e3d8cf;
-border-radius:20px;
-overflow:hidden
-}
-
-.waterbar i{
-display:block;
-height:100%;
-background:#6f91b8;
-width:0
-}
-
-.waterquick{
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:7px
-}
-
-.waterquick button{
-padding:11px 5px;
-border:0;
-border-radius:12px;
-background:#e8eef5;
-font-weight:800
-}
-
-.coach{
-background:linear-gradient(145deg,#fff1df,#fff);
-border-color:#e5caa9
-}
-
-.coach h3{margin-top:0}
-
-.progress-photo{
-width:100%;
-border-radius:18px;
-margin-top:8px
-}
-
-.nav{
-position:fixed;
-bottom:0;
-left:50%;
-transform:translateX(-50%);
-max-width:560px;
-width:100%;
-background:#fff;
-border-top:1px solid #e1d7cf;
-display:flex;
-justify-content:space-around;
-padding:9px 5px calc(9px + env(safe-area-inset-bottom));
-z-index:20
-}
-
-.nav button{
-border:0;
-background:none;
-font-size:11px;
-color:#806f63;
-font-weight:700
-}
-
-.nav button.active{color:#5b321d}
-
-.chart{
-height:155px;
-display:flex;
-align-items:end;
-gap:7px;
-padding:12px 3px
-}
-
-.col{
-flex:1;
-text-align:center;
-font-size:10px
-}
-
-.barcol{
-background:#6b3e24;
-border-radius:8px 8px 3px 3px;
-min-height:4px
-}
-
-.notice{
-font-size:12px;
-color:#806f63;
-line-height:1.4
-}
-
-.section-title{
-margin:18px 0 8px
-}
-
-.center{text-align:center}
-
-.smallbtn{
-padding:9px 11px;
-font-size:13px
-}
-
-.line{
-height:1px;
-background:#eadfd6;
-margin:12px 0
-}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#efe8e1;color:#25180f}.app{max-width:560px;margin:auto;min-height:100vh;background:#fbf8f5;padding:14px 15px 100px}.screen{display:none}.screen.active{display:block}.top{display:flex;justify-content:space-between;align-items:center;gap:10px}.muted{color:#806f63}.hero{position:relative;overflow:hidden;background:linear-gradient(145deg,#4b2818,#7b492d);color:#fff;border-radius:28px;margin:12px 0;padding:20px 18px 16px;box-shadow:0 10px 28px #4b281833}.hero-copy{position:relative;z-index:2;width:56%}.hero-bear{display:block;width:58%;max-height:310px;object-fit:contain;object-position:center bottom;margin:-2px -2px -4px auto;position:relative;z-index:1;filter:drop-shadow(0 10px 12px #0005)}.hero h1{font-size:28px;margin:0 0 5px}.big{font-size:38px;font-weight:900;line-height:1}.bar{height:10px;background:#ffffff35;border-radius:9px;overflow:hidden;margin-top:10px}.bar i{display:block;height:100%;background:#fff;border-radius:9px;width:0}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.stat,.card{background:#fff;border:1px solid #eadfd6;border-radius:20px;padding:14px;box-shadow:0 5px 18px #5b321d0b}.stat b{display:block;font-size:20px;margin-top:4px}.macrogrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.macro{border-radius:16px;padding:12px;text-align:center;background:#f4eee9}.macro b{display:block;font-size:18px}.macro span{font-size:12px;color:#806f63}.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}.btn{border:0;border-radius:16px;padding:14px;font-size:15px;font-weight:800;cursor:pointer}.primary{background:#5b321d;color:#fff}.secondary{background:#eee5dd;color:#432719}.danger{background:#f7dddd;color:#8a2727}.back{border:0;background:none;font-size:16px;padding:4px 0;color:#5b321d;font-weight:700}.input,select{width:100%;padding:12px;border:1px solid #dacdc2;border-radius:12px;margin:6px 0 10px;background:#fff;font-size:16px}.row{display:flex;justify-content:space-between;align-items:center;gap:10px}.food{display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid #eadfd6}.food:last-child{border:0}.food small{color:#806f63}.pill{display:inline-block;padding:5px 8px;border-radius:99px;background:#eee5dd;font-size:11px}.ingredient{display:grid;grid-template-columns:1fr 105px;gap:8px;align-items:center}.scanbox{border:2px dashed #c9b9ab;border-radius:20px;padding:12px;text-align:center}.preview{width:100%;border-radius:22px;background:#21150f;aspect-ratio:4/3;object-fit:cover}.hidden{display:none!important}.success{padding:12px;border-radius:14px;background:#e8f5e8}.warn{padding:12px;border-radius:14px;background:#fff2dc}.waterbig{font-size:34px;font-weight:900}.waterbar{height:14px;background:#e3d8cf;border-radius:20px;overflow:hidden}.waterbar i{display:block;height:100%;background:#6f91b8;width:0}.waterquick{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}.waterquick button{padding:11px 5px;border:0;border-radius:12px;background:#e8eef5;font-weight:800}.coach{background:linear-gradient(145deg,#fff1df,#fff);border-color:#e5caa9}.coach h3{margin-top:0}.progress-photo{width:100%;border-radius:18px;margin-top:8px}.nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);max-width:560px;width:100%;background:#fff;border-top:1px solid #e1d7cf;display:flex;justify-content:space-around;padding:9px 5px calc(9px + env(safe-area-inset-bottom));z-index:20}.nav button{border:0;background:none;font-size:11px;color:#806f63;font-weight:700}.nav button.active{color:#5b321d}.chart{height:155px;display:flex;align-items:end;gap:7px;padding:12px 3px}.col{flex:1;text-align:center;font-size:10px}.barcol{background:#6b3e24;border-radius:8px 8px 3px 3px;min-height:4px}.notice{font-size:12px;color:#806f63;line-height:1.4}.section-title{margin:18px 0 8px}.center{text-align:center}.smallbtn{padding:9px 11px;font-size:13px}.line{height:1px;background:#eadfd6;margin:12px 0}
 </style>
 </head>
-
 <body>
-
 <main class="app">
-
 <section id="home" class="screen active">
-
-<div class="top">
-<div>
-<h2 style="margin:0">JuliFit</h2>
-<div class="muted">Tu nutrición, tus macros, tu progreso.</div>
-</div>
-
-<div style="display:flex;gap:6px">
-
-<button
-class="btn secondary smallbtn"
-onclick="show('notifications')">
-🔔
-</button>
-
-<button
-class="btn secondary smallbtn"
-onclick="show('profile')">
-⚙️
-</button>
-
-</div>
-</div>
-
-<div class="hero">
-
-<div class="hero-copy">
-
-<div style="opacity:.82">
-Calorías restantes hoy
-</div>
-
-<div class="big" id="remaining">
-2.200
-</div>
-
-<div>
-de <span id="goal">2.200</span> kcal
-</div>
-
-<div class="bar">
-<i id="progress"></i>
-</div>
-
-</div>
-
-<img
-class="hero-bear"
-src="/images/oso-gym.png"
-alt="Mascota oso del gimnasio"
-onerror="this.style.display='none'">
-
-</div>
-
-<div class="card" style="margin-top:12px">
-
-<div class="row">
-<b>🔥 Racha</b>
-<b id="streakHome">0 días</b>
-</div>
-
-<div
-class="muted"
-id="streakMessage"
-style="margin-top:5px">
-Registra una comida hoy para empezar.
-</div>
-
-</div>
-
-<div class="card">
-
-<div class="row">
-<b>📊 Resumen de hoy</b>
-<span class="muted" id="mealCount">
-0 comidas
-</span>
-</div>
-
-<div class="macrogrid" style="margin-top:10px">
-
-<div class="macro">
-<b id="cal">0</b>
-<span>🔥 kcal</span>
-</div>
-
-<div class="macro">
-<b id="p">0 g</b>
-<span>🥩 proteína</span>
-</div>
-
-<div class="macro">
-<b id="c">0 g</b>
-<span>🍚 carbohidratos</span>
-</div>
-
-<div class="macro">
-<b id="f">0 g</b>
-<span>🥑 grasas</span>
-</div>
-
-<div class="macro">
-<b id="waterHome">0 ml</b>
-<span>💧 agua</span>
-</div>
-
-<div class="macro">
-<b id="waterGoalHome">2000 ml</b>
-<span>🎯 objetivo agua</span>
-</div>
-
-</div>
-</div>
-
-<div class="actions" style="margin-top:12px">
-
-<button
-class="btn primary"
-onclick="show('scan')">
-📸 Añadir comida
-</button>
-
-<button
-class="btn secondary"
-onclick="show('water')">
-💧 Agua
-</button>
-
-</div>
-
-<div class="actions" style="margin-top:10px">
-
-<button
-class="btn secondary"
-onclick="show('coach')">
-🐻 Coach IA
-</button>
-
-<button
-class="btn secondary"
-onclick="show('progressScreen')">
-📈 Mi progreso
-</button>
-
-</div>
-
-<div class="card" style="margin-top:12px">
-
-<div class="row">
-
-<h3 style="margin:0">
-🍽️ Comidas de hoy
-</h3>
-
-<button
-class="btn secondary smallbtn"
-onclick="show('history')">
-Ver estadísticas
-</button>
-
-</div>
-
-<div id="diary"></div>
-
-</div>
-
+  <div class="top"><div><h2 style="margin:0">JuliFit</h2><div class="muted">Tu nutrición, tus macros, tu progreso.</div></div><div style="display:flex;gap:6px"><button class="btn secondary smallbtn" onclick="show('notifications')">🔔</button><button class="btn secondary smallbtn" onclick="show('profile')">⚙️</button><button class="btn secondary smallbtn" onclick="show('account')">👤</button></div></div>
+  <div class="hero">
+    <div class="hero-copy"><div style="opacity:.82">Calorías restantes hoy</div><div class="big" id="remaining">2.200</div><div>de <span id="goal">2.200</span> kcal</div><div class="bar"><i id="progress"></i></div></div>
+    <img class="hero-bear" src="/images/oso-gym.png" alt="Mascota oso del gimnasio" onerror="this.style.display='none'">
+  </div>
+  <div class="card" style="margin-top:12px">
+    <div class="row"><b>🔥 Racha</b><b id="streakHome">0 días</b></div>
+    <div class="muted" id="streakMessage" style="margin-top:5px">Registra una comida hoy para empezar.</div>
+  </div>
+  <div class="card"><div class="row"><b>📊 Resumen de hoy</b><span class="muted" id="mealCount">0 comidas</span></div><div class="macrogrid" style="margin-top:10px"><div class="macro"><b id="cal">0</b><span>🔥 kcal</span></div><div class="macro"><b id="p">0 g</b><span>🥩 proteína</span></div><div class="macro"><b id="c">0 g</b><span>🍚 carbohidratos</span></div><div class="macro"><b id="f">0 g</b><span>🥑 grasas</span></div><div class="macro"><b id="waterHome">0 ml</b><span>💧 agua</span></div><div class="macro"><b id="waterGoalHome">2000 ml</b><span>🎯 objetivo agua</span></div></div></div>
+  <div class="actions" style="margin-top:12px"><button class="btn primary" onclick="show('scan')">📸 Añadir comida</button><button class="btn secondary" onclick="show('water')">💧 Agua</button></div>
+  <div class="actions" style="margin-top:10px"><button class="btn secondary" onclick="show('coach')">🐻 Coach IA</button><button class="btn secondary" onclick="show('progressScreen')">📈 Mi progreso</button></div>
+  <div class="card" style="margin-top:12px"><div class="row"><h3 style="margin:0">🍽️ Comidas de hoy</h3><button class="btn secondary smallbtn" onclick="show('history')">Ver estadísticas</button></div><div id="diary"></div></div>
 </section>
-<div id="photoActions" class="actions" style="margin-top:10px;display:none">
-  <button class="btn secondary" onclick="retakePhoto()">↩️ Repetir</button>
-  <button class="btn primary" onclick="showIngredients()">➡️ Continuar</button>
-</div>
 
+<section id="scan" class="screen">
+<button class="back" onclick="resetScan();show('home')">← Volver</button><h2>📸 Añadir comida</h2>
+<p class="muted">Primero toma una foto. Después puedes escribir los alimentos y sus gramos. Todo es opcional.</p>
+<div class="scanbox"><video id="video" class="preview" autoplay playsinline muted></video><img id="shot" class="preview hidden" alt="Foto de comida"><canvas id="canvas" hidden></canvas></div>
+<input id="photo" type="file" accept="image/*" hidden>
+<div class="actions" style="margin-top:10px"><button class="btn primary" onclick="openCamera()">📷 Tomar foto</button><button class="btn secondary" onclick="openGallery()">🖼️ Galería</button></div>
+<button id="captureBtn" class="btn primary" style="width:100%;margin-top:10px;display:none" onclick="takePhoto()">🔘 Capturar foto</button>
+<div id="photoActions" class="actions" style="margin-top:10px;display:none"><button class="btn secondary" onclick="retakePhoto()">↩️ Repetir</button><button class="btn primary" onclick="showIngredients()">➡️ Continuar</button></div>
 <div id="scanStatus" class="muted" style="margin:12px 0"></div>
-
-<div id="ingredientsBox" class="card hidden">
-  <h3 style="margin-top:0">🥘 ¿Qué alimentos hay?</h3>
-
-  <p class="notice">
-    Escribe los alimentos que quieras. Los gramos también son opcionales.
-    Para mayor precisión, introduce ambos cuando los conozcas.
-  </p>
-
-  <div id="ingredients"></div>
-
-  <button
-    class="btn secondary"
-    style="width:100%;margin-top:8px"
-    onclick="addIngredient()">
-    ＋ Añadir otro alimento
-  </button>
-
-  <label style="display:block;margin-top:12px">
-    Nota opcional
-    <input
-      id="foodNote"
-      class="input"
-      placeholder="Ej.: arroz con pollo, poca salsa...">
-  </label>
-
-  <button
-    class="btn primary"
-    style="width:100%;margin-top:4px"
-    onclick="calculateFood()">
-    ✨ Calcular calorías y macros
-  </button>
-</div>
-
+<div id="ingredientsBox" class="card hidden"><h3 style="margin-top:0">🥘 ¿Qué alimentos hay?</h3><p class="notice">Escribe los alimentos que quieras. Los gramos también son opcionales. Para mayor precisión, introduce ambos cuando los conozcas.</p><div id="ingredients"></div><button class="btn secondary" style="width:100%;margin-top:8px" onclick="addIngredient()">＋ Añadir otro alimento</button><label style="display:block;margin-top:12px">Nota opcional<input id="foodNote" class="input" placeholder="Ej.: arroz con pollo, poca salsa..."></label><button class="btn primary" style="width:100%;margin-top:4px" onclick="calculateFood()">✨ Calcular calorías y macros</button></div>
 <div id="result"></div>
-
 </section>
 
-<section id="water" class="screen">
+<section id="water" class="screen"><button class="back" onclick="show('home')">← Volver</button><h2>💧 Agua</h2><div class="card center"><div class="muted">Consumida hoy</div><div class="waterbig" id="waterBig">0 ml</div><div class="muted">Objetivo: <span id="waterGoal">2000</span> ml</div><div class="waterbar" style="margin:14px 0"><i id="waterProgress"></i></div><div class="waterquick"><button onclick="addWater(250)">+250</button><button onclick="addWater(330)">+330</button><button onclick="addWater(500)">+500</button><button onclick="addWater(1000)">+1000</button></div><div class="line"></div><label>O escribe la cantidad<input id="waterInput" class="input" type="number" inputmode="numeric" placeholder="ml"></label><button class="btn primary" style="width:100%" onclick="addTypedWater()">＋ Añadir agua</button><button class="btn danger" style="width:100%;margin-top:8px" onclick="resetWater()">Reiniciar agua de hoy</button></div></section>
 
-  <button class="back" onclick="show('home')">← Volver</button>
+<section id="coach" class="screen"><button class="back" onclick="show('home')">← Volver</button><h2>🐻 Coach nutricional IA</h2><p class="muted">Consejos personalizados según tu perfil, tus calorías, macros y agua.</p><div class="card coach"><div id="coachResult"><p>Pulsa el botón para pedir al oso un consejo.</p><button class="btn primary" style="width:100%" onclick="askCoach()">✨ Pedir consejo a la IA</button></div></div></section>
 
-  <h2>💧 Agua</h2>
-
-  <div class="card center">
-
-    <div class="muted">Consumida hoy</div>
-
-    <div class="waterbig" id="waterBig">0 ml</div>
-
-    <div class="muted">
-      Objetivo: <span id="waterGoal">2000</span> ml
-    </div>
-
-    <div class="waterbar" style="margin:14px 0">
-      <i id="waterProgress"></i>
-    </div>
-
-    <div class="waterquick">
-      <button onclick="addWater(250)">+250</button>
-      <button onclick="addWater(330)">+330</button>
-      <button onclick="addWater(500)">+500</button>
-      <button onclick="addWater(1000)">+1000</button>
-    </div>
-
-    <div class="line"></div>
-
-    <label>
-      O escribe la cantidad
-      <input
-        id="waterInput"
-        class="input"
-        type="number"
-        inputmode="numeric"
-        placeholder="ml">
-    </label>
-
-    <button
-      class="btn primary"
-      style="width:100%"
-      onclick="addTypedWater()">
-      ＋ Añadir agua
-    </button>
-
-    <button
-      class="btn danger"
-      style="width:100%;margin-top:8px"
-      onclick="resetWater()">
-      Reiniciar agua de hoy
-    </button>
-
-  </div>
-
-</section>
-
-<section id="coach" class="screen">
-
-  <button class="back" onclick="show('home')">← Volver</button>
-
-  <h2>🐻 Coach nutricional IA</h2>
-
-  <p class="muted">
-    Consejos personalizados según tu perfil, tus calorías, macros y agua.
-  </p>
-
-  <div class="card coach">
-
-    <div id="coachResult">
-
-      <p>
-        Pulsa el botón para pedir al oso un consejo.
-      </p>
-
-      <button
-        class="btn primary"
-        style="width:100%"
-        onclick="askCoach()">
-        ✨ Pedir consejo a la IA
-      </button>
-
-    </div>
-
-  </div>
-
-</section>
-
-<section id="progressScreen" class="screen">
-
-  <button class="back" onclick="show('home')">← Volver</button>
-
-  <h2>📈 Mi progreso</h2>
-
-  <p class="muted">
-    Sube hasta 3 fotos (frente, lado y espalda) para recibir una valoración visual responsable.
-  </p>
-
-  <div class="card">
-
-    <input
-      id="progressFiles"
-      type="file"
-      accept="image/*"
-      multiple
-      class="input">
-
-    <label>
-      Peso actual (kg)
-      <input
-        id="progressWeight"
-        class="input"
-        type="number"
-        step="0.1">
-    </label>
-
-    <button
-      class="btn primary"
-      style="width:100%"
-      onclick="analyzeProgress()">
-      🔍 Analizar mi progreso
-    </button>
-
-    <p class="notice">
-      La IA no puede determinar con precisión el porcentaje de grasa corporal solo por una foto.
-      Usará las imágenes para cambios visuales y el peso como dato complementario.
-    </p>
-
-  </div>
-
-  <div id="progressResult"></div>
-
-</section>
+<section id="progressScreen" class="screen"><button class="back" onclick="show('home')">← Volver</button><h2>📈 Mi progreso</h2><p class="muted">Sube hasta 3 fotos (frente, lado y espalda) para recibir una valoración visual responsable.</p><div class="card"><input id="progressFiles" type="file" accept="image/*" multiple class="input"><label>Peso actual (kg)<input id="progressWeight" class="input" type="number" step="0.1"></label><button class="btn primary" style="width:100%" onclick="analyzeProgress()">🔍 Analizar mi progreso</button><p class="notice">La IA no puede determinar con precisión el porcentaje de grasa corporal solo por una foto. Usará las imágenes para cambios visuales y el peso como dato complementario.</p></div><div id="progressResult"></div></section>
 
 <section id="notifications" class="screen">
-
   <button class="back" onclick="show('home')">← Volver</button>
-
   <h2>🔔 Recordatorios</h2>
-
-  <p class="muted">
-    Activa avisos para recordar registrar tus comidas y beber agua.
-  </p>
-
+  <p class="muted">Activa avisos para recordar registrar tus comidas y beber agua.</p>
   <div class="card">
-
-    <div class="row">
-      <span>Notificaciones</span>
-      <b id="notifStatus">Desactivadas</b>
-    </div>
-
-    <button
-      class="btn primary"
-      style="width:100%;margin-top:10px"
-      onclick="enableNotifications()">
-      🔔 Activar notificaciones
-    </button>
-
-    <button
-      class="btn secondary"
-      style="width:100%;margin-top:8px"
-      onclick="testNotification()">
-      🧪 Probar aviso
-    </button>
-
-    <p class="notice" style="margin-bottom:0">
-      En iPhone, para recibir avisos de una PWA, instala JuliFit en la pantalla de inicio
-      y permite las notificaciones. Los recordatorios automáticos del navegador dependen
-      de que el sistema mantenga la app activa.
-    </p>
-
+    <div class="row"><span>Notificaciones</span><b id="notifStatus">Desactivadas</b></div>
+    <button class="btn primary" style="width:100%;margin-top:10px" onclick="enableNotifications()">🔔 Activar notificaciones</button>
+    <button class="btn secondary" style="width:100%;margin-top:8px" onclick="testNotification()">🧪 Probar aviso</button>
+    <p class="notice" style="margin-bottom:0">En iPhone, para recibir avisos de una PWA, instala JuliFit en la pantalla de inicio y permite las notificaciones. Los recordatorios automáticos del navegador dependen de que el sistema mantenga la app activa.</p>
   </div>
-
 </section>
 
-<section id="history" class="screen">
+<section id="history" class="screen"><button class="back" onclick="show('home')">← Volver</button><h2>📊 Estadísticas</h2><div class="card"><b>Últimos 7 días</b><div id="chart" class="chart"></div><div class="row"><span>Media kcal</span><b id="avg">0 kcal</b></div><div class="row"><span>Objetivo</span><b id="avgGoal">0 kcal</b></div></div><div id="historyList"></div></section>
 
+
+<section id="account" class="screen">
   <button class="back" onclick="show('home')">← Volver</button>
-
-  <h2>📊 Estadísticas</h2>
-
-  <div class="card">
-
-    <b>Últimos 7 días</b>
-
-    <div id="chart" class="chart"></div>
-
-    <div class="row">
-      <span>Media kcal</span>
-      <b id="avg">0 kcal</b>
-    </div>
-
-    <div class="row">
-      <span>Objetivo</span>
-      <b id="avgGoal">0 kcal</b>
-    </div>
-
-  </div>
-
-  <div id="historyList"></div>
-
-</section>
-
-<section id="profile" class="screen">
-
-  <button class="back" onclick="show('home')">← Volver</button>
-
-  <h2>👤 Mi perfil</h2>
-
-  <p class="muted">
-    Estos datos ayudan a JuliFit a calcular tus objetivos y personalizar
-    las recomendaciones de la IA.
-  </p>
+  <h2>🔐 Mi cuenta</h2>
+  <p class="muted">Crea tu cuenta o inicia sesión para guardar tus datos de JuliFit.</p>
 
   <div class="card">
-
-    <label>
-      Nombre
-      <input
-        id="name"
-        class="input"
-        type="text"
-        autocomplete="name"
-        placeholder="Tu nombre">
+    <h3 style="margin-top:0">Crear cuenta</h3>
+    <label>Nombre
+      <input id="regName" class="input" type="text" autocomplete="name" placeholder="Tu nombre">
     </label>
-
-    <label>
-      Edad
-      <input
-        id="age"
-        class="input"
-        type="number"
-        inputmode="numeric"
-        min="1"
-        max="120"
-        placeholder="Ej. 27">
+    <label>Correo electrónico
+      <input id="regEmail" class="input" type="email" autocomplete="email" placeholder="tu@email.com">
     </label>
-
-    <label>
-      Peso (kg)
-      <input
-        id="weight"
-        class="input"
-        type="number"
-        inputmode="decimal"
-        step="0.1"
-        min="1"
-        placeholder="Ej. 80">
+    <label>Contraseña
+      <input id="regPassword" class="input" type="password" autocomplete="new-password" placeholder="Mínimo 6 caracteres">
     </label>
-
-    <label>
-      Talla / Altura (cm)
-      <input
-        id="height"
-        class="input"
-        type="number"
-        inputmode="numeric"
-        min="50"
-        max="250"
-        placeholder="Ej. 169">
-    </label>
-
-    <label>
-      Sexo
-
-      <select id="sex" class="input">
-        <option value="male">Hombre</option>
-        <option value="female">Mujer</option>
-      </select>
-
-    </label>
-
-    <label>
-      Tipo de dieta
-
-      <select id="dietType" class="input">
-
-        <option value="balanced">
-          Equilibrada
-        </option>
-
-        <option value="mediterranean">
-          Mediterránea
-        </option>
-
-        <option value="high_protein">
-          Alta en proteína
-        </option>
-
-        <option value="low_carb">
-          Baja en carbohidratos
-        </option>
-
-        <option value="vegetarian">
-          Vegetariana
-        </option>
-
-        <option value="vegan">
-          Vegana
-        </option>
-
-        <option value="flexible">
-          Flexible
-        </option>
-
-        <option value="keto">
-          Cetogénica (keto)
-        </option>
-
-        <option value="ai_recommend">
-          Recomendada por la IA
-        </option>
-
-      </select>
-
-      <div class="notice">
-        Si eliges “Recomendada por la IA”, el Coach tendrá en cuenta tus datos
-        y objetivo para orientarte.
-      </div>
-
-    </label>
-
-    <label>
-      ¿Qué buscas?
-
-      <select id="goalType" class="input">
-
-        <option value="lose">
-          Perder peso
-        </option>
-
-        <option value="gain">
-          Ganar peso
-        </option>
-
-        <option value="recomp">
-          Perder peso y ganar masa muscular
-        </option>
-
-      </select>
-
-    </label>
-
-    <label>
-      Objetivo de agua (ml)
-
-      <input
-        id="waterGoalInput"
-        class="input"
-        type="number"
-        inputmode="numeric"
-        value="2000">
-
-    </label>
-
-    <button
-      class="btn primary"
-      style="width:100%"
-      onclick="saveProfile()">
-      Guardar y calcular objetivos
-    </button>
-
+    <button class="btn primary" style="width:100%;margin-top:8px" onclick="registerAccount()">Crear cuenta</button>
   </div>
 
-</section>
+  <div class="card" style="margin-top:12px">
+    <h3 style="margin-top:0">Iniciar sesión</h3>
+    <label>Correo electrónico
+      <input id="loginEmail" class="input" type="email" autocomplete="email" placeholder="tu@email.com">
+    </label>
+    <label>Contraseña
+      <input id="loginPassword" class="input" type="password" autocomplete="current-password" placeholder="Tu contraseña">
+    </label>
+    <button class="btn secondary" style="width:100%;margin-top:8px" onclick="loginAccount()">Iniciar sesión</button>
+    <button class="btn secondary" style="width:100%;margin-top:8px" onclick="logoutAccount()">Cerrar sesión</button>
+    <p class="muted" id="accountStatus" style="margin-bottom:0">No has iniciado sesión.</p>
+  </div>
 
+  <div class="notice">
+    Esta versión guarda la cuenta solo en este dispositivo. Para una cuenta real sincronizada entre dispositivos, habrá que conectar un servicio de autenticación seguro.
+  </div>
+</section>
+<section id="profile" class="screen"><button class="back" onclick="show('home')">← Volver</button><h2>👤 Mi perfil</h2><p class="muted">Estos datos ayudan a JuliFit a calcular tus objetivos y personalizar las recomendaciones de la IA.</p><div class="card"><label>Nombre<input id="name" class="input" type="text" autocomplete="name" placeholder="Tu nombre"></label><label>Edad<input id="age" class="input" type="number" inputmode="numeric" min="1" max="120" placeholder="Ej. 27"></label><label>Peso (kg)<input id="weight" class="input" type="number" inputmode="decimal" step="0.1" min="1" placeholder="Ej. 80"></label><label>Talla / Altura (cm)<input id="height" class="input" type="number" inputmode="numeric" min="50" max="250" placeholder="Ej. 169"></label><label>Sexo<select id="sex" class="input"><option value="male">Hombre</option><option value="female">Mujer</option></select></label><label>Tipo de dieta<select id="dietType" class="input"><option value="balanced">Equilibrada</option><option value="mediterranean">Mediterránea</option><option value="high_protein">Alta en proteína</option><option value="low_carb">Baja en carbohidratos</option><option value="vegetarian">Vegetariana</option><option value="vegan">Vegana</option><option value="flexible">Flexible</option><option value="keto">Cetogénica (keto)</option><option value="ai_recommend">Recomendada por la IA</option></select><div class="notice">Si eliges “Recomendada por la IA”, el Coach tendrá en cuenta tus datos y objetivo para orientarte.</div></label><label>¿Qué buscas?<select id="goalType" class="input"><option value="lose">Perder peso</option><option value="gain">Ganar peso</option><option value="recomp">Perder peso y ganar masa muscular</option></select></label><label>Objetivo de agua (ml)<input id="waterGoalInput" class="input" type="number" inputmode="numeric" value="2000"></label><button class="btn primary" style="width:100%" onclick="saveProfile()">Guardar y calcular objetivos</button></div></section>
 </main>
-
-<nav class="nav">
-
-  <button onclick="show('home')">
-    🏠<br>Inicio
-  </button>
-
-  <button onclick="show('scan')">
-    📸<br>Comida
-  </button>
-
-  <button onclick="show('water')">
-    💧<br>Agua
-  </button>
-
-  <button onclick="show('coach')">
-    🐻<br>Coach
-  </button>
-
-  <button onclick="show('progressScreen')">
-    📈<br>Progreso
-  </button>
-
-  <button onclick="show('notifications')">
-    🔔<br>Avisos
-  </button>
-
-</nav>
-
+<nav class="nav"><button onclick="show('home')">🏠<br>Inicio</button><button onclick="show('scan')">📸<br>Comida</button><button onclick="show('water')">💧<br>Agua</button><button onclick="show('coach')">🐻<br>Coach</button><button onclick="show('progressScreen')">📈<br>Progreso</button><button onclick="show('notifications')">🔔<br>Avisos</button></nav>
 <script>
-
 const $=id=>document.getElementById(id);
-
 let stream=null,lastPhotoBlob=null,lastResult=null;
-
 const today=()=>new Date().toISOString().slice(0,10);
-
-let state=JSON.parse(
-  localStorage.getItem('v7state')||'null'
-)||{
-  goal:2200,
-  waterGoal:2000,
-  foods:[],
-  days:{},
-  waterDays:{},
-  progress:[],
-  profile:{
-    name:'',
-    weight:80,
-    height:169,
-    age:27,
-    sex:'male',
-    dietType:'balanced',
-    goalType:'lose'
-  }
-};
-
-if(!state.waterDays)state.waterDays={};
-
-if(!state.progress)state.progress=[];
-
-function save(){
-
-  state.days[today()]=state.foods;
-
-  state.waterDays[today()]=state.water||0;
-
-  localStorage.setItem(
-    'v7state',
-    JSON.stringify(state)
-  );
-
-  render();
-
-}
-
-function totals(){
-
-  return state.foods.reduce((a,x)=>{
-
-    let t=x.totals||x;
-
-    return{
-      cal:a.cal+(+t.calories||0),
-      p:a.p+(+t.protein_g||0),
-      c:a.c+(+t.carbs_g||0),
-      f:a.f+(+t.fat_g||0)
-    }
-
-  },{cal:0,p:0,c:0,f:0})
-
-}
+let state=JSON.parse(localStorage.getItem('v7state')||'null')||{goal:2200,waterGoal:2000,foods:[],days:{},waterDays:{},progress:[],profile:{name:'',weight:80,height:169,age:27,sex:'male',dietType:'balanced',goalType:'lose'}};
+if(!state.waterDays)state.waterDays={}; if(!state.progress)state.progress=[];
+function save(){state.days[today()]=state.foods;state.waterDays[today()]=state.water||0;localStorage.setItem('v7state',JSON.stringify(state));render();}
+function totals(){return state.foods.reduce((a,x)=>{let t=x.totals||x;return{cal:a.cal+(+t.calories||0),p:a.p+(+t.protein_g||0),c:a.c+(+t.carbs_g||0),f:a.f+(+t.fat_g||0)}},{cal:0,p:0,c:0,f:0})}
 
 function dayKeyOffset(n){
-
-  let d=new Date();
-
-  d.setHours(12,0,0,0);
-
-  d.setDate(d.getDate()+n);
-
+  let d=new Date(); d.setHours(12,0,0,0); d.setDate(d.getDate()+n);
   return d.toISOString().slice(0,10);
-
 }
-
 function getStreak(){
-
   let s=0;
-
   // A day counts when at least one meal was registered.
-
   for(let i=0;i<370;i++){
-
     let k=dayKeyOffset(-i);
-
     let meals=state.days[k]||[];
-
-    if(meals.length){
-      s++
-    }else{
-      break
-    }
-
+    if(meals.length){s++}else{break}
   }
-
   return s;
-
 }
-
 function updateStreak(){
-
   let s=getStreak();
-
   if($('streakHome')){
-
-    $('streakHome').textContent=
-      s+' día'+(s===1?'':'s');
-
+    $('streakHome').textContent=s+' día'+(s===1?'':'s');
     $('streakMessage').textContent=s
-
-      ?(
-        s>=7
-        ?'¡Excelente! Mantén la constancia.'
-        :'Vas muy bien. Sigue registrando tus comidas.'
-       )
-
-      :'Registra una comida hoy para empezar.';
-
+      ? (s>=7?'¡Excelente! Mantén la constancia.':'Vas muy bien. Sigue registrando tus comidas.')
+      : 'Registra una comida hoy para empezar.';
   }
-
-}
-  $('streakHome').textContent=s+' día'+(s===1?'':'s');
-
-$('streakMessage').textContent=s
-  ? (s>=7
-      ?'¡Excelente! Mantén la constancia.'
-      :'Vas muy bien. Sigue registrando tus comidas.')
-  :'Registra una comida hoy para empezar.';
 }
 
-function render(){
-  let t=totals(),w=state.water||0;
-
-  $('goal').textContent=Math.round(state.goal).toLocaleString('es-ES');
-  $('cal').textContent=Math.round(t.cal);
-  $('p').textContent=t.p.toFixed(1)+' g';
-  $('c').textContent=t.c.toFixed(1)+' g';
-  $('f').textContent=t.f.toFixed(1)+' g';
-
-  $('remaining').textContent=
-    Math.max(0,Math.round(state.goal-t.cal)).toLocaleString('es-ES');
-
-  $('progress').style.width=
-    Math.min(100,t.cal/state.goal*100)+'%';
-
-  $('mealCount').textContent=
-    state.foods.length+' comida'+
-    (state.foods.length===1?'':'s');
-
-  $('waterHome').textContent=
-    w.toLocaleString('es-ES')+' ml';
-
-  $('waterGoalHome').textContent=
-    state.waterGoal.toLocaleString('es-ES')+' ml';
-
-  $('waterBig').textContent=
-    w.toLocaleString('es-ES')+' ml';
-
-  $('waterGoal').textContent=
-    state.waterGoal.toLocaleString('es-ES');
-
-  $('waterProgress').style.width=
-    Math.min(100,w/state.waterGoal*100)+'%';
-
-  $('diary').innerHTML=state.foods.length
-    ?state.foods.map((m,i)=>`
-      <div class="card" style="margin-top:10px">
-
-        <div class="row">
-          <b>${esc(m.meal_name||'Comida')}</b>
-
-          <button
-            class="btn danger smallbtn"
-            onclick="removeFood(${i})">
-            Eliminar
-          </button>
-        </div>
-
-        ${(m.items||[]).map(x=>`
-          <div class="food">
-
-            <span>
-              <b>${esc(x.food)}</b><br>
-
-              <small>
-                ${Math.round(x.grams||0)} g ·
-                P ${(+x.protein_g||0).toFixed(1)} g ·
-                C ${(+x.carbs_g||0).toFixed(1)} g ·
-                G ${(+x.fat_g||0).toFixed(1)} g
-              </small>
-
-            </span>
-
-            <b>${Math.round(x.calories||0)} kcal</b>
-
-          </div>
-        `).join('')}
-
-        <div class="row" style="margin-top:10px">
-          <span class="muted">Total</span>
-          <b>${Math.round(m.totals?.calories||0)} kcal</b>
-        </div>
-
-      </div>
-    `).join('')
-    :'<p class="muted">Todavía no tienes comidas registradas.</p>';
-
-  renderHistory();
-  updateStreak();
-}
-
-function esc(s){
-  return String(s).replace(
-    /[&<>"']/g,
-    m=>({
-      '&':'&amp;',
-      '<':'&lt;',
-      '>':'&gt;',
-      '"':'&quot;',
-      "'":'&#039;'
-    }[m])
-  )
-}
-
-function show(id){
-
-  stopCamera();
-
-  document
-    .querySelectorAll('.screen')
-    .forEach(x=>x.classList.remove('active'));
-
-  $(id).classList.add('active');
-
-  window.scrollTo(0,0);
-
-  if(id==='home')render();
-
-  if(id==='history')renderHistory();
-
-  if(id==='water')render();
-
-  if(id==='profile'){
-
-    $('name').value=state.profile.name||'';
-    $('weight').value=state.profile.weight;
-    $('height').value=state.profile.height;
-    $('age').value=state.profile.age;
-    $('sex').value=state.profile.sex||'male';
-    $('dietType').value=state.profile.dietType||'balanced';
-    $('goalType').value=state.profile.goalType||'lose';
-    $('waterGoalInput').value=state.waterGoal;
-
-  }
-
-}
-
-function removeFood(i){
-  state.foods.splice(i,1);
-  save();
-}
-
-async function openCamera(){
-
-  try{
-
-    resetScan(false);
-
-    stream=await navigator.mediaDevices.getUserMedia({
-      video:{
-        facingMode:{
-          ideal:'environment'
-        }
-      },
-      audio:false
-    });
-
-    $('video').classList.remove('hidden');
-    $('shot').classList.add('hidden');
-
-    $('video').srcObject=stream;
-
-    $('captureBtn').style.display='block';
-
-    $('scanStatus').textContent=
-      'Cámara abierta. Pulsa Capturar foto. La app no guardará vídeo.';
-
-  }catch(e){
-
-    $('scanStatus').textContent=
-      'No se pudo abrir la cámara. Puedes usar Galería.';
-
-  }
-
-}
-
-function openGallery(){
-
-  $('photo').value='';
-
-  $('photo').click();
-
-}
-
-$('photo').onchange=()=>{
-
-  let f=$('photo').files[0];
-
-  if(!f)return;
-
-  stopCamera();
-
-  lastPhotoBlob=f;
-
-  $('shot').src=URL.createObjectURL(f);
-
-  $('shot').classList.remove('hidden');
-
-  $('video').classList.add('hidden');
-
-  $('captureBtn').style.display='none';
-
-  $('photoActions').style.display='grid';
-
-  $('scanStatus').textContent=
-    '📸 Foto lista. Pulsa Continuar.';
-
-}
-
-function takePhoto(){
-
-  if(!stream)return;
-
-  $('canvas').width=$('video').videoWidth;
-  $('canvas').height=$('video').videoHeight;
-
-  $('canvas')
-    .getContext('2d')
-    .drawImage(
-      $('video'),
-      0,
-      0,
-      $('canvas').width,
-      $('canvas').height
-    );
-
-  $('canvas').toBlob(b=>{
-
-    lastPhotoBlob=b;
-
-    $('shot').src=URL.createObjectURL(b);
-
-    $('shot').classList.remove('hidden');
-
-    $('video').classList.add('hidden');
-
-    stopCamera();
-
-    $('captureBtn').style.display='none';
-
-    $('photoActions').style.display='grid';
-
-    $('scanStatus').textContent=
-      '📸 Foto capturada. Pulsa Continuar.';
-
-  },'image/jpeg',.9)
-
-}
-
-function stopCamera(){
-
-  if(stream){
-
-    stream
-      .getTracks()
-      .forEach(t=>t.stop());
-
-    stream=null;
-
-  }
-
-  if($('video'))
-    $('video').srcObject=null;
-
-}
-
-function retakePhoto(){
-
-  lastPhotoBlob=null;
-
-  $('photoActions').style.display='none';
-
-  $('ingredientsBox').classList.add('hidden');
-
-  $('result').innerHTML='';
-
-  openCamera();
-
-}
-
-function resetScan(hard=true){
-
-  stopCamera();
-
-  lastPhotoBlob=null;
-
-  if(hard){
-
-    $('photo').value='';
-
-    $('shot').classList.add('hidden');
-
-    $('video').classList.remove('hidden');
-
-    $('captureBtn').style.display='none';
-
-    $('photoActions').style.display='none';
-
-    $('ingredientsBox').classList.add('hidden');
-
-    $('result').innerHTML='';
-
-    $('scanStatus').textContent='';
-
-  }
-
-}
-
-function showIngredients(){
-
-  if(!lastPhotoBlob)return;
-
-  $('ingredientsBox').classList.remove('hidden');
-
-  $('ingredients').innerHTML='';
-
-  addIngredient();
-  addIngredient();
-  addIngredient();
-
-  $('scanStatus').textContent=
-    'Ahora escribe los alimentos que quieras. Los gramos son opcionales.';
-
-  window.scrollTo(
-    0,
-    $('ingredientsBox').offsetTop-10
-  );
-
-}
-
-function addIngredient(){
-
-  let d=document.createElement('div');
-
-  d.className='ingredient';
-
-  d.style.marginBottom='8px';
-
-  d.innerHTML=
-    '<input class="input ing-name" placeholder="Ej. arroz blanco">'+
-    '<input class="input ing-grams" type="number" inputmode="decimal" placeholder="gramos">';
-
-  $('ingredients').appendChild(d);
-
-}
-
-async function calculateFood(){
-
-  if(!lastPhotoBlob)return;
-
-  $('scanStatus').textContent=
-    '⏳ Calculando calorías y macros…';
-
-  let rows=[
-    ...document.querySelectorAll('.ingredient')
-  ]
-  .map(r=>({
-    name:r.querySelector('.ing-name').value.trim(),
-    grams:r.querySelector('.ing-grams').value
-      ?+r.querySelector('.ing-grams').value
-      :null
-  }))
-  .filter(x=>x.name);
-
-  let img=await resizeData(lastPhotoBlob);
-
-  try{
-
-    let r=await fetch(
-      '/api/analyze-food',
-      {
-        method:'POST',
-        headers:{
-          'Content-Type':'application/json'
-        },
-        body:JSON.stringify({
-          step:'calculate',
-          image:img,
-          ingredients:rows,
-          note:$('foodNote').value.trim()
-        })
-      }
-    );
-
-    let d=await r.json();
-
-    if(!r.ok)
-      throw Error(d.error||'Error al analizar');
-
-    lastResult=d;
-
-    $('scanStatus').textContent=
-      '✅ Cálculo listo. Revisa los datos antes de guardarlos.';
-
-    $('result').innerHTML=`
-      <div class="card" style="margin-top:12px">
-
-        <h3 style="margin-top:0">
-          ${esc(d.meal_name||'Comida')}
-        </h3>
-
-        ${(d.items||[]).map(x=>`
-          <div class="food">
-
-            <span>
-
-              <b>${esc(x.food)}</b><br>
-
-              <small>
-                ${Math.round(x.grams||0)} g ·
-                P ${(+x.protein_g||0).toFixed(1)} g ·
-                C ${(+x.carbs_g||0).toFixed(1)} g ·
-                G ${(+x.fat_g||0).toFixed(1)} g
-              </small>
-
-              <br>
-
-              <span class="pill">
-                ${x.grams_source==='user'
-                  ?'Peso introducido por ti'
-                  :'Peso estimado por IA'}
-                · ${esc(x.confidence||'media')}
-              </span>
-
-            </span>
-
-            <b>
-              ${Math.round(x.calories||0)} kcal
-            </b>
-
-          </div>
-        `).join('')}
-
-        <div class="line"></div>
-
-        <div class="macrogrid">
-
-          <div class="macro">
-            <b>${Math.round(d.totals.calories)}</b>
-            <span>🔥 kcal</span>
-          </div>
-
-          <div class="macro">
-            <b>${(+d.totals.protein_g||0).toFixed(1)} g</b>
-            <span>🥩 proteína</span>
-          </div>
-
-          <div class="macro">
-            <b>${(+d.totals.carbs_g||0).toFixed(1)} g</b>
-            <span>🍚 carbos</span>
-          </div>
-
-          <div class="macro">
-            <b>${(+d.totals.fat_g||0).toFixed(1)} g</b>
-            <span>🥑 grasas</span>
-          </div>
-
-        </div>
-
-        <p class="notice">
-          ${esc(d.notes||'')}
-        </p>
-
-        <button
-          class="btn primary"
-          style="width:100%"
-          onclick="addResult()">
-          ＋ Añadir al diario
-        </button>
-
-      </div>
-    `;
-
-    window.scrollTo(
-      0,
-      $('result').offsetTop-10
-    );
-
-  }catch(e){
-
-    $('scanStatus').textContent=
-      '❌ '+e.message;
-
-  }
-
-}
-
-function addResult(){
-
-  if(!lastResult)return;
-
-  state.foods.push(lastResult);
-
-  save();
-
-  resetScan();
-
-  show('home');
-
-}
-
+function render(){let t=totals(),w=state.water||0;$('goal').textContent=Math.round(state.goal).toLocaleString('es-ES');$('cal').textContent=Math.round(t.cal);$('p').textContent=t.p.toFixed(1)+' g';$('c').textContent=t.c.toFixed(1)+' g';$('f').textContent=t.f.toFixed(1)+' g';$('remaining').textContent=Math.max(0,Math.round(state.goal-t.cal)).toLocaleString('es-ES');$('progress').style.width=Math.min(100,t.cal/state.goal*100)+'%';$('mealCount').textContent=state.foods.length+' comida'+(state.foods.length===1?'':'s');$('waterHome').textContent=w.toLocaleString('es-ES')+' ml';$('waterGoalHome').textContent=state.waterGoal.toLocaleString('es-ES')+' ml';$('waterBig').textContent=w.toLocaleString('es-ES')+' ml';$('waterGoal').textContent=state.waterGoal.toLocaleString('es-ES');$('waterProgress').style.width=Math.min(100,w/state.waterGoal*100)+'%';$('diary').innerHTML=state.foods.length?state.foods.map((m,i)=>`<div class="card" style="margin-top:10px"><div class="row"><b>${esc(m.meal_name||'Comida')}</b><button class="btn danger smallbtn" onclick="removeFood(${i})">Eliminar</button></div>${(m.items||[]).map(x=>`<div class="food"><span><b>${esc(x.food)}</b><br><small>${Math.round(x.grams||0)} g · P ${(+x.protein_g||0).toFixed(1)} g · C ${(+x.carbs_g||0).toFixed(1)} g · G ${(+x.fat_g||0).toFixed(1)} g</small></span><b>${Math.round(x.calories||0)} kcal</b></div>`).join('')}<div class="row" style="margin-top:10px"><span class="muted">Total</span><b>${Math.round(m.totals?.calories||0)} kcal</b></div></div>`).join(''):'<p class="muted">Todavía no tienes comidas registradas.</p>';renderHistory();updateStreak()}
+function esc(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+function show(id){stopCamera();document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));$(id).classList.add('active');window.scrollTo(0,0);if(id==='home')render();if(id==='history')renderHistory();if(id==='water')render();if(id==='profile'){ $('name').value=state.profile.name||'';$('weight').value=state.profile.weight;$('height').value=state.profile.height;$('age').value=state.profile.age;$('sex').value=state.profile.sex||'male';$('dietType').value=state.profile.dietType||'balanced';$('goalType').value=state.profile.goalType||'lose';$('waterGoalInput').value=state.waterGoal}}
+function removeFood(i){state.foods.splice(i,1);save()}
+async function openCamera(){try{resetScan(false);stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'}},audio:false});$('video').classList.remove('hidden');$('shot').classList.add('hidden');$('video').srcObject=stream;$('captureBtn').style.display='block';$('scanStatus').textContent='Cámara abierta. Pulsa Capturar foto. La app no guardará vídeo.'}catch(e){$('scanStatus').textContent='No se pudo abrir la cámara. Puedes usar Galería.'}}
+function openGallery(){$('photo').value='';$('photo').click()}
+$('photo').onchange=()=>{let f=$('photo').files[0];if(!f)return;stopCamera();lastPhotoBlob=f;$('shot').src=URL.createObjectURL(f);$('shot').classList.remove('hidden');$('video').classList.add('hidden');$('captureBtn').style.display='none';$('photoActions').style.display='grid';$('scanStatus').textContent='📸 Foto lista. Pulsa Continuar.'}
+function takePhoto(){if(!stream)return;$('canvas').width=$('video').videoWidth;$('canvas').height=$('video').videoHeight;$('canvas').getContext('2d').drawImage($('video'),0,0,$('canvas').width,$('canvas').height);$('canvas').toBlob(b=>{lastPhotoBlob=b;$('shot').src=URL.createObjectURL(b);$('shot').classList.remove('hidden');$('video').classList.add('hidden');stopCamera();$('captureBtn').style.display='none';$('photoActions').style.display='grid';$('scanStatus').textContent='📸 Foto capturada. Pulsa Continuar.'},'image/jpeg',.9)}
+function stopCamera(){if(stream){stream.getTracks().forEach(t=>t.stop());stream=null}if($('video'))$('video').srcObject=null}
+function retakePhoto(){lastPhotoBlob=null;$('photoActions').style.display='none';$('ingredientsBox').classList.add('hidden');$('result').innerHTML='';openCamera()}
+function resetScan(hard=true){stopCamera();lastPhotoBlob=null;if(hard){$('photo').value='';$('shot').classList.add('hidden');$('video').classList.remove('hidden');$('captureBtn').style.display='none';$('photoActions').style.display='none';$('ingredientsBox').classList.add('hidden');$('result').innerHTML='';$('scanStatus').textContent='';}}
+function showIngredients(){if(!lastPhotoBlob)return;$('ingredientsBox').classList.remove('hidden');$('ingredients').innerHTML='';addIngredient();addIngredient();addIngredient();$('scanStatus').textContent='Ahora escribe los alimentos que quieras. Los gramos son opcionales.';window.scrollTo(0,$('ingredientsBox').offsetTop-10)}
+function addIngredient(){let d=document.createElement('div');d.className='ingredient';d.style.marginBottom='8px';d.innerHTML='<input class="input ing-name" placeholder="Ej. arroz blanco"><input class="input ing-grams" type="number" inputmode="decimal" placeholder="gramos">';$('ingredients').appendChild(d)}
+async function calculateFood(){if(!lastPhotoBlob)return;$('scanStatus').textContent='⏳ Calculando calorías y macros…';let rows=[...document.querySelectorAll('.ingredient')].map(r=>({name:r.querySelector('.ing-name').value.trim(),grams:r.querySelector('.ing-grams').value?+r.querySelector('.ing-grams').value:null})).filter(x=>x.name);let img=await resizeData(lastPhotoBlob);try{let r=await fetch('/api/analyze-food',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({step:'calculate',image:img,ingredients:rows,note:$('foodNote').value.trim()})});let d=await r.json();if(!r.ok)throw Error(d.error||'Error al analizar');lastResult=d;$('scanStatus').textContent='✅ Cálculo listo. Revisa los datos antes de guardarlos.';$('result').innerHTML=`<div class="card" style="margin-top:12px"><h3 style="margin-top:0">${esc(d.meal_name||'Comida')}</h3>${(d.items||[]).map(x=>`<div class="food"><span><b>${esc(x.food)}</b><br><small>${Math.round(x.grams||0)} g · P ${(+x.protein_g||0).toFixed(1)} g · C ${(+x.carbs_g||0).toFixed(1)} g · G ${(+x.fat_g||0).toFixed(1)} g</small><br><span class="pill">${x.grams_source==='user'?'Peso introducido por ti':'Peso estimado por IA'} · ${esc(x.confidence||'media')}</span></span><b>${Math.round(x.calories||0)} kcal</b></div>`).join('')}<div class="line"></div><div class="macrogrid"><div class="macro"><b>${Math.round(d.totals.calories)}</b><span>🔥 kcal</span></div><div class="macro"><b>${(+d.totals.protein_g||0).toFixed(1)} g</b><span>🥩 proteína</span></div><div class="macro"><b>${(+d.totals.carbs_g||0).toFixed(1)} g</b><span>🍚 carbos</span></div><div class="macro"><b>${(+d.totals.fat_g||0).toFixed(1)} g</b><span>🥑 grasas</span></div></div><p class="notice">${esc(d.notes||'')}</p><button class="btn primary" style="width:100%" onclick="addResult()">＋ Añadir al diario</button></div>`;window.scrollTo(0,$('result').offsetTop-10)}catch(e){$('scanStatus').textContent='❌ '+e.message}}
+function addResult(){if(!lastResult)return;state.foods.push(lastResult);save();resetScan();show('home')}
 async function resizeData(blob){
-
   return new Promise((resolve,reject)=>{
-
     const im=new Image();
-
     const url=URL.createObjectURL(blob);
-
     im.onload=()=>{
-
       URL.revokeObjectURL(url);
-
       const maxSide=1024;
-
-      const scale=Math.min(
-        maxSide/
-          Math.max(im.width,im.height),
-        1
-      );
-
+      const scale=Math.min(maxSide/Math.max(im.width,im.height),1);
       const c=document.createElement('canvas');
-
-      c.width=Math.max(
-        1,
-        Math.round(im.width*scale)
-      );
-
-      c.height=Math.max(
-        1,
-        Math.round(im.height*scale)
-      );
-
-      const ctx=c.getContext(
-        '2d',
-        {alpha:false}
-      );
-
-      ctx.drawImage(
-        im,
-        0,
-        0,
-        c.width,
-        c.height
-      );
-
+      c.width=Math.max(1,Math.round(im.width*scale));
+      c.height=Math.max(1,Math.round(im.height*scale));
+      const ctx=c.getContext('2d',{alpha:false});
+      ctx.drawImage(im,0,0,c.width,c.height);
       let quality=.72;
-
-      let data=c.toDataURL(
-        'image/jpeg',
-        quality
-      );
-
+      let data=c.toDataURL('image/jpeg',quality);
       const MAX_LENGTH=2000000;
-
-      while(
-        data.length>MAX_LENGTH &&
-        quality>.42
-      ){
-
+      while(data.length>MAX_LENGTH && quality>.42){
         quality-=.08;
-
-        data=c.toDataURL(
-          'image/jpeg',
-          quality
-        );
-
+        data=c.toDataURL('image/jpeg',quality);
       }
-
       resolve(data);
-
     };
-
     im.onerror=()=>{
-
       URL.revokeObjectURL(url);
-
-      reject(
-        new Error(
-          'No se pudo preparar la foto.'
-        )
-      );
-
+      reject(new Error('No se pudo preparar la foto.'));
     };
-
     im.src=url;
-
   });
-
 }
+function addWater(n){state.water=(state.water||0)+n;save()}
+function addTypedWater(){let n=+$('waterInput').value||0;if(n>0){addWater(n);$('waterInput').value=''}}
+function resetWater(){state.water=0;save()}
 
-function addWater(n){
-
-  state.water=(state.water||0)+n;
-
-  save();
-
-}
-
-function addTypedWater(){
-
-  let n=+$('waterInput').value||0;
-
-  if(n>0){
-
-    addWater(n);
-
-    $('waterInput').value='';
-
-  }
-
-}
-
-function resetWater(){
-
-  state.water=0;
-
-  save();
-
-}
 function notificationSupported(){
   return 'Notification' in window;
 }
-
 function updateNotificationStatus(){
-
   if(!$('notifStatus'))return;
-
-  if(!notificationSupported())
-    $('notifStatus').textContent='No disponible';
-
-  else
-    $('notifStatus').textContent=
-      Notification.permission==='granted'
-        ?'Activadas'
-        :Notification.permission==='denied'
-          ?'Bloqueadas'
-          :'Desactivadas';
-
+  if(!notificationSupported()) $('notifStatus').textContent='No disponible';
+  else $('notifStatus').textContent=Notification.permission==='granted'?'Activadas':Notification.permission==='denied'?'Bloqueadas':'Desactivadas';
 }
-
 async function enableNotifications(){
-
-  if(!notificationSupported()){
-    alert('Este navegador no permite notificaciones.');
-    return;
-  }
-
+  if(!notificationSupported()){alert('Este navegador no permite notificaciones.');return}
   let p=await Notification.requestPermission();
-
   updateNotificationStatus();
-
-  if(p==='granted')
-    new Notification(
-      'JuliFit 🐻',
-      {
-        body:'¡Notificaciones activadas!'
-      }
-    );
-
+  if(p==='granted') new Notification('JuliFit 🐻',{body:'¡Notificaciones activadas!'});
 }
-
 function testNotification(){
-
-  if(!notificationSupported()){
-    alert('Este navegador no permite notificaciones.');
-    return;
-  }
-
-  if(Notification.permission!=='granted'){
-    enableNotifications();
-    return;
-  }
-
-  new Notification(
-    'JuliFit 🐻',
-    {
-      body:'Recuerda registrar tu comida y beber agua.'
-    }
-  );
-
+  if(!notificationSupported()){alert('Este navegador no permite notificaciones.');return}
+  if(Notification.permission!=='granted'){enableNotifications();return}
+  new Notification('JuliFit 🐻',{body:'Recuerda registrar tu comida y beber agua.'});
 }
-
 function scheduleInSessionReminders(){
-
-  // Recordatorios mientras JuliFit permanezca abierta.
-
-  if(
-    !notificationSupported() ||
-    Notification.permission!=='granted'
-  )return;
-
-  if(window.julifitReminderTimer)
-    clearInterval(window.julifitReminderTimer);
-
+  // Lightweight reminders while JuliFit remains open.
+  if(!notificationSupported() || Notification.permission!=='granted')return;
+  if(window.julifitReminderTimer)clearInterval(window.julifitReminderTimer);
   window.julifitReminderTimer=setInterval(()=>{
-
-    let h=new Date().getHours();
-    let m=new Date().getMinutes();
-
+    let h=new Date().getHours(),m=new Date().getMinutes();
     if(m!==0)return;
-
     if(h===13||h===20){
-
-      new Notification(
-        'JuliFit 🐻',
-        {
-          body:'¿Ya registraste tu comida? Mantén tu racha 🔥'
-        }
-      );
-
+      new Notification('JuliFit 🐻',{body:'¿Ya registraste tu comida? Mantén tu racha 🔥'});
     }
-
     if(h===18){
-
-      new Notification(
-        'JuliFit 💧',
-        {
-          body:'Recuerda beber agua y revisar tu objetivo de hoy.'
-        }
-      );
-
+      new Notification('JuliFit 💧',{body:'Recuerda beber agua y revisar tu objetivo de hoy.'});
     }
-
   },60000);
-
 }
 
-async function askCoach(){
-
-  $('coachResult').innerHTML=
-    '<p>⏳ El oso está preparando tu consejo…</p>';
-
-  try{
-
-    let r=await fetch(
-      '/api/coach',
-      {
-        method:'POST',
-        headers:{
-          'Content-Type':'application/json'
-        },
-        body:JSON.stringify({
-          profile:state.profile,
-          totals:totals(),
-          water:{
-            consumed_ml:state.water||0,
-            goal_ml:state.waterGoal
-          }
-        })
-      }
-    );
-
-    let d=await r.json();
-
-    if(!r.ok)
-      throw Error(
-        d.error||'No se pudo obtener el consejo'
-      );
-
-    $('coachResult').innerHTML=`
-
-      <h3>
-        🐻 ${esc(
-          d.summary||'Tu consejo de hoy'
-        )}
-      </h3>
-
-      <p>
-        <b>🔥 Calorías:</b>
-        ${esc(d.calorie_advice||'')}
-      </p>
-
-      <p>
-        <b>🥩 Proteína:</b>
-        ${esc(d.protein_advice||'')}
-      </p>
-
-      <p>
-        <b>💧 Agua:</b>
-        ${esc(d.water_advice||'')}
-      </p>
-
-      <p>
-        <b>🍽️ Alimentación:</b>
-        ${esc(d.meal_recommendation||'')}
-      </p>
-
-      <p>
-        <b>🏋️ Entrenamiento:</b>
-        ${esc(d.training_advice||'')}
-      </p>
-
-      <ul>
-        ${(d.tips||[])
-          .map(x=>`<li>${esc(x)}</li>`)
-          .join('')}
-      </ul>
-
-      ${
-        d.warning
-        ?`<p class="notice">${esc(d.warning)}</p>`
-        :''
-      }
-
-    `;
-
-  }catch(e){
-
-    $('coachResult').innerHTML=`
-
-      <div class="warn">
-        ❌ ${esc(e.message)}
-      </div>
-
-      <button
-        class="btn primary"
-        style="width:100%;margin-top:8px"
-        onclick="askCoach()">
-        Reintentar
-      </button>
-
-    `;
-
-  }
-
-}
-
-async function analyzeProgress(){
-
-  let fs=[
-    ...$('progressFiles').files
-  ].slice(0,3);
-
-  if(!fs.length){
-
-    $('progressResult').innerHTML=
-      '<div class="warn">Selecciona al menos una foto.</div>';
-
-    return;
-
-  }
-
-  $('progressResult').innerHTML=
-    '<div class="card">⏳ Analizando tu progreso…</div>';
-
-  try{
-
-    let photos=[];
-
-    for(let f of fs){
-
-      photos.push(
-        await resizeData(f)
-      );
-
-    }
-
-    let r=await fetch(
-      '/api/analyze-progress',
-      {
-        method:'POST',
-        headers:{
-          'Content-Type':'application/json'
-        },
-        body:JSON.stringify({
-          photos,
-          profile:state.profile,
-          previousProgress:
-            state.progress.slice(-3)
-        })
-      }
-    );
-
-    let d=await r.json();
-
-    if(!r.ok)
-      throw Error(
-        d.error||'No se pudo analizar'
-      );
-
-    state.progress.push({
-      date:today(),
-      weight:
-        +$('progressWeight').value||
-        state.profile.weight,
-      analysis:d
-    });
-
-    localStorage.setItem(
-      'v7state',
-      JSON.stringify(state)
-    );
-
-    $('progressResult').innerHTML=`
-
-      <div class="card">
-
-        <h3>
-          🐻 ${esc(
-            d.overall||'Valoración'
-          )}
-        </h3>
-
-        <h4>Cambios visuales</h4>
-
-        <ul>
-          ${(d.visual_changes||[])
-            .map(x=>`<li>${esc(x)}</li>`)
-            .join('')}
-        </ul>
-
-        <h4>Puntos fuertes</h4>
-
-        <ul>
-          ${(d.strengths||[])
-            .map(x=>`<li>${esc(x)}</li>`)
-            .join('')}
-        </ul>
-
-        <h4>Qué mejorar</h4>
-
-        <ul>
-          ${(d.improvements||[])
-            .map(x=>`<li>${esc(x)}</li>`)
-            .join('')}
-        </ul>
-
-        <p>
-          <b>🍽️ Nutrición:</b>
-          ${esc(d.nutrition_advice||'')}
-        </p>
-
-        <p>
-          <b>🏋️ Entrenamiento:</b>
-          ${esc(d.training_advice||'')}
-        </p>
-
-        <h4>Próximos pasos</h4>
-
-        <ul>
-          ${(d.next_steps||[])
-            .map(x=>`<li>${esc(x)}</li>`)
-            .join('')}
-        </ul>
-
-        <p class="notice">
-          ${esc(d.note||'')}
-        </p>
-
-      </div>
-
-    `;
-
-  }catch(e){
-
-    $('progressResult').innerHTML=
-      '<div class="warn">❌ '+
-      esc(e.message)+
-      '</div>';
-
-  }
-
-}
-
-function renderHistory(){
-
-  if(!$('chart'))return;
-
-  let vals=[];
-
-  for(let i=6;i>=0;i--){
-
-    let d=new Date();
-
-    d.setDate(
-      d.getDate()-i
-    );
-
-    let k=d.toISOString().slice(0,10);
-
-    let f=state.days[k]||[];
-
-    let kcal=f.reduce(
-      (a,x)=>
-        a+(+(x.totals?.calories||0)),
-      0
-    );
-
-    vals.push({
-      k,
-      kcal
-    });
-
-  }
-
-  let max=Math.max(
-    state.goal,
-    ...vals.map(x=>x.kcal),
-    1
-  );
-
-  $('chart').innerHTML=
-    vals.map(x=>`
-
-      <div class="col">
-
-        <div
-          style="
-            height:115px;
-            display:flex;
-            align-items:end
-          ">
-
-          <div
-            class="barcol"
-            style="
-              height:${Math.max(
-                5,
-                x.kcal/max*105
-              )}px;
-              width:100%
-            ">
-          </div>
-
-        </div>
-
-        <div>
-          ${x.k.slice(8)}
-        </div>
-
-      </div>
-
-    `).join('');
-
-  $('avg').textContent=
-    Math.round(
-      vals.reduce(
-        (a,x)=>a+x.kcal,
-        0
-      )/7
-    )+' kcal';
-
-  $('avgGoal').textContent=
-    Math.round(state.goal)+' kcal';
-
-  $('historyList').innerHTML=
-    vals
-      .slice()
-      .reverse()
-      .map(x=>`
-
-        <div
-          class="card"
-          style="margin-top:8px">
-
-          <div class="row">
-
-            <span>${x.k}</span>
-
-            <b>
-              ${Math.round(x.kcal)} kcal
-            </b>
-
-          </div>
-
-        </div>
-
-      `)
-      .join('');
-
-}
-
-function saveProfile(){
-
-  let name=$('name').value.trim();
-
-  let w=+$('weight').value||80;
-
-  let h=+$('height').value||169;
-
-  let a=+$('age').value||27;
-
-  let s=$('sex').value;
-
-  let diet=$('dietType').value;
-
-  let g=$('goalType').value;
-
-  let bmr=
-    s==='male'
-      ?10*w+6.25*h-5*a+5
-      :10*w+6.25*h-5*a-161;
-
-  let tdee=bmr*1.55;
-
-  let adjustment=
-    g==='lose'
-      ?-400
-      :g==='gain'
-        ?300
-        :0;
-
-  state.goal=Math.max(
-    1500,
-    Math.round(
-      tdee+adjustment
-    )
-  );
-
-  state.waterGoal=Math.max(
-    500,
-    +$('waterGoalInput').value||2000
-  );
-
-  state.profile={
-    name,
-    weight:w,
-    height:h,
-    age:a,
-    sex:s,
-    dietType:diet,
-    goalType:g
-  };
-
-  save();
-
-  show('home');
-
-}
-
-state.profile=Object.assign(
-  {
-    name:'',
-    weight:80,
-    height:169,
-    age:27,
-    sex:'male',
-    dietType:'balanced',
-    goalType:'lose'
-  },
-  state.profile||{}
-);
-
-state.water=
-  state.waterDays[today()]||
-  state.water||
-  0;
-
-$('name').value=
-  state.profile.name||'';
-
-$('weight').value=
-  state.profile.weight;
-
-$('height').value=
-  state.profile.height;
-
-$('age').value=
-  state.profile.age;
-
-$('sex').value=
-  state.profile.sex||'male';
-
-$('dietType').value=
-  state.profile.dietType||'balanced';
-
-$('goalType').value=
-  state.profile.goalType||'lose';
-
-$('waterGoalInput').value=
-  state.waterGoal;
-
-render();
-
-if('serviceWorker' in navigator)
-  navigator.serviceWorker.register('/sw.js');
-
+async function askCoach(){$('coachResult').innerHTML='<p>⏳ El oso está preparando tu consejo…</p>';try{let r=await fetch('/api/coach',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({profile:state.profile,totals:totals(),water:{consumed_ml:state.water||0,goal_ml:state.waterGoal}})}),d=await r.json();if(!r.ok)throw Error(d.error||'No se pudo obtener el consejo');$('coachResult').innerHTML=`<h3>🐻 ${esc(d.summary||'Tu consejo de hoy')}</h3><p><b>🔥 Calorías:</b> ${esc(d.calorie_advice||'')}</p><p><b>🥩 Proteína:</b> ${esc(d.protein_advice||'')}</p><p><b>💧 Agua:</b> ${esc(d.water_advice||'')}</p><p><b>🍽️ Alimentación:</b> ${esc(d.meal_recommendation||'')}</p><p><b>🏋️ Entrenamiento:</b> ${esc(d.training_advice||'')}</p><ul>${(d.tips||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ul>${d.warning?`<p class="notice">${esc(d.warning)}</p>`:''}`}catch(e){$('coachResult').innerHTML='<div class="warn">❌ '+esc(e.message)+'</div><button class="btn primary" style="width:100%;margin-top:8px" onclick="askCoach()">Reintentar</button>'}}
+async function analyzeProgress(){let fs=[...$('progressFiles').files].slice(0,3);if(!fs.length){$('progressResult').innerHTML='<div class="warn">Selecciona al menos una foto.</div>';return}$('progressResult').innerHTML='<div class="card">⏳ Analizando tu progreso…</div>';try{let photos=[];for(let f of fs){photos.push(await resizeData(f))}let r=await fetch('/api/analyze-progress',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({photos,profile:state.profile,previousProgress:state.progress.slice(-3)})}),d=await r.json();if(!r.ok)throw Error(d.error||'No se pudo analizar');state.progress.push({date:today(),weight:+$('progressWeight').value||state.profile.weight,analysis:d});localStorage.setItem('v7state',JSON.stringify(state));$('progressResult').innerHTML=`<div class="card"><h3>🐻 ${esc(d.overall||'Valoración')}</h3><h4>Cambios visuales</h4><ul>${(d.visual_changes||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ul><h4>Puntos fuertes</h4><ul>${(d.strengths||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ul><h4>Qué mejorar</h4><ul>${(d.improvements||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ul><p><b>🍽️ Nutrición:</b> ${esc(d.nutrition_advice||'')}</p><p><b>🏋️ Entrenamiento:</b> ${esc(d.training_advice||'')}</p><h4>Próximos pasos</h4><ul>${(d.next_steps||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ul><p class="notice">${esc(d.note||'')}</p></div>`}catch(e){$('progressResult').innerHTML='<div class="warn">❌ '+esc(e.message)+'</div>'}}
+function renderHistory(){if(!$('chart'))return;let vals=[];for(let i=6;i>=0;i--){let d=new Date();d.setDate(d.getDate()-i);let k=d.toISOString().slice(0,10),f=state.days[k]||[];let kcal=f.reduce((a,x)=>a+(+(x.totals?.calories||0)),0);vals.push({k,kcal})}let max=Math.max(state.goal,...vals.map(x=>x.kcal),1);$('chart').innerHTML=vals.map(x=>`<div class="col"><div style="height:115px;display:flex;align-items:end"><div class="barcol" style="height:${Math.max(5,x.kcal/max*105)}px;width:100%"></div></div><div>${x.k.slice(8)}</div></div>`).join('');$('avg').textContent=Math.round(vals.reduce((a,x)=>a+x.kcal,0)/7)+' kcal';$('avgGoal').textContent=Math.round(state.goal)+' kcal';$('historyList').innerHTML=vals.slice().reverse().map(x=>`<div class="card" style="margin-top:8px"><div class="row"><span>${x.k}</span><b>${Math.round(x.kcal)} kcal</b></div></div>`).join('')}
+function saveProfile(){let name=$('name').value.trim(),w=+$('weight').value||80,h=+$('height').value||169,a=+$('age').value||27,s=$('sex').value,diet=$('dietType').value,g=$('goalType').value;let bmr=s==='male'?10*w+6.25*h-5*a+5:10*w+6.25*h-5*a-161,tdee=bmr*1.55;let adjustment=g==='lose'?-400:g==='gain'?300:0;state.goal=Math.max(1500,Math.round(tdee+adjustment));state.waterGoal=Math.max(500,+$('waterGoalInput').value||2000);state.profile={name,weight:w,height:h,age:a,sex:s,dietType:diet,goalType:g};save();show('home')}
+state.profile=Object.assign({name:'',weight:80,height:169,age:27,sex:'male',dietType:'balanced',goalType:'lose'},state.profile||{});
+state.water=state.waterDays[today()]||state.water||0;$('name').value=state.profile.name||'';$('weight').value=state.profile.weight;$('height').value=state.profile.height;$('age').value=state.profile.age;$('sex').value=state.profile.sex||'male';$('dietType').value=state.profile.dietType||'balanced';$('goalType').value=state.profile.goalType||'lose';$('waterGoalInput').value=state.waterGoal;render();
+if('serviceWorker'in navigator){navigator.serviceWorker.register('/sw.js').catch(()=>{});}
 updateNotificationStatus();
-
 scheduleInSessionReminders();
 
+/* JuliFit account prototype */
+function updateAccountStatus(){
+  const st = $('accountStatus');
+  if(!st) return;
+  const a = JSON.parse(localStorage.getItem('julifitAccount') || 'null');
+  st.textContent = a ? 'Sesión iniciada como ' + a.email : 'No has iniciado sesión.';
+}
+function registerAccount(){
+  const name = $('regName')?.value.trim();
+  const email = $('regEmail')?.value.trim().toLowerCase();
+  const password = $('regPassword')?.value || '';
+  if(!name || !email || password.length < 6){
+    alert('Completa nombre, correo y una contraseña de al menos 6 caracteres.');
+    return;
+  }
+  localStorage.setItem('julifitAccount', JSON.stringify({name,email,password}));
+  if(state.profile) state.profile.name = name;
+  save();
+  updateAccountStatus();
+  alert('Cuenta creada correctamente.');
+  show('profile');
+}
+function loginAccount(){
+  const email = $('loginEmail')?.value.trim().toLowerCase();
+  const password = $('loginPassword')?.value || '';
+  const a = JSON.parse(localStorage.getItem('julifitAccount') || 'null');
+  if(!a || a.email !== email || a.password !== password){
+    alert('Correo o contraseña incorrectos.');
+    return;
+  }
+  updateAccountStatus();
+  alert('Sesión iniciada.');
+  show('home');
+}
+function logoutAccount(){
+  localStorage.removeItem('julifitSession');
+  updateAccountStatus();
+}
+updateAccountStatus();
 </script>
-
-</body>
-</html>  
+</body></html>
