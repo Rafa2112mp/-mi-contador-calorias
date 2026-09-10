@@ -6,10 +6,12 @@
 <meta name="theme-color" content="#5b321d">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Mi Contador">
+<meta name="apple-mobile-web-app-title" content="JuliFit">
 <link rel="manifest" href="/manifest.webmanifest">
-<link rel="apple-touch-icon" href="/icons/icon-192.png">
-<title>Mi Contador de Calorías</title>
+<link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32.png">
+<link rel="icon" type="image/png" sizes="48x48" href="/icons/favicon-48.png">
+<title>JuliFit</title>
 
 <style>
 *{box-sizing:border-box}
@@ -19,57 +21,308 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif
 .screen.active{display:block}
 .top{display:flex;justify-content:space-between;align-items:center;gap:10px}
 .muted{color:#806f63}
-.hero{position:relative;overflow:hidden;background:linear-gradient(145deg,#4b2818,#7b492d);color:#fff;border-radius:28px;margin:12px 0;padding:20px 18px 16px;box-shadow:0 10px 28px #4b321d33}
-.hero-copy{position:relative;z-index:2;width:56%}
-.hero-bear{display:block;width:58%;max-height:310px;object-fit:contain;object-position:center bottom;margin:-2px -2px -4px auto;position:relative;z-index:1;filter:drop-shadow(0 10px 12px #0005)}
+
+.hero{
+position:relative;
+overflow:hidden;
+background:linear-gradient(145deg,#4b2818,#7b492d);
+color:#fff;
+border-radius:28px;
+margin:12px 0;
+padding:20px 18px 16px;
+box-shadow:0 10px 28px #4b281833
+}
+
+.hero-copy{
+position:relative;
+z-index:2;
+width:56%
+}
+
+.hero-bear{
+display:block;
+width:58%;
+max-height:310px;
+object-fit:contain;
+object-position:center bottom;
+margin:-2px -2px -4px auto;
+position:relative;
+z-index:1;
+filter:drop-shadow(0 10px 12px #0005)
+}
+
 .hero h1{font-size:28px;margin:0 0 5px}
 .big{font-size:38px;font-weight:900;line-height:1}
 .bar{height:10px;background:#ffffff35;border-radius:9px;overflow:hidden;margin-top:10px}
 .bar i{display:block;height:100%;background:#fff;border-radius:9px;width:0}
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-.stat,.card{background:#fff;border:1px solid #eadfd6;border-radius:20px;padding:14px;box-shadow:0 5px 18px #5b321d0b}
-.stat b{display:block;font-size:20px;margin-top:4px}
-.macrogrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.macro{border-radius:16px;padding:12px;text-align:center;background:#f4eee9}
-.macro b{display:block;font-size:18px}
-.macro span{font-size:12px;color:#806f63}
-.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.btn{border:0;border-radius:16px;padding:14px;font-size:15px;font-weight:800;cursor:pointer}
-.primary{background:#5b321d;color:#fff}
-.secondary{background:#eee5dd;color:#432719}
-.danger{background:#f7dddd;color:#8a2727}
-.back{border:0;background:none;font-size:16px;padding:4px 0;color:#5b321d;font-weight:700}
-.input,select{width:100%;padding:12px;border:1px solid #dacdc2;border-radius:12px;margin:6px 0 10px;background:#fff;font-size:16px}
-.row{display:flex;justify-content:space-between;align-items:center;gap:10px}
-.food{display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid #eadfd6}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:10px
+}
+
+.stat,.card{
+background:#fff;
+border:1px solid #eadfd6;
+border-radius:20px;
+padding:14px;
+box-shadow:0 5px 18px #5b321d0b
+}
+
+.stat b{
+display:block;
+font-size:20px;
+margin-top:4px
+}
+
+.macrogrid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:8px
+}
+
+.macro{
+border-radius:16px;
+padding:12px;
+text-align:center;
+background:#f4eee9
+}
+
+.macro b{
+display:block;
+font-size:18px
+}
+
+.macro span{
+font-size:12px;
+color:#806f63
+}
+
+.actions{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:10px
+}
+
+.btn{
+border:0;
+border-radius:16px;
+padding:14px;
+font-size:15px;
+font-weight:800;
+cursor:pointer
+}
+
+.primary{
+background:#5b321d;
+color:#fff
+}
+
+.secondary{
+background:#eee5dd;
+color:#432719
+}
+
+.danger{
+background:#f7dddd;
+color:#8a2727
+}
+
+.back{
+border:0;
+background:none;
+font-size:16px;
+padding:4px 0;
+color:#5b321d;
+font-weight:700
+}
+
+.input,select{
+width:100%;
+padding:12px;
+border:1px solid #dacdc2;
+border-radius:12px;
+margin:6px 0 10px;
+background:#fff;
+font-size:16px
+}
+
+.row{
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:10px
+}
+
+.food{
+display:flex;
+justify-content:space-between;
+gap:12px;
+padding:12px 0;
+border-bottom:1px solid #eadfd6
+}
+
 .food:last-child{border:0}
 .food small{color:#806f63}
-.pill{display:inline-block;padding:5px 8px;border-radius:99px;background:#eee5dd;font-size:11px}
-.ingredient{display:grid;grid-template-columns:1fr 105px;gap:8px;align-items:center}
-.scanbox{border:2px dashed #c9b9ab;border-radius:20px;padding:12px;text-align:center}
-.preview{width:100%;border-radius:22px;background:#21150f;aspect-ratio:4/3;object-fit:cover}
+
+.pill{
+display:inline-block;
+padding:5px 8px;
+border-radius:99px;
+background:#eee5dd;
+font-size:11px
+}
+
+.ingredient{
+display:grid;
+grid-template-columns:1fr 105px;
+gap:8px;
+align-items:center
+}
+
+.scanbox{
+border:2px dashed #c9b9ab;
+border-radius:20px;
+padding:12px;
+text-align:center
+}
+
+.preview{
+width:100%;
+border-radius:22px;
+background:#21150f;
+aspect-ratio:4/3;
+object-fit:cover
+}
+
 .hidden{display:none!important}
-.success{padding:12px;border-radius:14px;background:#e8f5e8}
-.warn{padding:12px;border-radius:14px;background:#fff2dc}
-.waterbig{font-size:34px;font-weight:900}
-.waterbar{height:14px;background:#e3d8cf;border-radius:20px;overflow:hidden}
-.waterbar i{display:block;height:100%;background:#6f91b8;width:0}
-.waterquick{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
-.waterquick button{padding:11px 5px;border:0;border-radius:12px;background:#e8eef5;font-weight:800}
-.coach{background:linear-gradient(145deg,#fff1df,#fff);border-color:#e5caa9}
+
+.success{
+padding:12px;
+border-radius:14px;
+background:#e8f5e8
+}
+
+.warn{
+padding:12px;
+border-radius:14px;
+background:#fff2dc
+}
+
+.waterbig{
+font-size:34px;
+font-weight:900
+}
+
+.waterbar{
+height:14px;
+background:#e3d8cf;
+border-radius:20px;
+overflow:hidden
+}
+
+.waterbar i{
+display:block;
+height:100%;
+background:#6f91b8;
+width:0
+}
+
+.waterquick{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:7px
+}
+
+.waterquick button{
+padding:11px 5px;
+border:0;
+border-radius:12px;
+background:#e8eef5;
+font-weight:800
+}
+
+.coach{
+background:linear-gradient(145deg,#fff1df,#fff);
+border-color:#e5caa9
+}
+
 .coach h3{margin-top:0}
-.progress-photo{width:100%;border-radius:18px;margin-top:8px}
-.nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);max-width:560px;width:100%;background:#fff;border-top:1px solid #e1d7cf;display:flex;justify-content:space-around;padding:9px 5px calc(9px + env(safe-area-inset-bottom));z-index:20}
-.nav button{border:0;background:none;font-size:11px;color:#806f63;font-weight:700}
+
+.progress-photo{
+width:100%;
+border-radius:18px;
+margin-top:8px
+}
+
+.nav{
+position:fixed;
+bottom:0;
+left:50%;
+transform:translateX(-50%);
+max-width:560px;
+width:100%;
+background:#fff;
+border-top:1px solid #e1d7cf;
+display:flex;
+justify-content:space-around;
+padding:9px 5px calc(9px + env(safe-area-inset-bottom));
+z-index:20
+}
+
+.nav button{
+border:0;
+background:none;
+font-size:11px;
+color:#806f63;
+font-weight:700
+}
+
 .nav button.active{color:#5b321d}
-.chart{height:155px;display:flex;align-items:end;gap:7px;padding:12px 3px}
-.col{flex:1;text-align:center;font-size:10px}
-.barcol{background:#6b3e24;border-radius:8px 8px 3px 3px;min-height:4px}
-.notice{font-size:12px;color:#806f63;line-height:1.4}
-.section-title{margin:18px 0 8px}
+
+.chart{
+height:155px;
+display:flex;
+align-items:end;
+gap:7px;
+padding:12px 3px
+}
+
+.col{
+flex:1;
+text-align:center;
+font-size:10px
+}
+
+.barcol{
+background:#6b3e24;
+border-radius:8px 8px 3px 3px;
+min-height:4px
+}
+
+.notice{
+font-size:12px;
+color:#806f63;
+line-height:1.4
+}
+
+.section-title{
+margin:18px 0 8px
+}
+
 .center{text-align:center}
-.smallbtn{padding:9px 11px;font-size:13px}
-.line{height:1px;background:#eadfd6;margin:12px 0}
+
+.smallbtn{
+padding:9px 11px;
+font-size:13px
+}
+
+.line{
+height:1px;
+background:#eadfd6;
+margin:12px 0
+}
 </style>
 </head>
 
@@ -78,128 +331,232 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif
 <main class="app">
 
 <section id="home" class="screen active">
-  <div class="top">
-    <div>
-      <h2 style="margin:0">Mi Contador de Calorías</h2>
-      <div class="muted">Tu nutrición, tus macros, tu progreso.</div>
-    </div>
-    <button class="btn secondary smallbtn" onclick="show('profile')">⚙️</button>
-  </div>
 
-  <div class="hero">
-    <div class="hero-copy">
-      <div style="opacity:.82">Calorías restantes hoy</div>
-      <div class="big" id="remaining">2.200</div>
-      <div>de <span id="goal">2.200</span> kcal</div>
-      <div class="bar"><i id="progress"></i></div>
-    </div>
-    <img class="hero-bear" src="/images/oso-gym.png" alt="Mascota oso del gimnasio" onerror="this.style.display='none'">
-  </div>
+<div class="top">
+<div>
+<h2 style="margin:0">JuliFit</h2>
+<div class="muted">Tu nutrición, tus macros, tu progreso.</div>
+</div>
 
-  <div class="card">
-    <div class="row">
-      <b>📊 Resumen de hoy</b>
-      <span class="muted" id="mealCount">0 comidas</span>
-    </div>
+<div style="display:flex;gap:6px">
 
-    <div class="macrogrid" style="margin-top:10px">
-      <div class="macro"><b id="cal">0</b><span>🔥 kcal</span></div>
-      <div class="macro"><b id="p">0 g</b><span>🥩 proteína</span></div>
-      <div class="macro"><b id="c">0 g</b><span>🍚 carbohidratos</span></div>
-      <div class="macro"><b id="f">0 g</b><span>🥑 grasas</span></div>
-      <div class="macro"><b id="waterHome">0 ml</b><span>💧 agua</span></div>
-      <div class="macro"><b id="waterGoalHome">2000 ml</b><span>🎯 objetivo agua</span></div>
-    </div>
-  </div>
+<button
+class="btn secondary smallbtn"
+onclick="show('notifications')">
+🔔
+</button>
 
-  <div class="actions" style="margin-top:12px">
-    <button class="btn primary" onclick="show('scan')">📸 Añadir comida</button>
-    <button class="btn secondary" onclick="show('water')">💧 Agua</button>
-  </div>
+<button
+class="btn secondary smallbtn"
+onclick="show('profile')">
+⚙️
+</button>
 
-  <div class="actions" style="margin-top:10px">
-    <button class="btn secondary" onclick="show('coach')">🐻 Coach IA</button>
-    <button class="btn secondary" onclick="show('progressScreen')">📈 Mi progreso</button>
-  </div>
+</div>
+</div>
 
-  <div class="card" style="margin-top:12px">
-    <div class="row">
-      <h3 style="margin:0">🍽️ Comidas de hoy</h3>
-      <button class="btn secondary smallbtn" onclick="show('history')">Ver estadísticas</button>
-    </div>
-    <div id="diary"></div>
-  </div>
+<div class="hero">
+
+<div class="hero-copy">
+
+<div style="opacity:.82">
+Calorías restantes hoy
+</div>
+
+<div class="big" id="remaining">
+2.200
+</div>
+
+<div>
+de <span id="goal">2.200</span> kcal
+</div>
+
+<div class="bar">
+<i id="progress"></i>
+</div>
+
+</div>
+
+<img
+class="hero-bear"
+src="/images/oso-gym.png"
+alt="Mascota oso del gimnasio"
+onerror="this.style.display='none'">
+
+</div>
+
+<div class="card" style="margin-top:12px">
+
+<div class="row">
+<b>🔥 Racha</b>
+<b id="streakHome">0 días</b>
+</div>
+
+<div
+class="muted"
+id="streakMessage"
+style="margin-top:5px">
+Registra una comida hoy para empezar.
+</div>
+
+</div>
+
+<div class="card">
+
+<div class="row">
+<b>📊 Resumen de hoy</b>
+<span class="muted" id="mealCount">
+0 comidas
+</span>
+</div>
+
+<div class="macrogrid" style="margin-top:10px">
+
+<div class="macro">
+<b id="cal">0</b>
+<span>🔥 kcal</span>
+</div>
+
+<div class="macro">
+<b id="p">0 g</b>
+<span>🥩 proteína</span>
+</div>
+
+<div class="macro">
+<b id="c">0 g</b>
+<span>🍚 carbohidratos</span>
+</div>
+
+<div class="macro">
+<b id="f">0 g</b>
+<span>🥑 grasas</span>
+</div>
+
+<div class="macro">
+<b id="waterHome">0 ml</b>
+<span>💧 agua</span>
+</div>
+
+<div class="macro">
+<b id="waterGoalHome">2000 ml</b>
+<span>🎯 objetivo agua</span>
+</div>
+
+</div>
+</div>
+
+<div class="actions" style="margin-top:12px">
+
+<button
+class="btn primary"
+onclick="show('scan')">
+📸 Añadir comida
+</button>
+
+<button
+class="btn secondary"
+onclick="show('water')">
+💧 Agua
+</button>
+
+</div>
+
+<div class="actions" style="margin-top:10px">
+
+<button
+class="btn secondary"
+onclick="show('coach')">
+🐻 Coach IA
+</button>
+
+<button
+class="btn secondary"
+onclick="show('progressScreen')">
+📈 Mi progreso
+</button>
+
+</div>
+
+<div class="card" style="margin-top:12px">
+
+<div class="row">
+
+<h3 style="margin:0">
+🍽️ Comidas de hoy
+</h3>
+
+<button
+class="btn secondary smallbtn"
+onclick="show('history')">
+Ver estadísticas
+</button>
+
+</div>
+
+<div id="diary"></div>
+
+</div>
+
 </section>
+<div id="photoActions" class="actions" style="margin-top:10px;display:none">
+  <button class="btn secondary" onclick="retakePhoto()">↩️ Repetir</button>
+  <button class="btn primary" onclick="showIngredients()">➡️ Continuar</button>
+</div>
 
-<section id="scan" class="screen">
-  <button class="back" onclick="resetScan();show('home')">← Volver</button>
-  <h2>📸 Añadir comida</h2>
+<div id="scanStatus" class="muted" style="margin:12px 0"></div>
 
-  <p class="muted">
-    Primero toma una foto. Después puedes escribir los alimentos y sus gramos.
-    Todo es opcional.
+<div id="ingredientsBox" class="card hidden">
+  <h3 style="margin-top:0">🥘 ¿Qué alimentos hay?</h3>
+
+  <p class="notice">
+    Escribe los alimentos que quieras. Los gramos también son opcionales.
+    Para mayor precisión, introduce ambos cuando los conozcas.
   </p>
 
-  <div class="scanbox">
-    <video id="video" class="preview" autoplay playsinline muted></video>
-    <img id="shot" class="preview hidden" alt="Foto de comida">
-    <canvas id="canvas" hidden></canvas>
-  </div>
+  <div id="ingredients"></div>
 
-  <!-- CAMBIO: se eliminó capture="environment" -->
-  <input id="photo" type="file" accept="image/*" hidden>
-
-  <div class="actions" style="margin-top:10px">
-    <button class="btn primary" onclick="openCamera()">📷 Tomar foto</button>
-    <button class="btn secondary" onclick="openGallery()">🖼️ Galería</button>
-  </div>
-
-  <button id="captureBtn" class="btn primary" style="width:100%;margin-top:10px;display:none" onclick="takePhoto()">
-    🔘 Capturar foto
+  <button
+    class="btn secondary"
+    style="width:100%;margin-top:8px"
+    onclick="addIngredient()">
+    ＋ Añadir otro alimento
   </button>
 
-  <div id="photoActions" class="actions" style="margin-top:10px;display:none">
-    <button class="btn secondary" onclick="retakePhoto()">↩️ Repetir</button>
-    <button class="btn primary" onclick="showIngredients()">➡️ Continuar</button>
-  </div>
+  <label style="display:block;margin-top:12px">
+    Nota opcional
+    <input
+      id="foodNote"
+      class="input"
+      placeholder="Ej.: arroz con pollo, poca salsa...">
+  </label>
 
-  <div id="scanStatus" class="muted" style="margin:12px 0"></div>
+  <button
+    class="btn primary"
+    style="width:100%;margin-top:4px"
+    onclick="calculateFood()">
+    ✨ Calcular calorías y macros
+  </button>
+</div>
 
-  <div id="ingredientsBox" class="card hidden">
-    <h3 style="margin-top:0">🥘 ¿Qué alimentos hay?</h3>
+<div id="result"></div>
 
-    <p class="notice">
-      Escribe los alimentos que quieras. Los gramos también son opcionales.
-      Para mayor precisión, introduce ambos cuando los conozcas.
-    </p>
-
-    <div id="ingredients"></div>
-
-    <button class="btn secondary" style="width:100%;margin-top:8px" onclick="addIngredient()">
-      ＋ Añadir otro alimento
-    </button>
-
-    <label style="display:block;margin-top:12px">
-      Nota opcional
-      <input id="foodNote" class="input" placeholder="Ej.: arroz con pollo, poca salsa...">
-    </label>
-
-    <button class="btn primary" style="width:100%;margin-top:4px" onclick="calculateFood()">
-      ✨ Calcular calorías y macros
-    </button>
-  </div>
-
-  <div id="result"></div>
 </section>
 
 <section id="water" class="screen">
+
   <button class="back" onclick="show('home')">← Volver</button>
+
   <h2>💧 Agua</h2>
 
   <div class="card center">
+
     <div class="muted">Consumida hoy</div>
+
     <div class="waterbig" id="waterBig">0 ml</div>
-    <div class="muted">Objetivo: <span id="waterGoal">2000</span> ml</div>
+
+    <div class="muted">
+      Objetivo: <span id="waterGoal">2000</span> ml
+    </div>
 
     <div class="waterbar" style="margin:14px 0">
       <i id="waterProgress"></i>
@@ -216,21 +573,36 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif
 
     <label>
       O escribe la cantidad
-      <input id="waterInput" class="input" type="number" inputmode="numeric" placeholder="ml">
+      <input
+        id="waterInput"
+        class="input"
+        type="number"
+        inputmode="numeric"
+        placeholder="ml">
     </label>
 
-    <button class="btn primary" style="width:100%" onclick="addTypedWater()">
+    <button
+      class="btn primary"
+      style="width:100%"
+      onclick="addTypedWater()">
       ＋ Añadir agua
     </button>
 
-    <button class="btn danger" style="width:100%;margin-top:8px" onclick="resetWater()">
+    <button
+      class="btn danger"
+      style="width:100%;margin-top:8px"
+      onclick="resetWater()">
       Reiniciar agua de hoy
     </button>
+
   </div>
+
 </section>
 
 <section id="coach" class="screen">
+
   <button class="back" onclick="show('home')">← Volver</button>
+
   <h2>🐻 Coach nutricional IA</h2>
 
   <p class="muted">
@@ -238,17 +610,30 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif
   </p>
 
   <div class="card coach">
+
     <div id="coachResult">
-      <p>Pulsa el botón para pedir al oso un consejo.</p>
-      <button class="btn primary" style="width:100%" onclick="askCoach()">
+
+      <p>
+        Pulsa el botón para pedir al oso un consejo.
+      </p>
+
+      <button
+        class="btn primary"
+        style="width:100%"
+        onclick="askCoach()">
         ✨ Pedir consejo a la IA
       </button>
+
     </div>
+
   </div>
+
 </section>
 
 <section id="progressScreen" class="screen">
+
   <button class="back" onclick="show('home')">← Volver</button>
+
   <h2>📈 Mi progreso</h2>
 
   <p class="muted">
@@ -256,14 +641,27 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif
   </p>
 
   <div class="card">
-    <input id="progressFiles" type="file" accept="image/*" multiple class="input">
+
+    <input
+      id="progressFiles"
+      type="file"
+      accept="image/*"
+      multiple
+      class="input">
 
     <label>
       Peso actual (kg)
-      <input id="progressWeight" class="input" type="number" step="0.1">
+      <input
+        id="progressWeight"
+        class="input"
+        type="number"
+        step="0.1">
     </label>
 
-    <button class="btn primary" style="width:100%" onclick="analyzeProgress()">
+    <button
+      class="btn primary"
+      style="width:100%"
+      onclick="analyzeProgress()">
       🔍 Analizar mi progreso
     </button>
 
@@ -271,17 +669,64 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif
       La IA no puede determinar con precisión el porcentaje de grasa corporal solo por una foto.
       Usará las imágenes para cambios visuales y el peso como dato complementario.
     </p>
+
   </div>
 
   <div id="progressResult"></div>
+
+</section>
+
+<section id="notifications" class="screen">
+
+  <button class="back" onclick="show('home')">← Volver</button>
+
+  <h2>🔔 Recordatorios</h2>
+
+  <p class="muted">
+    Activa avisos para recordar registrar tus comidas y beber agua.
+  </p>
+
+  <div class="card">
+
+    <div class="row">
+      <span>Notificaciones</span>
+      <b id="notifStatus">Desactivadas</b>
+    </div>
+
+    <button
+      class="btn primary"
+      style="width:100%;margin-top:10px"
+      onclick="enableNotifications()">
+      🔔 Activar notificaciones
+    </button>
+
+    <button
+      class="btn secondary"
+      style="width:100%;margin-top:8px"
+      onclick="testNotification()">
+      🧪 Probar aviso
+    </button>
+
+    <p class="notice" style="margin-bottom:0">
+      En iPhone, para recibir avisos de una PWA, instala JuliFit en la pantalla de inicio
+      y permite las notificaciones. Los recordatorios automáticos del navegador dependen
+      de que el sistema mantenga la app activa.
+    </p>
+
+  </div>
+
 </section>
 
 <section id="history" class="screen">
+
   <button class="back" onclick="show('home')">← Volver</button>
+
   <h2>📊 Estadísticas</h2>
 
   <div class="card">
+
     <b>Últimos 7 días</b>
+
     <div id="chart" class="chart"></div>
 
     <div class="row">
@@ -293,67 +738,204 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif
       <span>Objetivo</span>
       <b id="avgGoal">0 kcal</b>
     </div>
+
   </div>
 
   <div id="historyList"></div>
+
 </section>
 
 <section id="profile" class="screen">
+
   <button class="back" onclick="show('home')">← Volver</button>
-  <h2>👤 Tu perfil</h2>
+
+  <h2>👤 Mi perfil</h2>
+
+  <p class="muted">
+    Estos datos ayudan a JuliFit a calcular tus objetivos y personalizar
+    las recomendaciones de la IA.
+  </p>
 
   <div class="card">
-    <label>
-      Peso (kg)
-      <input id="weight" class="input" type="number" step="0.1">
-    </label>
 
     <label>
-      Altura (cm)
-      <input id="height" class="input" type="number">
+      Nombre
+      <input
+        id="name"
+        class="input"
+        type="text"
+        autocomplete="name"
+        placeholder="Tu nombre">
     </label>
 
     <label>
       Edad
-      <input id="age" class="input" type="number">
+      <input
+        id="age"
+        class="input"
+        type="number"
+        inputmode="numeric"
+        min="1"
+        max="120"
+        placeholder="Ej. 27">
+    </label>
+
+    <label>
+      Peso (kg)
+      <input
+        id="weight"
+        class="input"
+        type="number"
+        inputmode="decimal"
+        step="0.1"
+        min="1"
+        placeholder="Ej. 80">
+    </label>
+
+    <label>
+      Talla / Altura (cm)
+      <input
+        id="height"
+        class="input"
+        type="number"
+        inputmode="numeric"
+        min="50"
+        max="250"
+        placeholder="Ej. 169">
     </label>
 
     <label>
       Sexo
+
       <select id="sex" class="input">
         <option value="male">Hombre</option>
         <option value="female">Mujer</option>
       </select>
+
     </label>
 
     <label>
-      Objetivo
-      <select id="goalType" class="input">
-        <option value="lose">Perder grasa</option>
-        <option value="maintain">Mantener</option>
-        <option value="gain">Ganar músculo/peso</option>
+      Tipo de dieta
+
+      <select id="dietType" class="input">
+
+        <option value="balanced">
+          Equilibrada
+        </option>
+
+        <option value="mediterranean">
+          Mediterránea
+        </option>
+
+        <option value="high_protein">
+          Alta en proteína
+        </option>
+
+        <option value="low_carb">
+          Baja en carbohidratos
+        </option>
+
+        <option value="vegetarian">
+          Vegetariana
+        </option>
+
+        <option value="vegan">
+          Vegana
+        </option>
+
+        <option value="flexible">
+          Flexible
+        </option>
+
+        <option value="keto">
+          Cetogénica (keto)
+        </option>
+
+        <option value="ai_recommend">
+          Recomendada por la IA
+        </option>
+
       </select>
+
+      <div class="notice">
+        Si eliges “Recomendada por la IA”, el Coach tendrá en cuenta tus datos
+        y objetivo para orientarte.
+      </div>
+
+    </label>
+
+    <label>
+      ¿Qué buscas?
+
+      <select id="goalType" class="input">
+
+        <option value="lose">
+          Perder peso
+        </option>
+
+        <option value="gain">
+          Ganar peso
+        </option>
+
+        <option value="recomp">
+          Perder peso y ganar masa muscular
+        </option>
+
+      </select>
+
     </label>
 
     <label>
       Objetivo de agua (ml)
-      <input id="waterGoalInput" class="input" type="number" value="2000">
+
+      <input
+        id="waterGoalInput"
+        class="input"
+        type="number"
+        inputmode="numeric"
+        value="2000">
+
     </label>
 
-    <button class="btn primary" style="width:100%" onclick="saveProfile()">
+    <button
+      class="btn primary"
+      style="width:100%"
+      onclick="saveProfile()">
       Guardar y calcular objetivos
     </button>
+
   </div>
+
 </section>
 
 </main>
 
 <nav class="nav">
-  <button onclick="show('home')">🏠<br>Inicio</button>
-  <button onclick="show('scan')">📸<br>Comida</button>
-  <button onclick="show('water')">💧<br>Agua</button>
-  <button onclick="show('coach')">🐻<br>Coach</button>
-  <button onclick="show('progressScreen')">📈<br>Progreso</button>
+
+  <button onclick="show('home')">
+    🏠<br>Inicio
+  </button>
+
+  <button onclick="show('scan')">
+    📸<br>Comida
+  </button>
+
+  <button onclick="show('water')">
+    💧<br>Agua
+  </button>
+
+  <button onclick="show('coach')">
+    🐻<br>Coach
+  </button>
+
+  <button onclick="show('progressScreen')">
+    📈<br>Progreso
+  </button>
+
+  <button onclick="show('notifications')">
+    🔔<br>Avisos
+  </button>
+
 </nav>
 
 <script>
@@ -364,7 +946,9 @@ let stream=null,lastPhotoBlob=null,lastResult=null;
 
 const today=()=>new Date().toISOString().slice(0,10);
 
-let state=JSON.parse(localStorage.getItem('v7state')||'null')||{
+let state=JSON.parse(
+  localStorage.getItem('v7state')||'null'
+)||{
   goal:2200,
   waterGoal:2000,
   foods:[],
@@ -372,53 +956,126 @@ let state=JSON.parse(localStorage.getItem('v7state')||'null')||{
   waterDays:{},
   progress:[],
   profile:{
+    name:'',
     weight:80,
     height:169,
     age:27,
     sex:'male',
+    dietType:'balanced',
     goalType:'lose'
   }
 };
 
 if(!state.waterDays)state.waterDays={};
+
 if(!state.progress)state.progress=[];
 
 function save(){
+
   state.days[today()]=state.foods;
+
   state.waterDays[today()]=state.water||0;
-  localStorage.setItem('v7state',JSON.stringify(state));
+
+  localStorage.setItem(
+    'v7state',
+    JSON.stringify(state)
+  );
+
   render();
+
 }
 
 function totals(){
+
   return state.foods.reduce((a,x)=>{
+
     let t=x.totals||x;
+
     return{
       cal:a.cal+(+t.calories||0),
       p:a.p+(+t.protein_g||0),
       c:a.c+(+t.carbs_g||0),
       f:a.f+(+t.fat_g||0)
     }
-  },{
-    cal:0,
-    p:0,
-    c:0,
-    f:0
-  })
+
+  },{cal:0,p:0,c:0,f:0})
+
+}
+
+function dayKeyOffset(n){
+
+  let d=new Date();
+
+  d.setHours(12,0,0,0);
+
+  d.setDate(d.getDate()+n);
+
+  return d.toISOString().slice(0,10);
+
+}
+
+function getStreak(){
+
+  let s=0;
+
+  // A day counts when at least one meal was registered.
+
+  for(let i=0;i<370;i++){
+
+    let k=dayKeyOffset(-i);
+
+    let meals=state.days[k]||[];
+
+    if(meals.length){
+      s++
+    }else{
+      break
+    }
+
+  }
+
+  return s;
+
+}
+
+function updateStreak(){
+
+  let s=getStreak();
+
+  if($('streakHome')){
+
+    $('streakHome').textContent=
+      s+' día'+(s===1?'':'s');
+
+    $('streakMessage').textContent=s
+
+      ?(
+        s>=7
+        ?'¡Excelente! Mantén la constancia.'
+        :'Vas muy bien. Sigue registrando tus comidas.'
+       )
+
+      :'Registra una comida hoy para empezar.';
+
+  }
+
+}
+  $('streakHome').textContent=s+' día'+(s===1?'':'s');
+
+$('streakMessage').textContent=s
+  ? (s>=7
+      ?'¡Excelente! Mantén la constancia.'
+      :'Vas muy bien. Sigue registrando tus comidas.')
+  :'Registra una comida hoy para empezar.';
 }
 
 function render(){
-
   let t=totals(),w=state.water||0;
 
   $('goal').textContent=Math.round(state.goal).toLocaleString('es-ES');
-
   $('cal').textContent=Math.round(t.cal);
-
   $('p').textContent=t.p.toFixed(1)+' g';
-
   $('c').textContent=t.c.toFixed(1)+' g';
-
   $('f').textContent=t.f.toFixed(1)+' g';
 
   $('remaining').textContent=
@@ -446,31 +1103,37 @@ function render(){
   $('waterProgress').style.width=
     Math.min(100,w/state.waterGoal*100)+'%';
 
-  $('diary').innerHTML=
-    state.foods.length
-    ?
-    state.foods.map((m,i)=>`
+  $('diary').innerHTML=state.foods.length
+    ?state.foods.map((m,i)=>`
       <div class="card" style="margin-top:10px">
+
         <div class="row">
           <b>${esc(m.meal_name||'Comida')}</b>
-          <button class="btn danger smallbtn" onclick="removeFood(${i})">
+
+          <button
+            class="btn danger smallbtn"
+            onclick="removeFood(${i})">
             Eliminar
           </button>
         </div>
 
         ${(m.items||[]).map(x=>`
           <div class="food">
+
             <span>
               <b>${esc(x.food)}</b><br>
+
               <small>
                 ${Math.round(x.grams||0)} g ·
                 P ${(+x.protein_g||0).toFixed(1)} g ·
                 C ${(+x.carbs_g||0).toFixed(1)} g ·
                 G ${(+x.fat_g||0).toFixed(1)} g
               </small>
+
             </span>
 
             <b>${Math.round(x.calories||0)} kcal</b>
+
           </div>
         `).join('')}
 
@@ -478,29 +1141,34 @@ function render(){
           <span class="muted">Total</span>
           <b>${Math.round(m.totals?.calories||0)} kcal</b>
         </div>
+
       </div>
     `).join('')
-    :
-    '<p class="muted">Todavía no tienes comidas registradas.</p>';
+    :'<p class="muted">Todavía no tienes comidas registradas.</p>';
 
   renderHistory();
+  updateStreak();
 }
 
 function esc(s){
-  return String(s).replace(/[&<>"']/g,m=>({
-    '&':'&amp;',
-    '<':'&lt;',
-    '>':'&gt;',
-    '"':'&quot;',
-    "'":'&#039;'
-  }[m]))
+  return String(s).replace(
+    /[&<>"']/g,
+    m=>({
+      '&':'&amp;',
+      '<':'&lt;',
+      '>':'&gt;',
+      '"':'&quot;',
+      "'":'&#039;'
+    }[m])
+  )
 }
 
 function show(id){
 
   stopCamera();
 
-  document.querySelectorAll('.screen')
+  document
+    .querySelectorAll('.screen')
     .forEach(x=>x.classList.remove('active'));
 
   $(id).classList.add('active');
@@ -514,13 +1182,18 @@ function show(id){
   if(id==='water')render();
 
   if(id==='profile'){
+
+    $('name').value=state.profile.name||'';
     $('weight').value=state.profile.weight;
     $('height').value=state.profile.height;
     $('age').value=state.profile.age;
-    $('sex').value=state.profile.sex;
-    $('goalType').value=state.profile.goalType;
+    $('sex').value=state.profile.sex||'male';
+    $('dietType').value=state.profile.dietType||'balanced';
+    $('goalType').value=state.profile.goalType||'lose';
     $('waterGoalInput').value=state.waterGoal;
+
   }
+
 }
 
 function removeFood(i){
@@ -559,6 +1232,7 @@ async function openCamera(){
       'No se pudo abrir la cámara. Puedes usar Galería.';
 
   }
+
 }
 
 function openGallery(){
@@ -630,7 +1304,7 @@ function takePhoto(){
     $('scanStatus').textContent=
       '📸 Foto capturada. Pulsa Continuar.';
 
-  },'image/jpeg',.9);
+  },'image/jpeg',.9)
 
 }
 
@@ -638,7 +1312,9 @@ function stopCamera(){
 
   if(stream){
 
-    stream.getTracks().forEach(t=>t.stop());
+    stream
+      .getTracks()
+      .forEach(t=>t.stop());
 
     stream=null;
 
@@ -742,8 +1418,8 @@ async function calculateFood(){
   .map(r=>({
     name:r.querySelector('.ing-name').value.trim(),
     grams:r.querySelector('.ing-grams').value
-      ? +r.querySelector('.ing-grams').value
-      : null
+      ?+r.querySelector('.ing-grams').value
+      :null
   }))
   .filter(x=>x.name);
 
@@ -809,7 +1485,9 @@ async function calculateFood(){
 
             </span>
 
-            <b>${Math.round(x.calories||0)} kcal</b>
+            <b>
+              ${Math.round(x.calories||0)} kcal
+            </b>
 
           </div>
         `).join('')}
@@ -897,7 +1575,8 @@ async function resizeData(blob){
       const maxSide=1024;
 
       const scale=Math.min(
-        maxSide/Math.max(im.width,im.height),
+        maxSide/
+          Math.max(im.width,im.height),
         1
       );
 
@@ -954,12 +1633,15 @@ async function resizeData(blob){
     };
 
     im.onerror=()=>{
+
       URL.revokeObjectURL(url);
+
       reject(
         new Error(
           'No se pudo preparar la foto.'
         )
       );
+
     };
 
     im.src=url;
@@ -997,6 +1679,113 @@ function resetWater(){
   save();
 
 }
+function notificationSupported(){
+  return 'Notification' in window;
+}
+
+function updateNotificationStatus(){
+
+  if(!$('notifStatus'))return;
+
+  if(!notificationSupported())
+    $('notifStatus').textContent='No disponible';
+
+  else
+    $('notifStatus').textContent=
+      Notification.permission==='granted'
+        ?'Activadas'
+        :Notification.permission==='denied'
+          ?'Bloqueadas'
+          :'Desactivadas';
+
+}
+
+async function enableNotifications(){
+
+  if(!notificationSupported()){
+    alert('Este navegador no permite notificaciones.');
+    return;
+  }
+
+  let p=await Notification.requestPermission();
+
+  updateNotificationStatus();
+
+  if(p==='granted')
+    new Notification(
+      'JuliFit 🐻',
+      {
+        body:'¡Notificaciones activadas!'
+      }
+    );
+
+}
+
+function testNotification(){
+
+  if(!notificationSupported()){
+    alert('Este navegador no permite notificaciones.');
+    return;
+  }
+
+  if(Notification.permission!=='granted'){
+    enableNotifications();
+    return;
+  }
+
+  new Notification(
+    'JuliFit 🐻',
+    {
+      body:'Recuerda registrar tu comida y beber agua.'
+    }
+  );
+
+}
+
+function scheduleInSessionReminders(){
+
+  // Recordatorios mientras JuliFit permanezca abierta.
+
+  if(
+    !notificationSupported() ||
+    Notification.permission!=='granted'
+  )return;
+
+  if(window.julifitReminderTimer)
+    clearInterval(window.julifitReminderTimer);
+
+  window.julifitReminderTimer=setInterval(()=>{
+
+    let h=new Date().getHours();
+    let m=new Date().getMinutes();
+
+    if(m!==0)return;
+
+    if(h===13||h===20){
+
+      new Notification(
+        'JuliFit 🐻',
+        {
+          body:'¿Ya registraste tu comida? Mantén tu racha 🔥'
+        }
+      );
+
+    }
+
+    if(h===18){
+
+      new Notification(
+        'JuliFit 💧',
+        {
+          body:'Recuerda beber agua y revisar tu objetivo de hoy.'
+        }
+      );
+
+    }
+
+  },60000);
+
+}
 
 async function askCoach(){
 
@@ -1027,16 +1816,16 @@ async function askCoach(){
 
     if(!r.ok)
       throw Error(
-        d.error||
-        'No se pudo obtener el consejo'
+        d.error||'No se pudo obtener el consejo'
       );
 
     $('coachResult').innerHTML=`
 
-      <h3>🐻 ${esc(
-        d.summary||
-        'Tu consejo de hoy'
-      )}</h3>
+      <h3>
+        🐻 ${esc(
+          d.summary||'Tu consejo de hoy'
+        )}
+      </h3>
 
       <p>
         <b>🔥 Calorías:</b>
@@ -1064,9 +1853,9 @@ async function askCoach(){
       </p>
 
       <ul>
-        ${(d.tips||[]).map(x=>
-          `<li>${esc(x)}</li>`
-        ).join('')}
+        ${(d.tips||[])
+          .map(x=>`<li>${esc(x)}</li>`)
+          .join('')}
       </ul>
 
       ${
@@ -1079,13 +1868,20 @@ async function askCoach(){
 
   }catch(e){
 
-    $('coachResult').innerHTML=
-      '<div class="warn">❌ '+
-      esc(e.message)+
-      '</div>'+
-      '<button class="btn primary" style="width:100%;margin-top:8px" onclick="askCoach()">'+
-      'Reintentar'+
-      '</button>';
+    $('coachResult').innerHTML=`
+
+      <div class="warn">
+        ❌ ${esc(e.message)}
+      </div>
+
+      <button
+        class="btn primary"
+        style="width:100%;margin-top:8px"
+        onclick="askCoach()">
+        Reintentar
+      </button>
+
+    `;
 
   }
 
@@ -1131,7 +1927,8 @@ async function analyzeProgress(){
         body:JSON.stringify({
           photos,
           profile:state.profile,
-          previousProgress:state.progress.slice(-3)
+          previousProgress:
+            state.progress.slice(-3)
         })
       }
     );
@@ -1140,8 +1937,7 @@ async function analyzeProgress(){
 
     if(!r.ok)
       throw Error(
-        d.error||
-        'No se pudo analizar'
+        d.error||'No se pudo analizar'
       );
 
     state.progress.push({
@@ -1163,33 +1959,32 @@ async function analyzeProgress(){
 
         <h3>
           🐻 ${esc(
-            d.overall||
-            'Valoración'
+            d.overall||'Valoración'
           )}
         </h3>
 
         <h4>Cambios visuales</h4>
 
         <ul>
-          ${(d.visual_changes||[]).map(x=>
-            `<li>${esc(x)}</li>`
-          ).join('')}
+          ${(d.visual_changes||[])
+            .map(x=>`<li>${esc(x)}</li>`)
+            .join('')}
         </ul>
 
         <h4>Puntos fuertes</h4>
 
         <ul>
-          ${(d.strengths||[]).map(x=>
-            `<li>${esc(x)}</li>`
-          ).join('')}
+          ${(d.strengths||[])
+            .map(x=>`<li>${esc(x)}</li>`)
+            .join('')}
         </ul>
 
         <h4>Qué mejorar</h4>
 
         <ul>
-          ${(d.improvements||[]).map(x=>
-            `<li>${esc(x)}</li>`
-          ).join('')}
+          ${(d.improvements||[])
+            .map(x=>`<li>${esc(x)}</li>`)
+            .join('')}
         </ul>
 
         <p>
@@ -1205,9 +2000,9 @@ async function analyzeProgress(){
         <h4>Próximos pasos</h4>
 
         <ul>
-          ${(d.next_steps||[]).map(x=>
-            `<li>${esc(x)}</li>`
-          ).join('')}
+          ${(d.next_steps||[])
+            .map(x=>`<li>${esc(x)}</li>`)
+            .join('')}
         </ul>
 
         <p class="notice">
@@ -1215,6 +2010,7 @@ async function analyzeProgress(){
         </p>
 
       </div>
+
     `;
 
   }catch(e){
@@ -1248,8 +2044,7 @@ function renderHistory(){
 
     let kcal=f.reduce(
       (a,x)=>
-        a+
-        (+(x.totals?.calories||0)),
+        a+(+(x.totals?.calories||0)),
       0
     );
 
@@ -1271,7 +2066,12 @@ function renderHistory(){
 
       <div class="col">
 
-        <div style="height:115px;display:flex;align-items:end">
+        <div
+          style="
+            height:115px;
+            display:flex;
+            align-items:end
+          ">
 
           <div
             class="barcol"
@@ -1286,7 +2086,9 @@ function renderHistory(){
 
         </div>
 
-        <div>${x.k.slice(8)}</div>
+        <div>
+          ${x.k.slice(8)}
+        </div>
 
       </div>
 
@@ -1298,35 +2100,41 @@ function renderHistory(){
         (a,x)=>a+x.kcal,
         0
       )/7
-    )+
-    ' kcal';
+    )+' kcal';
 
   $('avgGoal').textContent=
-    Math.round(state.goal)+
-    ' kcal';
+    Math.round(state.goal)+' kcal';
 
   $('historyList').innerHTML=
-    vals.slice().reverse().map(x=>`
+    vals
+      .slice()
+      .reverse()
+      .map(x=>`
 
-      <div class="card" style="margin-top:8px">
+        <div
+          class="card"
+          style="margin-top:8px">
 
-        <div class="row">
+          <div class="row">
 
-          <span>${x.k}</span>
+            <span>${x.k}</span>
 
-          <b>
-            ${Math.round(x.kcal)} kcal
-          </b>
+            <b>
+              ${Math.round(x.kcal)} kcal
+            </b>
+
+          </div>
 
         </div>
 
-      </div>
-
-    `).join('');
+      `)
+      .join('');
 
 }
 
 function saveProfile(){
+
+  let name=$('name').value.trim();
 
   let w=+$('weight').value||80;
 
@@ -1336,34 +2144,28 @@ function saveProfile(){
 
   let s=$('sex').value;
 
+  let diet=$('dietType').value;
+
   let g=$('goalType').value;
 
   let bmr=
     s==='male'
-    ?
-    10*w+
-    6.25*h-
-    5*a+
-    5
-    :
-    10*w+
-    6.25*h-
-    5*a-
-    161;
+      ?10*w+6.25*h-5*a+5
+      :10*w+6.25*h-5*a-161;
 
   let tdee=bmr*1.55;
+
+  let adjustment=
+    g==='lose'
+      ?-400
+      :g==='gain'
+        ?300
+        :0;
 
   state.goal=Math.max(
     1500,
     Math.round(
-      tdee+
-      (
-        g==='lose'
-        ?-400
-        :g==='gain'
-        ?300
-        :0
-      )
+      tdee+adjustment
     )
   );
 
@@ -1373,10 +2175,12 @@ function saveProfile(){
   );
 
   state.profile={
+    name,
     weight:w,
     height:h,
     age:a,
     sex:s,
+    dietType:diet,
     goalType:g
   };
 
@@ -1386,10 +2190,26 @@ function saveProfile(){
 
 }
 
+state.profile=Object.assign(
+  {
+    name:'',
+    weight:80,
+    height:169,
+    age:27,
+    sex:'male',
+    dietType:'balanced',
+    goalType:'lose'
+  },
+  state.profile||{}
+);
+
 state.water=
   state.waterDays[today()]||
   state.water||
   0;
+
+$('name').value=
+  state.profile.name||'';
 
 $('weight').value=
   state.profile.weight;
@@ -1401,20 +2221,27 @@ $('age').value=
   state.profile.age;
 
 $('sex').value=
-  state.profile.sex;
+  state.profile.sex||'male';
+
+$('dietType').value=
+  state.profile.dietType||'balanced';
 
 $('goalType').value=
-  state.profile.goalType;
+  state.profile.goalType||'lose';
 
 $('waterGoalInput').value=
   state.waterGoal;
 
 render();
 
-if('serviceWorker'in navigator)
+if('serviceWorker' in navigator)
   navigator.serviceWorker.register('/sw.js');
+
+updateNotificationStatus();
+
+scheduleInSessionReminders();
 
 </script>
 
 </body>
-</html>
+</html>  
