@@ -229,7 +229,7 @@ function renderHistory(){if(!$('chart'))return;let vals=[];for(let i=6;i>=0;i--)
 function saveProfile(){let name=$('name').value.trim(),w=+$('weight').value||80,h=+$('height').value||169,a=+$('age').value||27,s=$('sex').value,diet=$('dietType').value,g=$('goalType').value;let bmr=s==='male'?10*w+6.25*h-5*a+5:10*w+6.25*h-5*a-161,tdee=bmr*1.55;let adjustment=g==='lose'?-400:g==='gain'?300:0;state.goal=Math.max(1500,Math.round(tdee+adjustment));state.waterGoal=Math.max(500,+$('waterGoalInput').value||2000);state.profile={name,weight:w,height:h,age:a,sex:s,dietType:diet,goalType:g};save();show('home')}
 state.profile=Object.assign({name:'',weight:80,height:169,age:27,sex:'male',dietType:'balanced',goalType:'lose'},state.profile||{});
 state.water=state.waterDays[today()]||state.water||0;$('name').value=state.profile.name||'';$('weight').value=state.profile.weight;$('height').value=state.profile.height;$('age').value=state.profile.age;$('sex').value=state.profile.sex||'male';$('dietType').value=state.profile.dietType||'balanced';$('goalType').value=state.profile.goalType||'lose';$('waterGoalInput').value=state.waterGoal;render();
-if('serviceWorker'in navigator){navigator.serviceWorker.register('/sw.js').catch(()=>{});}
+if('serviceWorker'in navigator){navigator.serviceWorker.register('/sw.js').then(reg=>reg.update()).catch(()=>{});}
 updateNotificationStatus();
 scheduleInSessionReminders();
 
