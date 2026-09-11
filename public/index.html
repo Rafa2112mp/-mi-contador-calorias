@@ -125,31 +125,6 @@ body{background:#070b12!important;color:#f7f9fc!important}
 #result .notice,#result .food small{color:#a9b7c8!important}
 #result .macro{background:#152235!important;border:1px solid #2b3c52!important;color:#fff!important}
 </style>
-
-<style id="julifit-nav-profile-fix">
-.nav{grid-template-columns:repeat(5,1fr)!important;min-height:78px!important;padding:10px 8px calc(10px + env(safe-area-inset-bottom))!important;gap:6px!important}
-.nav button{font-size:15px!important;line-height:1.15!important;min-height:58px!important;border-radius:18px!important;padding:7px 3px!important}
-.nav button:first-line{font-size:25px}
-.nav button span{font-size:13px!important;font-weight:800!important}
-</style>
-<style id="julifit-final-fix">
-/* JuliFit final visual fix: clean food rows + prominent profile navigation */
-.food{border-bottom:0!important;border-top:0!important;background:transparent!important;box-shadow:none!important;padding:13px 0!important}
-.food + .food{border-top:1px solid #263548!important;padding-top:14px!important}
-.nav{padding:10px 6px calc(10px + env(safe-area-inset-bottom))!important}
-.nav button{font-size:13px!important;min-width:58px!important;padding:4px 3px!important;border-radius:14px!important}
-.nav button br{display:none}
-.nav button span{display:block;margin-top:2px;font-size:11px!important;font-weight:800!important}
-.nav button{line-height:1.1!important}
-.nav button:first-letter{font-size:22px}
-.nav button:last-child{color:#fff!important;background:#182538!important;border:1px solid #2b3d55!important}
-.nav button:last-child.active{color:#ff9b4b!important}
-#profile .card{background:#121d2b!important;border-color:#26364a!important;color:#fff!important}
-#profile label{color:#dfe7ef!important}
-#profile .muted{color:#9aa9bb!important}
-#profile .input,#profile select{background:#0d1724!important;color:#fff!important;border-color:#2a3b50!important}
-#profile .back{color:#ffad73!important}
-</style>
 </head>
 <body>
 <main class="app">
@@ -281,17 +256,22 @@ body{background:#070b12!important;color:#f7f9fc!important}
     </label>
     <button class="btn secondary" style="width:100%;margin-top:8px" onclick="loginAccount()">Iniciar sesión</button>
     <button class="btn secondary" style="width:100%;margin-top:8px" onclick="logoutAccount()">Cerrar sesión</button>
-    <p class="muted" id="accountStatus" style="margin-bottom:0">No has iniciado sesión.</p><button class="btn secondary" style="width:100%;margin-top:10px" onclick="show('profile')">👤 Editar mi perfil</button>
+    <p class="muted" id="accountStatus" style="margin-bottom:0">No has iniciado sesión.</p>
   </div>
 
   <div class="notice">
-    Esta versión guarda la cuenta solo en este dispositivo. Para una cuenta real sincronizada entre dispositivos, habrá que conectar un servicio de autenticación seguro.
+    Tu cuenta usa Supabase de forma segura. Tus datos de JuliFit se sincronizarán en la nube y podrás acceder desde otros dispositivos.
   </div>
 </section>
 <section id="profile" class="screen"><button class="back" onclick="show('home')">← Volver</button><h2>👤 Mi perfil</h2><p class="muted">Estos datos ayudan a JuliFit a calcular tus objetivos y personalizar las recomendaciones de la IA.</p><div class="card"><label>Nombre<input id="name" class="input" type="text" autocomplete="name" placeholder="Tu nombre"></label><label>Edad<input id="age" class="input" type="number" inputmode="numeric" min="1" max="120" placeholder="Ej. 27"></label><label>Peso (kg)<input id="weight" class="input" type="number" inputmode="decimal" step="0.1" min="1" placeholder="Ej. 80"></label><label>Talla / Altura (cm)<input id="height" class="input" type="number" inputmode="numeric" min="50" max="250" placeholder="Ej. 169"></label><label>Sexo<select id="sex" class="input"><option value="male">Hombre</option><option value="female">Mujer</option></select></label><label>Tipo de dieta<select id="dietType" class="input"><option value="balanced">Equilibrada</option><option value="mediterranean">Mediterránea</option><option value="high_protein">Alta en proteína</option><option value="low_carb">Baja en carbohidratos</option><option value="vegetarian">Vegetariana</option><option value="vegan">Vegana</option><option value="flexible">Flexible</option><option value="keto">Cetogénica (keto)</option><option value="ai_recommend">Recomendada por la IA</option></select><div class="notice">Si eliges “Recomendada por la IA”, el Coach tendrá en cuenta tus datos y objetivo para orientarte.</div></label><label>¿Qué buscas?<select id="goalType" class="input"><option value="lose">Perder peso</option><option value="gain">Ganar peso</option><option value="recomp">Perder peso y ganar masa muscular</option></select></label><label>Objetivo de agua (ml)<input id="waterGoalInput" class="input" type="number" inputmode="numeric" value="2000"></label><button class="btn primary" style="width:100%" onclick="saveProfile()">Guardar y calcular objetivos</button></div></section>
 </main>
-<nav class="nav"><button onclick="show('home')">🏠<br><span>Inicio</span></button><button onclick="show('scan')">📸<br><span>Comida</span></button><button onclick="show('water')">💧<br><span>Agua</span></button><button onclick="show('coach')">🐻<br><span>Coach</span></button><button onclick="show('profile')">👤<br><span>Perfil</span></button></nav>
+<nav class="nav"><button onclick="show('home')">🏠<br>Inicio</button><button onclick="show('scan')">📸<br>Comida</button><button onclick="show('water')">💧<br>Agua</button><button onclick="show('coach')">🐻<br>Coach</button><button onclick="show('progressScreen')">📈<br>Progreso</button><button onclick="show('notifications')">🔔<br>Avisos</button></nav>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+const SUPABASE_URL="https://nfjamwtrjfocyjirlynz.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY="sb_publishable_qfizNwrgcAh82Ijc-aMnxw_6zWEvis9";
+const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
+let currentUser=null;
 const $=id=>document.getElementById(id);
 let stream=null,lastPhotoBlob=null,lastResult=null;
 const today=()=>new Date().toISOString().slice(0,10);
@@ -429,7 +409,7 @@ function renderCoachChat(){const box=$('coachChat');if(!box)return;const h=coach
 async function sendCoachMessage(){const input=$('coachInput'),btn=$('coachSend'),text=input.value.trim();if(!text)return;let h=coachHistory();h.push({role:'user',content:text});saveCoachHistory(h);input.value='';renderCoachChat();btn.disabled=true;btn.textContent='…';h.push({role:'assistant',content:'⏳ Estoy pensando…'});saveCoachHistory(h);renderCoachChat();try{const payload={message:text,history:h.filter(x=>x.content!=='⏳ Estoy pensando…').slice(-20),profile:state.profile,totals:totals(),water:{consumed_ml:state.water||0,goal_ml:state.waterGoal}};const r=await fetch('/api/coach',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}),d=await r.json();if(!r.ok)throw Error(d.error||'No se pudo obtener la respuesta');h=coachHistory().filter(x=>x.content!=='⏳ Estoy pensando…');h.push({role:'assistant',content:d.reply||'No pude responderte ahora.'});saveCoachHistory(h);renderCoachChat()}catch(e){h=coachHistory().filter(x=>x.content!=='⏳ Estoy pensando…');h.push({role:'assistant',content:'❌ '+e.message});saveCoachHistory(h);renderCoachChat()}finally{btn.disabled=false;btn.textContent='➤'}}
 function clearCoachChat(){if(confirm('¿Borrar la conversación del Coach?')){localStorage.removeItem('julifitCoachChat');renderCoachChat()}}
 function askCoach(){sendCoachMessage()}
-async function analyzeProgress(){let fs=[...$('progressFiles').files].slice(0,3);if(!fs.length){$('progressResult').innerHTML='<div class="warn">Selecciona al menos una foto.</div>';return}$('progressResult').innerHTML='<div class="card">⏳ Analizando tu progreso…</div>';try{let photos=[];for(let f of fs){photos.push(await resizeData(f))}let r=await fetch('/api/analyze-progress',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({photos,profile:state.profile,previousProgress:state.progress.slice(-3)})}),d=await r.json();if(!r.ok)throw Error(d.error||'No se pudo analizar');state.progress.push({date:today(),weight:+$('progressWeight').value||state.profile.weight,analysis:d});localStorage.setItem('v7state',JSON.stringify(state));$('progressResult').innerHTML=`<div class="card"><h3>🐻 ${esc(d.overall||'Valoración')}</h3><h4>Cambios visuales</h4><ul>${(d.visual_changes||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ul><h4>Puntos fuertes</h4><ul>${(d.strengths||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ul><h4>Qué mejorar</h4><ul>${(d.improvements||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ul><p><b>🍽️ Nutrición:</b> ${esc(d.nutrition_advice||'')}</p><p><b>🏋️ Entrenamiento:</b> ${esc(d.training_advice||'')}</p><h4>Próximos pasos</h4><ul>${(d.next_steps||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ul><p class="notice">${esc(d.note||'')}</p></div>`}catch(e){$('progressResult').innerHTML='<div class="warn">❌ '+esc(e.message)+'</div>'}}
+async function analyzeProgress(){let fs=[...$('progressFiles').files].slice(0,3);if(!fs.length){$('progressResult').innerHTML='<div class="warn">Selecciona al menos una foto.</div>';return}$('progressResult').innerHTML='<div class="card">⏳ Analizando tu progreso…</div>';try{let photos=[];for(let f of fs){photos.push(await resizeData(f))}let r=await fetch('/api/analyze-progress',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({photos,profile:state.profile,previousProgress:state.progress.slice(-3)})}),d=await r.json();if(!r.ok)throw Error(d.error||'No se pudo analizar');state.progress.push({date:today(),weight:+$('progressWeight').value||state.profile.weight,analysis:d});localStorage.setItem('v7state',JSON.stringify(state));if(currentUser)saveProgressToCloud(state.progress[state.progress.length-1]).catch(()=>{});$('progressResult').innerHTML=`<div class="card"><h3>🐻 ${esc(d.overall||'Valoración')}</h3><h4>Cambios visuales</h4><ul>${(d.visual_changes||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ul><h4>Puntos fuertes</h4><ul>${(d.strengths||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ul><h4>Qué mejorar</h4><ul>${(d.improvements||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ul><p><b>🍽️ Nutrición:</b> ${esc(d.nutrition_advice||'')}</p><p><b>🏋️ Entrenamiento:</b> ${esc(d.training_advice||'')}</p><h4>Próximos pasos</h4><ul>${(d.next_steps||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ul><p class="notice">${esc(d.note||'')}</p></div>`}catch(e){$('progressResult').innerHTML='<div class="warn">❌ '+esc(e.message)+'</div>'}}
 function renderHistory(){if(!$('chart'))return;let vals=[];for(let i=6;i>=0;i--){let d=new Date();d.setDate(d.getDate()-i);let k=d.toISOString().slice(0,10),f=state.days[k]||[];let kcal=f.reduce((a,x)=>a+(+(x.totals?.calories||0)),0);vals.push({k,kcal})}let max=Math.max(state.goal,...vals.map(x=>x.kcal),1);$('chart').innerHTML=vals.map(x=>`<div class="col"><div style="height:115px;display:flex;align-items:end"><div class="barcol" style="height:${Math.max(5,x.kcal/max*105)}px;width:100%"></div></div><div>${x.k.slice(8)}</div></div>`).join('');$('avg').textContent=Math.round(vals.reduce((a,x)=>a+x.kcal,0)/7)+' kcal';$('avgGoal').textContent=Math.round(state.goal)+' kcal';$('historyList').innerHTML=vals.slice().reverse().map(x=>`<div class="card" style="margin-top:8px"><div class="row"><span>${x.k}</span><b>${Math.round(x.kcal)} kcal</b></div></div>`).join('')}
 function saveProfile(){let name=$('name').value.trim(),w=+$('weight').value||80,h=+$('height').value||169,a=+$('age').value||27,s=$('sex').value,diet=$('dietType').value,g=$('goalType').value;let bmr=s==='male'?10*w+6.25*h-5*a+5:10*w+6.25*h-5*a-161,tdee=bmr*1.55;let adjustment=g==='lose'?-400:g==='gain'?300:0;state.goal=Math.max(1500,Math.round(tdee+adjustment));state.waterGoal=Math.max(500,+$('waterGoalInput').value||2000);state.profile={name,weight:w,height:h,age:a,sex:s,dietType:diet,goalType:g};save();show('home')}
 state.profile=Object.assign({name:'',weight:80,height:169,age:27,sex:'male',dietType:'balanced',goalType:'lose'},state.profile||{});
@@ -438,44 +418,126 @@ if('serviceWorker'in navigator){navigator.serviceWorker.register('/sw.js').then(
 updateNotificationStatus();
 scheduleInSessionReminders();
 
-/* JuliFit account prototype */
-function updateAccountStatus(){
-  const st = $('accountStatus');
-  if(!st) return;
-  const a = JSON.parse(localStorage.getItem('julifitAccount') || 'null');
-  st.textContent = a ? 'Sesión iniciada como ' + a.email : 'No has iniciado sesión.';
+/* JuliFit real account + cloud sync (Supabase) */
+function updateAccountStatus(user=currentUser){
+  const st=$('accountStatus'); if(!st)return;
+  if(user) st.textContent='Sesión iniciada como '+(user.email||'');
+  else st.textContent='No has iniciado sesión.';
 }
-function registerAccount(){
-  const name = $('regName')?.value.trim();
-  const email = $('regEmail')?.value.trim().toLowerCase();
-  const password = $('regPassword')?.value || '';
-  if(!name || !email || password.length < 6){
-    alert('Completa nombre, correo y una contraseña de al menos 6 caracteres.');
-    return;
+async function registerAccount(){
+  const name=$('regName')?.value.trim();
+  const email=$('regEmail')?.value.trim().toLowerCase();
+  const password=$('regPassword')?.value||'';
+  if(!name||!email||password.length<6){alert('Completa nombre, correo y una contraseña de al menos 6 caracteres.');return}
+  try{
+    const {data,error}=await supabaseClient.auth.signUp({email,password,options:{data:{name}}});
+    if(error)throw error;
+    if(data.session){
+      currentUser=data.user;
+      state.profile.name=name;
+      save();
+      await loadCloudData();
+      updateAccountStatus(currentUser);
+      alert('Cuenta creada correctamente.');
+      show('profile');
+    }else{
+      alert('Cuenta creada. Revisa tu correo para confirmar la cuenta y después inicia sesión.');
+    }
+  }catch(e){alert('No se pudo crear la cuenta: '+(e.message||e))}
+}
+async function loginAccount(){
+  const email=$('loginEmail')?.value.trim().toLowerCase();
+  const password=$('loginPassword')?.value||'';
+  if(!email||!password){alert('Escribe tu correo y contraseña.');return}
+  try{
+    const {data,error}=await supabaseClient.auth.signInWithPassword({email,password});
+    if(error)throw error;
+    currentUser=data.user;
+    await loadCloudData();
+    updateAccountStatus(currentUser);
+    alert('Sesión iniciada correctamente.');
+    show('home');
+  }catch(e){alert('No se pudo iniciar sesión: '+(e.message||e))}
+}
+async function logoutAccount(){
+  try{await supabaseClient.auth.signOut()}catch(e){}
+  currentUser=null;
+  updateAccountStatus(null);
+  alert('Sesión cerrada.');
+}
+async function syncProfileToCloud(){
+  if(!currentUser)return;
+  const p=state.profile||{};
+  const {error}=await supabaseClient.from('profiles').upsert({id:currentUser.id,name:p.name||'',age:+p.age||null,weight:+p.weight||null,height:+p.height||null,sex:p.sex||null,diet_type:p.dietType||null,goal_type:p.goalType||null,water_goal:+state.waterGoal||2000,updated_at:new Date().toISOString()});
+  if(error)throw error;
+}
+async function syncMealsToCloud(){
+  if(!currentUser)return;
+  const k=today();
+  let q=await supabaseClient.from('meals').delete().eq('user_id',currentUser.id).eq('meal_date',k); if(q.error)throw q.error;
+  if(!state.foods.length)return;
+  const rows=state.foods.map(m=>({user_id:currentUser.id,meal_date:k,meal_name:m.meal_name||'Comida',calories:+(m.totals?.calories||0),protein:+(m.totals?.protein_g||0),carbs:+(m.totals?.carbs_g||0),fat:+(m.totals?.fat_g||0),items:m.items||[]}));
+  q=await supabaseClient.from('meals').insert(rows); if(q.error)throw q.error;
+}
+async function syncWaterToCloud(){
+  if(!currentUser)return;
+  const k=today();
+  let q=await supabaseClient.from('water_logs').delete().eq('user_id',currentUser.id).eq('log_date',k); if(q.error)throw q.error;
+  if((state.water||0)>0){q=await supabaseClient.from('water_logs').insert({user_id:currentUser.id,amount_ml:Math.round(state.water),log_date:k});if(q.error)throw q.error}
+}
+async function saveProgressToCloud(item){
+  if(!currentUser||!item)return;
+  const q=await supabaseClient.from('progress_photos').insert({user_id:currentUser.id,photo_url:null,analysis:item});
+  if(q.error)throw q.error;
+}
+let cloudSyncTimer=null;
+async function syncStateToCloud(){
+  if(!currentUser)return;
+  clearTimeout(cloudSyncTimer);
+  cloudSyncTimer=setTimeout(async()=>{try{await syncProfileToCloud();await syncMealsToCloud();await syncWaterToCloud()}catch(e){console.warn('JuliFit cloud sync:',e.message)}},250);
+}
+async function loadCloudData(){
+  if(!currentUser)return;
+  const [profileRes,mealsRes,waterRes,progressRes]=await Promise.all([
+    supabaseClient.from('profiles').select('*').eq('id',currentUser.id).maybeSingle(),
+    supabaseClient.from('meals').select('*').eq('user_id',currentUser.id).eq('meal_date',today()).order('created_at',{ascending:true}),
+    supabaseClient.from('water_logs').select('amount_ml').eq('user_id',currentUser.id).eq('log_date',today()),
+    supabaseClient.from('progress_photos').select('analysis,created_at').eq('user_id',currentUser.id).order('created_at',{ascending:false}).limit(20)
+  ]);
+  for(const r of [profileRes,mealsRes,waterRes,progressRes])if(r.error)throw r.error;
+  const cloudMeals=mealsRes.data||[];
+  const localHasData=state.foods.length>0||(state.water||0)>0;
+  if(cloudMeals.length===0&&localHasData){
+    await syncStateToCloud();
+  }else{
+    state.foods=cloudMeals.map(m=>({meal_name:m.meal_name,items:m.items||[],totals:{calories:+m.calories||0,protein_g:+m.protein||0,carbs_g:+m.carbs||0,fat_g:+m.fat||0}}));
+    state.days[today()]=state.foods;
+    state.water=(waterRes.data||[]).reduce((a,x)=>a+(+x.amount_ml||0),0);
+    state.waterDays[today()]=state.water;
   }
-  localStorage.setItem('julifitAccount', JSON.stringify({name,email,password}));
-  if(state.profile) state.profile.name = name;
-  save();
-  updateAccountStatus();
-  alert('Cuenta creada correctamente.');
-  show('profile');
-}
-function loginAccount(){
-  const email = $('loginEmail')?.value.trim().toLowerCase();
-  const password = $('loginPassword')?.value || '';
-  const a = JSON.parse(localStorage.getItem('julifitAccount') || 'null');
-  if(!a || a.email !== email || a.password !== password){
-    alert('Correo o contraseña incorrectos.');
-    return;
+  if(profileRes.data){
+    const p=profileRes.data;
+    state.profile=Object.assign({},state.profile,{name:p.name||'',age:p.age||state.profile.age,weight:p.weight||state.profile.weight,height:p.height||state.profile.height,sex:p.sex||state.profile.sex,dietType:p.diet_type||state.profile.dietType,goalType:p.goal_type||state.profile.goalType});
+    state.waterGoal=p.water_goal||state.waterGoal||2000;
   }
-  updateAccountStatus();
-  alert('Sesión iniciada.');
-  show('home');
+  if(progressRes.data?.length)state.progress=progressRes.data.map(x=>x.analysis).filter(Boolean);
+  localStorage.setItem('v7state',JSON.stringify(state));
+  render();
 }
-function logoutAccount(){
-  localStorage.removeItem('julifitSession');
-  updateAccountStatus();
+async function initSupabase(){
+  try{
+    const {data}=await supabaseClient.auth.getSession();
+    currentUser=data.session?.user||null;
+    updateAccountStatus(currentUser);
+    if(currentUser)await loadCloudData();
+  }catch(e){console.warn('Supabase:',e.message)}
+  supabaseClient.auth.onAuthStateChange((event,session)=>{
+    currentUser=session?.user||null;
+    updateAccountStatus(currentUser);
+    if(currentUser&&event==='SIGNED_IN')loadCloudData().catch(e=>console.warn('JuliFit cloud:',e.message));
+  });
 }
-updateAccountStatus();
+updateAccountStatus(null);
+initSupabase();
 </script>
 </body></html>
