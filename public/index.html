@@ -125,6 +125,31 @@ body{background:#070b12!important;color:#f7f9fc!important}
 #result .notice,#result .food small{color:#a9b7c8!important}
 #result .macro{background:#152235!important;border:1px solid #2b3c52!important;color:#fff!important}
 </style>
+
+<style id="julifit-nav-profile-fix">
+.nav{grid-template-columns:repeat(5,1fr)!important;min-height:78px!important;padding:10px 8px calc(10px + env(safe-area-inset-bottom))!important;gap:6px!important}
+.nav button{font-size:15px!important;line-height:1.15!important;min-height:58px!important;border-radius:18px!important;padding:7px 3px!important}
+.nav button:first-line{font-size:25px}
+.nav button span{font-size:13px!important;font-weight:800!important}
+</style>
+<style id="julifit-final-fix">
+/* JuliFit final visual fix: clean food rows + prominent profile navigation */
+.food{border-bottom:0!important;border-top:0!important;background:transparent!important;box-shadow:none!important;padding:13px 0!important}
+.food + .food{border-top:1px solid #263548!important;padding-top:14px!important}
+.nav{padding:10px 6px calc(10px + env(safe-area-inset-bottom))!important}
+.nav button{font-size:13px!important;min-width:58px!important;padding:4px 3px!important;border-radius:14px!important}
+.nav button br{display:none}
+.nav button span{display:block;margin-top:2px;font-size:11px!important;font-weight:800!important}
+.nav button{line-height:1.1!important}
+.nav button:first-letter{font-size:22px}
+.nav button:last-child{color:#fff!important;background:#182538!important;border:1px solid #2b3d55!important}
+.nav button:last-child.active{color:#ff9b4b!important}
+#profile .card{background:#121d2b!important;border-color:#26364a!important;color:#fff!important}
+#profile label{color:#dfe7ef!important}
+#profile .muted{color:#9aa9bb!important}
+#profile .input,#profile select{background:#0d1724!important;color:#fff!important;border-color:#2a3b50!important}
+#profile .back{color:#ffad73!important}
+</style>
 </head>
 <body>
 <main class="app">
@@ -256,7 +281,7 @@ body{background:#070b12!important;color:#f7f9fc!important}
     </label>
     <button class="btn secondary" style="width:100%;margin-top:8px" onclick="loginAccount()">Iniciar sesión</button>
     <button class="btn secondary" style="width:100%;margin-top:8px" onclick="logoutAccount()">Cerrar sesión</button>
-    <p class="muted" id="accountStatus" style="margin-bottom:0">No has iniciado sesión.</p>
+    <p class="muted" id="accountStatus" style="margin-bottom:0">No has iniciado sesión.</p><button class="btn secondary" style="width:100%;margin-top:10px" onclick="show('profile')">👤 Editar mi perfil</button>
   </div>
 
   <div class="notice">
@@ -265,7 +290,7 @@ body{background:#070b12!important;color:#f7f9fc!important}
 </section>
 <section id="profile" class="screen"><button class="back" onclick="show('home')">← Volver</button><h2>👤 Mi perfil</h2><p class="muted">Estos datos ayudan a JuliFit a calcular tus objetivos y personalizar las recomendaciones de la IA.</p><div class="card"><label>Nombre<input id="name" class="input" type="text" autocomplete="name" placeholder="Tu nombre"></label><label>Edad<input id="age" class="input" type="number" inputmode="numeric" min="1" max="120" placeholder="Ej. 27"></label><label>Peso (kg)<input id="weight" class="input" type="number" inputmode="decimal" step="0.1" min="1" placeholder="Ej. 80"></label><label>Talla / Altura (cm)<input id="height" class="input" type="number" inputmode="numeric" min="50" max="250" placeholder="Ej. 169"></label><label>Sexo<select id="sex" class="input"><option value="male">Hombre</option><option value="female">Mujer</option></select></label><label>Tipo de dieta<select id="dietType" class="input"><option value="balanced">Equilibrada</option><option value="mediterranean">Mediterránea</option><option value="high_protein">Alta en proteína</option><option value="low_carb">Baja en carbohidratos</option><option value="vegetarian">Vegetariana</option><option value="vegan">Vegana</option><option value="flexible">Flexible</option><option value="keto">Cetogénica (keto)</option><option value="ai_recommend">Recomendada por la IA</option></select><div class="notice">Si eliges “Recomendada por la IA”, el Coach tendrá en cuenta tus datos y objetivo para orientarte.</div></label><label>¿Qué buscas?<select id="goalType" class="input"><option value="lose">Perder peso</option><option value="gain">Ganar peso</option><option value="recomp">Perder peso y ganar masa muscular</option></select></label><label>Objetivo de agua (ml)<input id="waterGoalInput" class="input" type="number" inputmode="numeric" value="2000"></label><button class="btn primary" style="width:100%" onclick="saveProfile()">Guardar y calcular objetivos</button></div></section>
 </main>
-<nav class="nav"><button onclick="show('home')">🏠<br>Inicio</button><button onclick="show('scan')">📸<br>Comida</button><button onclick="show('water')">💧<br>Agua</button><button onclick="show('coach')">🐻<br>Coach</button><button onclick="show('progressScreen')">📈<br>Progreso</button><button onclick="show('notifications')">🔔<br>Avisos</button></nav>
+<nav class="nav"><button onclick="show('home')">🏠<br><span>Inicio</span></button><button onclick="show('scan')">📸<br><span>Comida</span></button><button onclick="show('water')">💧<br><span>Agua</span></button><button onclick="show('coach')">🐻<br><span>Coach</span></button><button onclick="show('profile')">👤<br><span>Perfil</span></button></nav>
 <script>
 const $=id=>document.getElementById(id);
 let stream=null,lastPhotoBlob=null,lastResult=null;
