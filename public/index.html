@@ -328,6 +328,7 @@ let rows=[...document.querySelectorAll('.ingredient')].map(r=>({name:r.querySele
   $('scanStatus').textContent='❌ '+e.message;
   $('result').innerHTML='<div class="warn"><b>No se pudo completar el análisis.</b><br>'+esc(e.message||'Error desconocido')+'</div>';
 }
+}
 function addResult(){if(!lastResult)return;state.foods.push(lastResult);save();resetScan();show('home')}
 async function resizeData(blob){
   return new Promise((resolve,reject)=>{
